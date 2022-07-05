@@ -1,9 +1,9 @@
 package main.java.dungeonmania.util;
 
-public class EntityNoPosition extends Entity{
+public class EntityPosition extends Entity{
     private Position position;
 
-    public EntityNoPosition(String id, String type, boolean isInteractable, Position position) {
+    public EntityPosition(String id, String type, boolean isInteractable, Position position) {
         super(id, type, isInteractable);
         this.position = position;
     }
