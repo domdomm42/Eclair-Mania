@@ -1,6 +1,5 @@
-package main.java.dungeonmania.util.EntityPositions.CollectableEntity;
 
-public class Sword extends EntityPosition{
+public class Sword extends Entity{
 
     //A standard melee weapon. Swords can be collected by the Player and used in battles, 
     //increasing the amount of damage they deal by an additive factor. Each sword has a 
@@ -8,7 +7,7 @@ public class Sword extends EntityPosition{
     //deteriorates and is no longer usable.
 
     public Sword(String id, String type, boolean isInteractable, Position position) {
-        super(id, "sword", true, position);
+        super(id, "sword", position, true);
 
     }
 }

@@ -1,4 +1,3 @@
-package main.java.dungeonmania.util.EntityPositions.StaticEntity;
 
 public class Boulder extends EntityPosition{
 
@@ -8,6 +7,6 @@ public class Boulder extends EntityPosition{
     // Boulders can be pushed onto collectable entities.
 
     public Boulder(String id, String type, boolean isInteractable, Position position) {
-        super(id, "boulder", true, position);
+        super(id, "boulder", position, true);
     }
 }

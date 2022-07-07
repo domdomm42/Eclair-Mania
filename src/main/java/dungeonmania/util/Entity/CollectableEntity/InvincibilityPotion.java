@@ -1,6 +1,5 @@
-package main.java.dungeonmania.util.EntityPositions.CollectableEntity;
 
-public class InvincibilityPotion extends EntityPosition{
+public class InvincibilityPotion extends Entity{
 
     //When a Player picks up an Invincibility potion, they may consume it at any time. Any battles 
     //that occur when the Player has the effects of the potion end immediately after the first round, 
@@ -9,6 +8,6 @@ public class InvincibilityPotion extends EntityPosition{
     //The effects of the potion only last for a limited time.
 
     public InvincibilityPotion(String id, String type, boolean isInteractable, Position position) {
-        super(id, "invincibility_potion", true, position);
+        super(id, "invincibility_potion", position, true);
     }
 }

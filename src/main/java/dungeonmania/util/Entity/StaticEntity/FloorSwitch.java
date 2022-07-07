@@ -1,4 +1,3 @@
-package main.java.dungeonmania.util.EntityPositions.StaticEntity;
 
 public class FloorSwitch extends EntityPosition{
         
@@ -6,7 +5,7 @@ public class FloorSwitch extends EntityPosition{
     //is pushed onto a floor switch, it is triggered. Pushing a boulder off the floor switch untriggers.
 
     public FloorSwitch(String id, String type, boolean isInteractable, Position position) {
-        super(id, "switch", true, position);
+        super(id, "switch", position, true);
     }
         
 }

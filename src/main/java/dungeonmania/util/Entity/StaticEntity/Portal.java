@@ -1,4 +1,3 @@
-package main.java.dungeonmania.util.EntityPositions.StaticEntity;
 
 public class Portal extends EntityPosition{
 
@@ -8,7 +7,7 @@ public class Portal extends EntityPosition{
     //adjacent to the corresponding portal are walls, then the player should remain where they are.
 
     public Portal(String id, String type, boolean isInteractable, Position position) {
-        super(id, "portal", true, position);
+        super(id, "portal", position, true);
     }
     
 }

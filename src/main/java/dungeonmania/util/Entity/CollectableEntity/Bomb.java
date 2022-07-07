@@ -1,6 +1,5 @@
-package main.java.dungeonmania.util.EntityPositions.CollectableEntity;
 
-public class Bomb extends EntityPosition{
+public class Bomb extends Entity{
 
     //Can be collected by the player. When removed from the inventory it is placed on 
     //the map at the player's location. When a bomb is cardinally adjacent to an active 
@@ -11,7 +10,7 @@ public class Bomb extends EntityPosition{
     //picked up once it has been used.
 
     public Bomb(String id, String type, boolean isInteractable, Position position) {
-        super(id, "bomb", true, position);
+        super(id, "bomb", position, true);
 
     }
 }

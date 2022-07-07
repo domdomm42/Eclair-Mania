@@ -3,11 +3,13 @@ package main.java.dungeonmania.util;
 public class Entity{
     private String id;
     private String type;
+    private Position position;
     private boolean isInteractable;
 
-    public Entity(String id, String type, boolean isInteractable) {
+    public Entity(String id, String type, Position position, boolean isInteractable) {
         this.id = id;
         this.type = type;
+        this.position;
         this.isInteractable = isInteractable;
     }
 
@@ -25,6 +27,14 @@ public class Entity{
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public boolean isInteractable() {
