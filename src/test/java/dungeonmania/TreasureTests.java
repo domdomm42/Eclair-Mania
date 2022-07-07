@@ -37,13 +37,10 @@ public class TreasureTests {
 
         
         // create the expected result
-        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 3), false);
-
-        // move player downward
-        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 2), false);
 
         // move downward again
-        actualDungonRes = dmc.tick(Direction.DOWN);
+        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
         EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
         assertEquals(expectedPlayer, actualPlayer);
 
