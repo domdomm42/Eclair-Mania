@@ -48,7 +48,7 @@ public class BoulderTests {
     }
 
     @Test
-    @DisplayName("Test the boulder not mvoing due to being pushed into a wall")
+    @DisplayName("Test the boulder not moving due to being pushed into a wall")
     public void testInvalidBoulderMovement() {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_boulderTest_testInvalidMovement", "c_movementTest_testMovementDown");
@@ -94,5 +94,4 @@ public class BoulderTests {
         assertEquals(expectedBoulder1, actualBoulder1);
         assertEquals(expectedBoulder2, actualBoulder2);
     }
-
 }
