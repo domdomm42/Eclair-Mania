@@ -1,0 +1,76 @@
+{
+    "entities": [
+        {
+            "type": "exit",
+            "x": 1,
+            "y": 3
+        }, {
+            "type": "player",
+            "x": 1,
+            "y": 10
+        }, {
+            "type": "zombie_toast_spawner",
+            "x" : 1,
+            "y" : 1
+        }, {
+            "type": "wall",
+            "x": 1,
+            "y": 2
+        }, {
+            "type": "wall",
+            "x": 2,
+            "y": 1
+        }, {
+            "type": "wall",
+            "x": 0,
+            "y": 1
+        }, {
+            "type": "wall",
+            "x": 1,
+            "y": 0
+        }, {
+            "type": "spider",
+            "x" : 10,
+            "y" : 10
+        }, {
+            "type": "wall",
+            "x": 10,
+            "y": 11
+        }, {
+            "type": "wall",
+            "x": 9,
+            "y": 10
+        }, {
+            "type": "wall",
+            "x": 10,
+            "y": 9
+        }, {
+            "type": "wall",
+            "x": 11,
+            "y": 10
+        }, {
+            "type": "mercenary",
+            "x" : 20,
+            "y" : 20
+        }, {
+            "type": "wall",
+            "x": 20,
+            "y": 21
+        }, {
+            "type": "wall",
+            "x": 19,
+            "y": 20
+        }, {
+            "type": "wall",
+            "x": 20,
+            "y": 19
+        }, {
+            "type": "wall",
+            "x": 21,
+            "y": 20
+        }
+    ],
+    "goal-condition": {
+        "goal": "exit"
+    }
+}
