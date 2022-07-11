@@ -59,7 +59,7 @@ public class SwordTests {
         pos = getEntities(res, "player").get(0).getPosition();
 
         // check if 2 swords are in inventory
-        assertEquals(4, getInventory(res, "sword").size());
+        assertEquals(2, getInventory(res, "sword").size());
 
 
     }
