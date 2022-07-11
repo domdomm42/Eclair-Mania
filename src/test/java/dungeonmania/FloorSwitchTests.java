@@ -27,7 +27,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 
-public class ExampleTests {
+public class FloorSwitchTests {
 
     @Test
     @DisplayName("Test player pushes boulder on switch")
