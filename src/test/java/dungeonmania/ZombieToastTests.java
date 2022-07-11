@@ -27,47 +27,42 @@ import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class SwordTests {
+public class ZombieToastTests {
     @Test
-    @DisplayName("Test sword is collectable")
-    public void testCollectKey() {
+    @DisplayName("Spawnable at zombie spawners")
+    public void ZombieToastSpawn() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_swordTest_pickup", "c_movementTest_testMovementDown");
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_movementTest_testMovementDown");
 
-        // move player upwards to pickup sword
+        // for each tick, spawn zombie
         res = dmc.tick(Direction.UP);
-        Position pos = getEntities(res, "player").get(0).getPosition();
-
-        // checks if sword is in inventory
-        assertEquals(1, getInventory(res, "sword").size());
-
-    }
-    
-    // not done yet
-    @Test
-    @DisplayName("Test sword increase damage")
-    public void testSwordIncreaseDamage() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_swordTest_multipleSwords", "c_movementTest_testMovementDown");
-
-        // move player upwards to pickup sword
-        res = dmc.tick(Direction.UP);
-        Position pos = getEntities(res, "player").get(0).getPosition();
-
-        // move player to the right to pickup another sword
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.LEFT);
         res = dmc.tick(Direction.RIGHT);
-        pos = getEntities(res, "player").get(0).getPosition();
 
-        // check if 2 swords are in inventory
-        assertEquals(4, getInventory(res, "sword").size());
-
+        // check that there are 4 zombie toasts as we have ran 4 ticks
+        assertEquals(4, getEntities(res, "ZombieToast").size());
 
     }
 
-    // not done yet.
+    // not done
     @Test
-    @DisplayName("Test sword durability")
-    public void testSwordDurability() {
+    @DisplayName("Portal has no effect")
+    public void PortalNoEffectOnZombieToast() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_movementTest_testMovementDown");
+
+        // for each tick, spawn zombie
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.LEFT);
+        res = dmc.tick(Direction.RIGHT);
+
+        // check that there are 4 zombie toasts as we have ran 4 ticks
+        assertEquals(4, getEntities(res, "ZombieToast").size());
 
     }
+
+
+    
 }
