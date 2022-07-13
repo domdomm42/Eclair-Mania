@@ -5,12 +5,16 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class DungeonManiaController {
+
+    ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
+    
     public String getSkin() {
         return "default";
     }
@@ -36,8 +40,8 @@ public class DungeonManiaController {
     /**
      * /game/new
      */
-    public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
-        return null;
+    public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException, FileNotFoundException {
+        return new Dungeon(Integer.toString(dungeons.size()), dungeonName, configName ).getDungeonResponse();
     }
 
     /**
