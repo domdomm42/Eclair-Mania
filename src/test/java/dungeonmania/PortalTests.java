@@ -39,7 +39,7 @@ public class PortalTests {
 
         // player ends up to the right of the next portal
         Position pos = getEntities(res, "player").get(0).getPosition();
-        assertEquals(pos, getEntities(res, "Portal").get(1).getPosition());
+        assertEquals(pos, getEntities(res, "portal").get(1).getPosition());
 
 
     }
@@ -55,7 +55,7 @@ public class PortalTests {
         res = dmc.tick(Direction.RIGHT);
 
         // player ends up at the same spot
-        assertEquals(pos, getEntities(res, "Portal").get(0).getPosition());
+        assertEquals(pos, getEntities(res, "portal").get(0).getPosition());
 
 
     }
