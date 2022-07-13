@@ -19,39 +19,39 @@
             "x": 8,
             "y": 8
         }, {
-            "type": "ZombieToastSpawner",
+            "type": "zombie_toast_spawner",
             "x": 9,
             "y": 9
         },{
-            "type": "Portal",
+            "type": "portal",
             "x": 8,
             "y": 10
         },{
-            "type": "Portal",
+            "type": "portal",
             "x": 9,
             "y": 10
         }, {
-            "type": "Portal",
+            "type": "portal",
             "x": 10,
             "y": 10
         }, {
-            "type": "Portal",
+            "type": "portal",
             "x": 8,
             "y": 9
         }, {
-            "type": "Portal",
+            "type": "portal",
             "x": 9,
             "y": 9
         }, {
-            "type": "Portal",
+            "type": "portal",
             "x": 10,
             "y": 9
         }, {
-            "type": "Portal",
+            "type": "portal",
             "x": 8,
             "y": 8
         }, {
-            "type": "Portal",
+            "type": "portal",
             "x": 9,
             "y": 8
         }
