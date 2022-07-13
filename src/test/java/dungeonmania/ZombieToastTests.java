@@ -27,37 +27,42 @@ import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class PortalTests {
+public class ZombieToastTests {
     @Test
-    @DisplayName("Player teleports normally")
-    public void PlayerTeleportsNormally() {
+    @DisplayName("Spawnable at zombie spawners")
+    public void ZombieToastSpawn() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_portalTest_basicportal", "c_movementTest_testMovementDown");
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_zombieToastTests_spawnZombies");
 
-        // move right to get into portal
+        // for each 2 tick, spawn zombie
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.LEFT);
         res = dmc.tick(Direction.RIGHT);
 
-        // player ends up to the right of the next portal
-        Position pos = getEntities(res, "player").get(0).getPosition();
-        assertEquals(pos, getEntities(res, "Portal").get(1).getPosition());
-
+        // check that there are 2 zombie toasts as we have ran 4 ticks
+        assertEquals(2, getEntities(res, "ZombieToast").size());
 
     }
 
+    // not done
     @Test
-    @DisplayName("Player cannot teleports")
-    public void PlayerCannotTeleport() {
+    @DisplayName("Portal has no effect")
+    public void PortalNoEffectOnZombieToast() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_portalTest_cannotTeleport", "c_movementTest_testMovementDown");
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_zombieToastTests_spawnZombies");
 
-        // move right to get into portal
-        Position pos = getEntities(res, "player").get(0).getPosition();
-        res = dmc.tick(Direction.RIGHT);
+        Position pos = getEntities(res, "zombie_toast").get(0).getPosition();
+        // for each 2 tick, spawn zombie
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.DOWN);
 
-        // player ends up at the same spot
-        assertEquals(pos, getEntities(res, "Portal").get(0).getPosition());
 
+        // one zombie exist checks that its location is not teleported
+        assertEquals(1, getEntities(res, "zombie_toast").get(0).getPosition());
 
     }
+
+
     
 }
