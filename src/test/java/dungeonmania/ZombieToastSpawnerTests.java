@@ -27,42 +27,23 @@ import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class ZombieToastTests {
+public class ZombieToastSpawnerTests {
     @Test
-    @DisplayName("Spawnable at zombie spawners")
-    public void ZombieToastSpawn() {
+    @DisplayName("User destroys spawner")
+    public void PlayerDestroysSpawner() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_zombieToastTests_spawnZombies");
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_destroySpawn", "c_zombieToastTests_spawnZombies");
 
-        // for each 2 tick, spawn zombie
+        // player picks up sword
         res = dmc.tick(Direction.UP);
-        res = dmc.tick(Direction.DOWN);
-        res = dmc.tick(Direction.LEFT);
-        res = dmc.tick(Direction.RIGHT);
 
-        // check that there are 2 zombie toasts as we have ran 4 ticks
-        assertEquals(2, getEntities(res, "ZombieToast").size());
+        String swordId = getInventory(res, "sword").get(0).getId();
+        res = assertDoesNotThrow(() -> dmc.tick(swordId));
+
+       
+        assertEquals(0, getEntities(res, "zombie_toast_spawner").size());
 
     }
-
-    // not done
-    @Test
-    @DisplayName("Portal has no effect")
-    public void PortalNoEffectOnZombieToast() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_zombieToastTests_spawnZombies");
-
-        Position pos = getEntities(res, "zombie_toast").get(0).getPosition();
-        // for each 2 tick, spawn zombie
-        res = dmc.tick(Direction.UP);
-        res = dmc.tick(Direction.DOWN);
-
-
-        // one zombie exist checks that its location is not teleported
-        assertEquals(1, getEntities(res, "zombie_toast").get(0).getPosition());
-
-    }
-
 
     
 }
