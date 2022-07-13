@@ -165,19 +165,9 @@ public class MercenaryTests {
 
     @DisplayName("Test a Mercenary Ally Movement, that it follows player correctly")
     public void testMercenaryAllyMovement() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("d_mercenaryTest_bribeMercenary", "c_mercenaryTest_bribeMercenary");
-        EntityResponse initMercenary = getEntities(initDungonRes, "mercenary").get(0);
-        EntityResponse initPlayer = getPlayer(initDungonRes).get();
-
         
-
     }
 
-    @DisplayName("Test that no new mercenaries spawn in the game once dungeon has been created")
-    public void testMercenaryNoNewSpawn() {
-
-    }
     // TEST SAME MOVEMENT CONSTRAINTS AS PLAYER --> TAKE PLAYER CONSTRAINT TESTS AND CHANGE THEM TO MERCENARY
 
 
