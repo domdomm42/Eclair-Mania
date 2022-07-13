@@ -71,7 +71,7 @@ public class SwordTests {
     @DisplayName("Test sword increase damage")
     public void testSwordIncreaseDamage() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_swordTest_multipleSwords", "c_movementTest_testMovementDown");
+        DungeonResponse res = dmc.newGame("d_swordTest_multipleSwords", "c_swordTests_sworddamage.json");
 
         // move player upwards to pickup sword
         res = dmc.tick(Direction.UP);
@@ -96,7 +96,7 @@ public class SwordTests {
     @DisplayName("Test sword durability")
     public void testSwordDurability() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_swordTest_multipleSwords", "c_movementTest_testMovementDown");
+        DungeonResponse res = dmc.newGame("d_swordTest_multipleSwords", "c_swordTests_sworddamage.json");
 
         // move player upwards to pickup sword
         res = dmc.tick(Direction.UP);
