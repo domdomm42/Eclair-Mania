@@ -1,5 +1,7 @@
 package dungeonmania.Entities;
 
-public class Entity {
+import dungeonmania.Dungeon;
+
+public class Entity extends Dungeon {
     
 }
