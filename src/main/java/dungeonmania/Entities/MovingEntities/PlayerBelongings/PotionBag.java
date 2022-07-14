@@ -5,8 +5,8 @@ import java.util.Queue;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
 
 public class PotionBag {
-    Potion activePotion;
-    Queue<Potion> potionQueue;
+    private Potion activePotion;
+    private Queue<Potion> potionQueue;
 
     public PotionBag() {}
 }

@@ -6,12 +6,14 @@ import dungeonmania.util.Position;
 
 public class MovingEntity extends Entity {
     private int health;
+    private int attack;
     private MovementStrategy movementStrategy;
     
-    public MovingEntity(String id, String type, Position position, int health, boolean isInteractable, MovementStrategy movementStrategy) {
+    public MovingEntity(String id, String type, Position position, int health, boolean isInteractable, MovementStrategy movementStrategy, int attack) {
         super(id, type, position, isInteractable);
         this.health = health;
         this.movementStrategy = movementStrategy;
+        this.attack = attack;
     }
 
     public int getHealth() {
@@ -28,6 +30,14 @@ public class MovingEntity extends Entity {
 
     public void setMovementStrategy(MovementStrategy movementStrategy) {
         this.movementStrategy = movementStrategy;
+    }
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
     }
 
 }

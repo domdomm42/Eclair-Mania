@@ -1,9 +1,12 @@
 package dungeonmania;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
+import dungeonmania.response.models.RoundResponse;
 
 public class Battle {
     private Player player;
@@ -16,6 +19,8 @@ public class Battle {
         this.player = player;
         this.enemy = enemy;
         initialPlayerHp = player.getHealth();
+        initialEnemyHp = enemy.getHealth();
+        rounds = new ArrayList<Round>();
         generateRounds();
     }
 
@@ -28,6 +33,22 @@ public class Battle {
     }
 
     private void generateRounds() {
-        
+        while (player.getHealth() > 0 && enemy.getHealth() > 0) {
+            rounds.add(new Round(enemy.getAttack(), player.getAttack(), player.getWeaponryUsed()));
+        }
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Enemy getEnemy() {
+        return enemy;
+    }
+
+    public List<RoundResponse> getRoundResponses() {
+        return rounds.stream().map(round -> round.toRoundResponse()).collect(Collectors.toList());
+    }
+
+
 }
