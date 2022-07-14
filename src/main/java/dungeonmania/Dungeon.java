@@ -15,6 +15,8 @@ import org.json.JSONObject;
 import com.google.gson.JsonParser;
 
 import dungeonmania.Entities.Entity;
+import dungeonmania.Entities.Position;
+import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.BuildableEntity;
 import dungeonmania.exceptions.InvalidActionException;
@@ -23,6 +25,8 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
+
+import dungeonmania.Entities.MovingEntities.Player;
 
 public class Dungeon {
     private String id;
@@ -53,8 +57,10 @@ public class Dungeon {
             //ADD MORE IF NEEDED TODO
 
             switch (type) {
-                case "wall":
-                    entities.add(new Wall(/**blah blah */));
+                //case "wall":
+                    //entities.add(new Wall(/**blah blah */));
+                case "player":
+                    this.entities.add(new Player(String.valueOf(i), type, new Position(x, y, 0), 0, false)); break;
             }
         }
     }
