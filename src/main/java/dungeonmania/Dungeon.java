@@ -61,10 +61,6 @@ public class Dungeon {
         this.goals = new Goal(goals);
     }
 
-    public static Entity createDungeonEntityByType(String type, String[] args) {
-        String x = args[0];
-    }
-
     public void setupConfigFile(String configName) throws FileNotFoundException {
         File configFile = new File("src/test/resources/dungeons/".concat(configName));
         FileReader configReader = new FileReader(configFile);
@@ -81,7 +77,7 @@ public class Dungeon {
         List<ItemResponse> itemResponses = items.stream().map(item -> new ItemResponse(item.getId(), item.getType())).collect(Collectors.toList());
         List<BattleResponse> battleResponses = battles.stream().map(battle -> new BattleResponse(battle.getEnemy(), battle.getRounds(), battle.getInitialPlayerHP(), battle.getInitialEnemyHP())).collect(Collectors.toList());
 
-        return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, buildables.toList(), goals.toString());
+        return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, /*buildables.toList()*/ new ArrayList<String>(), goals.toString());
     }
 
     public void tick() {

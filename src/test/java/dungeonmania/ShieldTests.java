@@ -14,6 +14,7 @@ import static dungeonmania.TestUtils.getGoals;
 import static dungeonmania.TestUtils.countEntityOfType;
 import static dungeonmania.TestUtils.getValueFromConfigFile;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +35,13 @@ public class ShieldTests {
 
     @Test
     @DisplayName("Test making a shield using 2 wood + 1 treasure")
-    public void testMakeShieldWithTreasure() {
+    public void testMakeShieldWithTreasure() throws InvalidActionException, IllegalArgumentException, FileNotFoundException {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_shieldTest_withTreasure", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
 
         // pick up items
-        res = dmc.tick(Direction.RIGHT);
+        DungeonResponse res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
         assertEquals(2, getInventory(res, "wood").size());
@@ -54,13 +55,13 @@ public class ShieldTests {
 
     @Test
     @DisplayName("Test making a shield using 2 wood + 1 key")
-    public void testMakeShieldWithKey() {
+    public void testMakeShieldWithKey() throws InvalidActionException, IllegalArgumentException, FileNotFoundException {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_shieldTest_withKey", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
 
         // pick up items
-        res = dmc.tick(Direction.RIGHT);
+        DungeonResponse res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
         assertEquals(2, getInventory(res, "wood").size());
@@ -74,13 +75,13 @@ public class ShieldTests {
 
     @Test
     @DisplayName("Test making a shield using 2 wood")
-    public void testMakeShieldWithInsufficientIngredients() {
+    public void testMakeShieldWithInsufficientIngredients() throws InvalidActionException, IllegalArgumentException, FileNotFoundException {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_shieldTest_withKey", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
 
         // pick up items
-        res = dmc.tick(Direction.RIGHT);
+        DungeonResponse res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
         assertEquals(2, getInventory(res, "wood").size());
         assertEquals(0, getInventory(res, "key").size());
