@@ -1,6 +1,4 @@
-package dungeonmania.entities.staticentities;
-
-import dungeonmania.entities.StaticEntity;
+package dungeonmania.Entities.StaticEntities;
 
 public class ZombieToastSpawner extends StaticEntity {
     
