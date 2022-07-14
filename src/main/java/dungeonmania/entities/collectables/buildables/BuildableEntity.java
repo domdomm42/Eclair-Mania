@@ -1,6 +1,6 @@
-package dungeonmania.entities;
+package dungeonmania.entities.collectables.buildables;
 
-import dungeonmania.collectables.CollectableEntity;
+import dungeonmania.entities.collectables.CollectableEntity;
 
 public abstract class BuildableEntity extends CollectableEntity {
     

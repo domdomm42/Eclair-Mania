@@ -1,7 +1,7 @@
 package dungeonmania.entities.collectables.potions;
 
-import dungeonmania.CollectableEntity;
+import dungeonmania.entities.collectables.Usable;
 
-public abstract class Potion extends CollectableEntity {
+public abstract class Potion extends Usable {
     
 }

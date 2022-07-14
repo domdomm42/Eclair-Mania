@@ -1,7 +1,7 @@
 package dungeonmania.entities.collectables;
 
-import dungeonmania.CollectableEntity;
+public abstract class Usable extends CollectableEntity{
 
-public interface Usable {
+    public abstract void use();
     
 }

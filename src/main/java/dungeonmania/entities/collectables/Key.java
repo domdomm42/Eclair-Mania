@@ -1,8 +1,11 @@
 package dungeonmania.entities.collectables;
 
-import dungeonmania.CollectableEntity;
-import java.security.Key;
+public class Key extends Usable {
 
-public class Key extends CollectableEntity implements Key {
+    @Override
+    public void use() {
+        // TODO Auto-generated method stub
+        
+    }
     
 }

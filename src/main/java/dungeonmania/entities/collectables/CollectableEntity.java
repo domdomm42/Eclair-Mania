@@ -1,4 +1,4 @@
-package dungeonmania.entities;
+package dungeonmania.entities.collectables;
 
 import dungeonmania.entities.StaticEntity;
 
