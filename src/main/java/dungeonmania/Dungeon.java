@@ -36,12 +36,12 @@ public class Dungeon {
 
 
     public Dungeon(String id, String dungeonName, String configName) throws IllegalArgumentException, FileNotFoundException {
-        instantiateDungeonEntities(dungeonName);
+        instantiateDungeonEntitiesAndGoals(dungeonName);
         setupConfigFile(configName);
         this.id = id;
     }
 
-    public void instantiateDungeonEntities(String dungeonName) {
+    public void instantiateDungeonEntitiesAndGoals(String dungeonName) {
         File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName));
         FileReader reader = new FileReader(dungeonFile);
         JSONObject obj = new JSONObject( JsonParser.parseReader(reader) );
@@ -57,6 +57,12 @@ public class Dungeon {
                     entities.add(new Wall(/**blah blah */));
             }
         }
+        JSONObject goals = obj.getJSONObject("goal-conditions");
+        this.goals = new Goal(goals);
+    }
+
+    public static Entity createDungeonEntityByType(String type, String[] args) {
+        String x = args[0];
     }
 
     public void setupConfigFile(String configName) throws FileNotFoundException {
