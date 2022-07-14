@@ -1,5 +1,7 @@
 package dungeonmania.Entities;
 
+import dungeonmania.util.Position;
+
 public class Entity {
     private String id, type;
     private Position position;
