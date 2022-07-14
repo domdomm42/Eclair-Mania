@@ -1,5 +1,7 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.Potions;
 
-public class Potion {
+import dungeonmania.Entities.StaticEntities.Collectables.Usable;
+
+public abstract class Potion extends Usable {
     
 }

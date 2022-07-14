@@ -1,5 +1,5 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities;
 
-public class BuildableEntity {
+public class Shield extends BuildableEntity {
     
 }
