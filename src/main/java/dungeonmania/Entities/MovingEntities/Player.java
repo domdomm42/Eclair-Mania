@@ -18,6 +18,7 @@ public class Player extends MovingEntity {
         super(id, type, position, Dungeon.getConfigValue("player_health"), isInteractable, new PlayerMovementStrategy(), Dungeon.getConfigValue("player_attack"));
         inventory = new Inventory();
         potionBag = new PotionBag();
+        getMovementStrategy().setEntity(this);
     };
 
     @Override

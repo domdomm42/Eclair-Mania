@@ -54,11 +54,17 @@ public class Dungeon {
 
             switch (type) {
                 case "player":
-                    this.entities.add(new Player(id, type, new Position(Integer.parseInt(x), Integer.parseInt(y)), Dungeon.getConfigValue("player_health"), false, Dungeon.getConfigValue("player_health")));
+                    this.entities.add(new Player(id, type, new Position(Integer.parseInt(x), Integer.parseInt(y)), false));
             }
         }
         JSONObject goals = obj.getJSONObject("goal-conditions");
         this.goals = new Goal(goals);
+    }
+
+    public Player getPlayer() {
+        Entity player = entities.stream().filter(entity -> entity.getType() == "player").findFirst().get();
+        if (player.getClass() == Player.class) return (Player) player;
+        return null;
     }
 
     public void setupConfigFile(String configName) throws FileNotFoundException {

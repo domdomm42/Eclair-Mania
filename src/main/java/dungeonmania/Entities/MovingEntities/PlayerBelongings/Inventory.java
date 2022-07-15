@@ -7,15 +7,19 @@ import java.util.stream.Collectors;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 
 public class Inventory {
-    ArrayList<CollectableEntity> items;
-    ArrayList<String> craftableItems;
+    private ArrayList<CollectableEntity> items;
 
     public Inventory() {
         items = new ArrayList<CollectableEntity>();
-        craftableItems = new ArrayList<String>();
     }
 
     public List<CollectableEntity> getItemsOfType(String type) {
         return items.stream().filter(item -> item.getType() == type).collect(Collectors.toList());
+    }
+
+    public ArrayList<String> getCraftableItems() {
+        ArrayList<String> craftableItems = new ArrayList<String>();
+        
+        return craftableItems;
     }
 }

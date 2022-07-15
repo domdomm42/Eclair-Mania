@@ -9,12 +9,11 @@ abstract public class MovementStrategy {
     public void move(Direction playerDirection) { };
     public void move() { };
 
-    public MovementStrategy(Entity entity) {
-        this.entity = entity;
-    }
-
     public Entity getEntity() {
         return entity;
+    }
+    public void setEntity(Entity entity) {
+        this.entity = entity;
     }
 
 }
