@@ -53,6 +53,10 @@ public class Player extends MovingEntity {
         return weaponryUsed;
     }
 
+    public void pickup(CollectableEntity item) {
+        inventory.addItem(item);
+    }
+
     @Override
     public void build(String type) throws InvalidActionException, IllegalArgumentException {
         inventory.buildEntity(type);

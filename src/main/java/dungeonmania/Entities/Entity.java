@@ -40,8 +40,8 @@ public class Entity {
         this.position = position;
     }
 
-    public void setPositionByDirection(Direction direction) {
-        this.position = this.position.translateBy(direction);
+    public Position getPositionInDirection(Direction direction) {
+        return this.position.translateBy(direction);
     }
 
     public boolean getIsInteractable() {
