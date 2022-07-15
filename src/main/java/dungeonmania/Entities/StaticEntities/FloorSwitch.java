@@ -7,7 +7,7 @@ public class FloorSwitch extends StaticEntity {
     private boolean isTriggered;
 
     public FloorSwitch(Position position, String id, String type, boolean Isinteractable, boolean isTriggered) {
-        super(position, id, type, Isinteractable);
+        super(position, id, "switch", false);
         this.isTriggered = isTriggered;
     }
 

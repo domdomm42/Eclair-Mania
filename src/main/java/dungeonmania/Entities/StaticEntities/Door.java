@@ -9,7 +9,7 @@ public class Door extends StaticEntity {
 
 
     public Door(Position position, String id, String type, boolean Isinteractable, Key keyThatUnlock, boolean isUnlocked) {
-        super(position, id, type, Isinteractable);
+        super(position, id, "door", false);
 
         this.keyThatUnlock = keyThatUnlock;
         this.isUnlocked = isUnlocked;

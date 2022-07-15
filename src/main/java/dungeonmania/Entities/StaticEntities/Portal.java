@@ -6,7 +6,7 @@ public class Portal extends StaticEntity {
     private Position endLocation;
 
     public Portal(Position position, String id, String type, boolean Isinteractable, Position endLocation) {
-        super(position, id, type, Isinteractable);
+        super(position, id, "portal", false);
         this.endLocation = endLocation;
     }
 

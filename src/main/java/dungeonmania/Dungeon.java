@@ -62,6 +62,11 @@ public class Dungeon {
         return null;
     }
 
+    public static Entity getEntityFromId(String id) {
+        Entity entity = entities.stream().filter(ent -> ent.getId() == id).findFirst().get();
+        return entity;
+    }
+
     public static void setupConfigFile(String configName) throws FileNotFoundException {
         File configFile = new File("src/test/resources/dungeons/".concat(configName));
         FileReader configReader = new FileReader(configFile);
