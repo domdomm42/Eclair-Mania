@@ -4,4 +4,7 @@ import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntit
 
 public abstract class BuildableEntity extends CollectableEntity {
     
+     
+
+
 }
