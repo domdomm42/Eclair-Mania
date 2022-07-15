@@ -6,13 +6,9 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DungeonManiaController {
-
-    ArrayList<Dungeon> dungeons = new ArrayList<Dungeon>();
-    
     public String getSkin() {
         return "default";
     }
@@ -39,41 +35,47 @@ public class DungeonManiaController {
      * /game/new
      */
     public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException, FileNotFoundException {
-        return new Dungeon(Integer.toString(dungeons.size()), dungeonName, configName ).getDungeonResponse();
+        Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
+        Dungeon.setupConfigFile(configName);
+        return Dungeon.getDungeonResponse();
     }
 
     /**
      * /game/dungeonResponseModel
      */
     public DungeonResponse getDungeonResponseModel() {
-        return null;
+        return Dungeon.getDungeonResponse();
     }
 
     /**
      * /game/tick/item
      */
     public DungeonResponse tick(String itemUsedId) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        Dungeon.tick(itemUsedId);
+        return Dungeon.getDungeonResponse();
     }
 
     /**
      * /game/tick/movement
      */
     public DungeonResponse tick(Direction movementDirection) {
-        return null;
+        Dungeon.tick(movementDirection);
+        return Dungeon.getDungeonResponse();
     }
 
     /**
      * /game/build
      */
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        Dungeon.build(buildable);
+        return Dungeon.getDungeonResponse();
     }
 
     /**
      * /game/interact
      */
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        Dungeon.interact(entityId);
+        return Dungeon.getDungeonResponse();
     }
 }

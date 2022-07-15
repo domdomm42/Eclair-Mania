@@ -56,7 +56,9 @@ public class Entity {
 
     public void tick(Direction movementDirection) { }
 
-    public void tick(String itemId) throws InvalidActionException, IllegalArgumentException { } 
+    public void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
+
+    } 
 
     public void build(String buildable) throws InvalidActionException, IllegalArgumentException  { }
 
