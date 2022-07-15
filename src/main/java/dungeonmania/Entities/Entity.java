@@ -1,5 +1,6 @@
 package dungeonmania.Entities;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -54,4 +55,10 @@ public class Entity {
     public void tick() { }
 
     public void tick(Direction movementDirection) { }
+
+    public void tick(String itemId) throws InvalidActionException, IllegalArgumentException { } 
+
+    public void build(String buildable) throws InvalidActionException, IllegalArgumentException  { }
+
+    public void interact(String entityId) throws InvalidActionException, IllegalArgumentException  { }
 }

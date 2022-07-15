@@ -1,5 +1,6 @@
 package dungeonmania.Entities.MovingEntities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.Dungeon;
@@ -7,6 +8,7 @@ import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStr
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -27,6 +29,18 @@ public class Player extends MovingEntity {
         getMovementStrategy().move(direction);
     }
     
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public PotionBag getPotionBag() {
+        return potionBag;
+    }
+
+    public ArrayList<String> getBuildables() {
+        return inventory.getCraftableItems();
+    }
+
     @Override
     public int getAttack() {
         return (super.getAttack() + inventory.getItemsOfType("sword").size() > 0 ? Dungeon.getConfigValue("sword_attack") : 0) 
@@ -37,5 +51,10 @@ public class Player extends MovingEntity {
         List<CollectableEntity> weaponryUsed = inventory.getItemsOfType("sword");
         weaponryUsed.addAll(inventory.getItemsOfType("bow"));
         return weaponryUsed;
+    }
+
+    @Override
+    public void build(String type) throws InvalidActionException, IllegalArgumentException {
+        inventory.buildEntity(type);
     }
 }
