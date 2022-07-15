@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -22,7 +24,6 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
-import dungeonmania.util.Position;
 
 public class Dungeon {
     private String id;
@@ -48,14 +49,12 @@ public class Dungeon {
         JSONArray entities = obj.getJSONArray("entities");
         for (int i = 0; i < entities.length(); i++) {
             String type = entities.getJSONObject(i).getString("type");
-            String x = entities.getJSONObject(i).getString("x");
-            String y = entities.getJSONObject(i).getString("y");
-            //ADD MORE IF NEEDED TODO
+            Map<String, String> creationArguments = new HashMap<String, String>();
+            creationArguments.put("x", entities.getJSONObject(i).getString("x"));
+            creationArguments.put("y", entities.getJSONObject(i).getString("y"));
+            creationArguments.put("id", Integer.toString(this.entities.size()));
 
-            switch (type) {
-                case "player":
-                    this.entities.add(new Player(id, type, new Position(Integer.parseInt(x), Integer.parseInt(y)), false));
-            }
+            this.entities.add(EntityFactory.createEntity(type, creationArguments));
         }
         JSONObject goals = obj.getJSONObject("goal-conditions");
         this.goals = new Goal(goals);

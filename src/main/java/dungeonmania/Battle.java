@@ -34,7 +34,7 @@ public class Battle {
 
     private void generateRounds() {
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
-            rounds.add(new Round(enemy.getAttack(), player.getAttack(), player.getWeaponryUsed()));
+            rounds.add(new Round(-enemy.getAttack(), -player.getAttack(), player.getWeaponryUsed()));
         }
     }
 
@@ -49,6 +49,4 @@ public class Battle {
     public List<RoundResponse> getRoundResponses() {
         return rounds.stream().map(round -> round.toRoundResponse()).collect(Collectors.toList());
     }
-
-
 }
