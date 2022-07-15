@@ -5,9 +5,12 @@ import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.util.Direction;
 
 public class PlayerMovementStrategy extends MovementStrategy {
-    private Player player;
+    public PlayerMovementStrategy(Player player) {
+        super(player);
+    }
     
+    @Override
     public void move(Direction direction) {
-        player.setPositionByDirection(direction);
+        getEntity().setPositionByDirection(direction);
     }
 }

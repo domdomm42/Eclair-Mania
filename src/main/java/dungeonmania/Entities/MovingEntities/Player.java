@@ -14,8 +14,8 @@ public class Player extends MovingEntity {
     Inventory inventory;
     PotionBag potionBag;
 
-    public Player(String id, String type, Position position, int health, boolean isInteractable, int attack) {
-        super(id, type, position, health, isInteractable, new PlayerMovementStrategy(), attack);
+    public Player(String id, String type, Position position, boolean isInteractable) {
+        super(id, type, position, Dungeon.getConfigValue("player_health"), isInteractable, new PlayerMovementStrategy(), Dungeon.getConfigValue("player_attack"));
         inventory = new Inventory();
         potionBag = new PotionBag();
     };
