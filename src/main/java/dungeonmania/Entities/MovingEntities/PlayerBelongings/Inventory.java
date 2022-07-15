@@ -17,6 +17,10 @@ public class Inventory {
         items = new ArrayList<CollectableEntity>();
     }
 
+    public boolean containsCollectable(String type) {
+        return items.stream().anyMatch(item -> item.getType() == type);
+    }
+
     public void addItem(CollectableEntity item) {
         items.add(item);
     }

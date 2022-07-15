@@ -82,6 +82,10 @@ public class Dungeon {
         return config.getInt(key);
     }
 
+    public static void removeEntity(Entity entity) {
+        entities.remove(entity);
+    }
+
     public static List<Entity> getEntitiesAtPosition(Position position) {
         return Dungeon.entities.stream().filter(entity -> entity.getPosition() == position).collect(Collectors.toList());
     }

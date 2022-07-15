@@ -28,6 +28,12 @@ public class Player extends MovingEntity {
         super.tick(direction);
         getMovementStrategy().move(direction);
     }
+
+    @Override
+    public void tick() {
+        super.tick();
+        potionBag.tick();
+    }
     
     public Inventory getInventory() {
         return inventory;
@@ -60,5 +66,13 @@ public class Player extends MovingEntity {
     @Override
     public void build(String type) throws InvalidActionException, IllegalArgumentException {
         inventory.buildEntity(type);
+    }
+
+    public boolean hasCollectable(String type) {
+        return inventory.containsCollectable(type);
+    }
+
+    public String activePotionEffect() {
+        return potionBag.getActivePotionType();
     }
 }
