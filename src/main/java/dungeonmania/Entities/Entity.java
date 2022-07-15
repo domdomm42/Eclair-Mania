@@ -1,9 +1,9 @@
 package dungeonmania.Entities;
 
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Entity {
-    
     private String id, type;
     private Position position;
     private boolean isInteractable = false;
@@ -39,6 +39,10 @@ public class Entity {
         this.position = position;
     }
 
+    public void setPositionByDirection(Direction direction) {
+        this.position = this.position.translateBy(direction);
+    }
+
     public boolean getIsInteractable() {
         return isInteractable;
     }
@@ -47,5 +51,7 @@ public class Entity {
         this.isInteractable = isInteractable;
     }
 
-    
+    public void tick() { }
+
+    public void tick(Direction movementDirection) { }
 }

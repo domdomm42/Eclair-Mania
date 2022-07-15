@@ -1,9 +1,10 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities;
 
+import dungeonmania.Dungeon;
 import dungeonmania.util.Position;
 
 public class Sword extends CollectableEntity {
     public Sword(Position position, String id) {
-        super(false, 10, position, id, "sword");
-    } // fix durability to get from config file
+        super(false, Dungeon.getConfigValue("sword_durability"), position, id, "sword");
+    }
 }
