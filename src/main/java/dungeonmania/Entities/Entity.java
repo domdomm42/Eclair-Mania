@@ -1,9 +1,10 @@
 package dungeonmania.Entities;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Entity {
+public abstract class Entity {
     private String id, type;
     private Position position;
     private boolean isInteractable = false;
@@ -39,8 +40,8 @@ public class Entity {
         this.position = position;
     }
 
-    public void setPositionByDirection(Direction direction) {
-        this.position = this.position.translateBy(direction);
+    public Position getPositionInDirection(Direction direction) {
+        return this.position.translateBy(direction);
     }
 
     public boolean getIsInteractable() {
@@ -51,7 +52,20 @@ public class Entity {
         this.isInteractable = isInteractable;
     }
 
-    public void tick() { }
+    public abstract void tick();
+    // if bomb next to active switch then explode
 
-    public void tick(Direction movementDirection) { }
+    public void tick(Direction movementDirection) { } // only for player
+
+    public abstract void tick(String itemId) throws InvalidActionException, IllegalArgumentException;
+    // use key
+    // use potion
+    // use drop bomb
+
+    public abstract void build(String buildable) throws InvalidActionException, IllegalArgumentException;
+    // build bow
+    // build shield
+    // all others should raise errors
+
+    public abstract void interact(String entityId) throws InvalidActionException, IllegalArgumentException;
 }

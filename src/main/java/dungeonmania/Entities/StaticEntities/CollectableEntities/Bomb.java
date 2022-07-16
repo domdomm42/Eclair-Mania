@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.StaticEntities.Boulder;
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -27,34 +29,22 @@ public class Bomb extends Usable {
         }
     }
     
+    @Override
+    public void tick() {
+        this.detonate();
+    }
+    
     // Denotes a bomb if next to an active switch
     // Returns a list of the entities which now exist
-    public ArrayList<Entity> detonate(ArrayList<Entity> entities) {
+    public void detonate() {
 
-        // List of positions that the bomb will destroy
-        
+        ArrayList<Entity> entities = Dungeon.getEntities();
 
-
-        // Check if there is an active switch adjacent to bomb
         if (isBombAdjacentToActiveSwitch(entities)) {
-
-            ArrayList<Entity> entitiesRemain;
-
-            entities.stream().filter(entity -> {
-
-            })
-            return 
+            for (Entity e : entities) {
+                destroyEntityByBomb(e);
+            }
         }
-
-        // ensure only destroys things on map
-        
-        
-        // probably need the dungeon class here to get all the entities
-
-        // ensure bomb is not picked up
-        // check if the bomb is next to an active switch at every tick
-        // if it is then detonate and destroy all entities within its radius
-        // ie remove from entitylist of dungeon those which are in position
     }
 
     private boolean isBombAdjacentToActiveSwitch(ArrayList<Entity> entities) {
@@ -71,13 +61,45 @@ public class Bomb extends Usable {
         return false;
     }
 
+    private void destroyEntityByBomb(Entity e) {
+
+        // Player cannot be destroyed by bomb
+        if (e.getType() == "player") {
+            return;
+        }
+
+        int bombRadius = Dungeon.getConfigValue("bomb_radius");
+        int entityPosX = e.getPosition().getX();
+        int entityPosY = e.getPosition().getY();
+
+        int bombPosX = this.getPosition().getX();
+        int bombPosY = this.getPosition().getY();
+
+        int bombRadiusLeftCoord = bombPosX - bombRadius;
+        int bombRadiusRightCoord = bombPosX + bombRadius;
+        int bombRadiusTopCoord = bombPosY + bombRadius;
+        int bombRadiusBottomCoord = bombPosY - bombRadius;
+
+        if (entityPosY <= bombRadiusBottomCoord && entityPosY >= bombRadiusTopCoord &&
+            entityPosX <= bombRadiusRightCoord && entityPosX >= bombRadiusLeftCoord) {
+            
+            // Cannot destroy collectable entities which are in the players inventory
+            if (!(e instanceof CollectableEntity)) {
+                Dungeon.removeEntity(e);
+            } else {
+                CollectableEntity c = (CollectableEntity) e;
+                if (!c.isPickedUp()) {
+                    Dungeon.removeEntity(c);
+                }
+            }
+        }
+    }
+
     public boolean isHasBeenPickedUp() {
         return hasBeenPickedUp;
     }
 
     public void setHasBeenPickedUp(boolean hasBeenPickedUp) {
         this.hasBeenPickedUp = hasBeenPickedUp;
-    }
-
-    
+    }    
 }

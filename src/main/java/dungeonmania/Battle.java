@@ -6,13 +6,14 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.response.models.RoundResponse;
 
 public class Battle {
     private Player player;
     private Enemy enemy;
     private int initialPlayerHp;
-    private int initialEnemyHp = 0;
+    private int initialEnemyHp;
     private ArrayList<Round> rounds;
 
     public Battle(Player player, Enemy enemy) {
@@ -33,6 +34,10 @@ public class Battle {
     }
 
     private void generateRounds() {
+        if (player.activePotionEffect() == "invincibility_potion") {
+            rounds.add(new Round(0, initialEnemyHp, new ArrayList<CollectableEntity>()));
+            return;
+        }
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             rounds.add(new Round(-enemy.getAttack(), -player.getAttack(), player.getWeaponryUsed()));
         }

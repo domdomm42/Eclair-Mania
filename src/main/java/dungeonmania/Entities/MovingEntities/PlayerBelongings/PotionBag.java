@@ -9,4 +9,14 @@ public class PotionBag {
     private Queue<Potion> potionQueue;
 
     public PotionBag() {}
+
+    public String getActivePotionType() {
+        return activePotion.getType();
+    }
+
+    public void usePotion(Potion potion) {
+        potionQueue.add(potion);
+    }
+
+    public void tick() {}
 }

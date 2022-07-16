@@ -17,32 +17,32 @@ import com.google.gson.JsonParser;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
-import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.BuildableEntity;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class Dungeon {
-    private String id;
-    private String dungeonName;
+    private static String id;
+    private static String dungeonName;
     private static JSONObject config;
-    private ArrayList<Entity> entities;
-    private ArrayList<CollectableEntity> items;
-    private ArrayList<Battle> battles;
-    private ArrayList<BuildableEntity> buildables;
-    private Goal goals;
+    private static ArrayList<Entity> entities = new ArrayList<Entity>();
+    private static ArrayList<CollectableEntity> items = new ArrayList<CollectableEntity>();
+    private static ArrayList<Battle> battles = new ArrayList<Battle>();
+    private static Goal goals;
 
-
-    public Dungeon(String id, String dungeonName, String configName) throws IllegalArgumentException, FileNotFoundException {
-        instantiateDungeonEntitiesAndGoals(dungeonName);
-        setupConfigFile(configName);
-        this.id = id;
+    public static void setId(String id) {
+        Dungeon.id = id;
     }
 
-    public void instantiateDungeonEntitiesAndGoals(String dungeonName) throws FileNotFoundException {
+    public static void addBattle(Battle battle) {
+        battles.add(battle);
+    }
+
+    public static void instantiateDungeonEntitiesAndGoals(String dungeonName) throws FileNotFoundException {
         File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName));
         FileReader reader = new FileReader(dungeonFile);
         JSONObject obj = new JSONObject( JsonParser.parseReader(reader) );
@@ -52,21 +52,26 @@ public class Dungeon {
             Map<String, String> creationArguments = new HashMap<String, String>();
             creationArguments.put("x", entities.getJSONObject(i).getString("x"));
             creationArguments.put("y", entities.getJSONObject(i).getString("y"));
-            creationArguments.put("id", Integer.toString(this.entities.size()));
+            creationArguments.put("id", Integer.toString(Dungeon.entities.size()));
 
-            this.entities.add(EntityFactory.createEntity(type, creationArguments));
+            Dungeon.entities.add(EntityFactory.createEntity(type, creationArguments));
         }
         JSONObject goals = obj.getJSONObject("goal-conditions");
-        this.goals = new Goal(goals);
+        Dungeon.goals = new Goal(goals);
     }
 
-    public Player getPlayer() {
+    public static Player getPlayer() {
         Entity player = entities.stream().filter(entity -> entity.getType() == "player").findFirst().get();
         if (player.getClass() == Player.class) return (Player) player;
         return null;
     }
 
-    public void setupConfigFile(String configName) throws FileNotFoundException {
+    public static Entity getEntityFromId(String id) {
+        Entity entity = entities.stream().filter(ent -> ent.getId() == id).findFirst().get();
+        return entity;
+    }
+
+    public static void setupConfigFile(String configName) throws FileNotFoundException {
         File configFile = new File("src/test/resources/dungeons/".concat(configName));
         FileReader configReader = new FileReader(configFile);
         JSONObject configObj = new JSONObject( JsonParser.parseReader(configReader) );
@@ -77,35 +82,49 @@ public class Dungeon {
         return config.getInt(key);
     }
 
-    public DungeonResponse getDungeonResponse() {
+    public static void removeEntity(Entity entity) {
+        entities.remove(entity);
+    }
+
+    public static List<Entity> getEntitiesAtPosition(Position position) {
+        return Dungeon.entities.stream().filter(entity -> entity.getPosition() == position).collect(Collectors.toList());
+    }
+
+    public static DungeonResponse getDungeonResponse() {
         List<EntityResponse> entityResponses = entities.stream().map(entity -> new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), entity.getIsInteractable())).collect(Collectors.toList());
         List<ItemResponse> itemResponses = items.stream().map(item -> new ItemResponse(item.getId(), item.getType())).collect(Collectors.toList());
         List<BattleResponse> battleResponses = battles.stream().map(battle -> new BattleResponse(battle.getEnemy().getType(), battle.getRoundResponses(), battle.getInitialPlayerHp(), battle.getInitialEnemyHp())).collect(Collectors.toList());
 
-        return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, /*buildables.toList()*/ new ArrayList<String>(), goals.toString());
+        return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, getPlayer().getBuildables(), goals.toString());
     }
 
-    public void tick() {
-        //TODO FOR STUFF THAT HAPPENS EVERY TICK REGARDLESS OF ACTION
+    public static void tick() {
+        entities.sort((Entity e1, Entity e2) -> e1.getType() == "player" ? -1 : 0); //NEED TO CHECK THIS
+        entities.forEach(entity -> entity.tick());
     }
 
-    public void tick(Direction movementDirection) {
+    public static void tick(Direction movementDirection) {
         tick();
-        //TODO 
+        entities.forEach(entity -> entity.tick(movementDirection));
     }
     
-    public void tick(String itemId) {
+    public static void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         tick();
-        //TODO 
+        for (Entity entity : entities) entity.tick(itemId);
     }
 
-    public void build(String buildable) throws IllegalArgumentException, InvalidActionException {
+    // only building the buildable string there, not all
+    public static void build(String buildable) throws InvalidActionException, IllegalArgumentException {
         tick();
-        //TODO 
+        for (Entity entity : entities) entity.build(buildable);
     }
 
-    public void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+    public static void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         tick();
-        //TODO 
+        for (Entity entity : entities) entity.interact(entityId);
+    }
+
+    public static ArrayList<Entity> getEntities() {
+        return entities;
     }
 }

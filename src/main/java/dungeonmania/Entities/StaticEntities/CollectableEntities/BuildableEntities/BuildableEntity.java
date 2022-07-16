@@ -1,5 +1,8 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities;
 
+import java.util.Map;
+
+import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.util.Position;
 
@@ -9,5 +12,9 @@ public abstract class BuildableEntity extends CollectableEntity {
         super(isPickedUp, durability, position, id, type);
     }
 
-    public abstract void build();
+    // the player's position is the buildable entity's position
+    @Override
+    public void tick() {
+        this.setPosition(Dungeon.getPlayer().getPosition());
+    }
 }
