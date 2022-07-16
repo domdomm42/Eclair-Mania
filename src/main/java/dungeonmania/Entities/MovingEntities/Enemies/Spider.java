@@ -50,4 +50,5 @@ public class Spider extends Enemy {
     }
 
     
+    
 }

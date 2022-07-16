@@ -1,5 +1,6 @@
 package dungeonmania.Entities.MovingEntities;
 
+import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.util.Position;
 
@@ -34,6 +35,11 @@ public class MovingEntity extends Entity {
 
     public double getAttack() {
         return attack;
+    }
+
+    public boolean isValidMove (Position nextPosition) {
+        return true;
+        
     }
 
 }

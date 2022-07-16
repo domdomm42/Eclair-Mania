@@ -2,6 +2,7 @@ package dungeonmania.Entities.MovingEntities;
 
 import dungeonmania.Entities.Entity;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 abstract public class MovementStrategy {
     private Entity entity;
@@ -16,5 +17,7 @@ abstract public class MovementStrategy {
     public void setEntity(Entity entity) {
         this.entity = entity;
     }
+    
+    public abstract boolean isValidMove(Position position);
 
 }
