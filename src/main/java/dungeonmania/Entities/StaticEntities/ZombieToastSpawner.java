@@ -16,7 +16,7 @@ public class ZombieToastSpawner extends StaticEntity {
     private int num_ticks = 0;
     private int zombie_spawn_rate = Dungeon.getConfigValue("zombie_spawn_rate");
 
-    public ZombieToastSpawner(Position position, String id, String type, boolean Isinteractable) {
+    public ZombieToastSpawner(Position position, String id) {
         super(position, id, "zombie_toast_spawner", true);
     }
 

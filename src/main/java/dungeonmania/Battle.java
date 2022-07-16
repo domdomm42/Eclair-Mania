@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
-import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.response.models.RoundResponse;
 
 public class Battle {

@@ -35,7 +35,7 @@ public class FloorSwitchTests {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "d_floorSwitchGoal");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
-        EntityResponse initSwitch = getEntities(actualDungonRes, "switch").get(0);
+        EntityResponse initSwitch = getEntities(initDungonRes, "switch").get(0);
 
         // create the expected result
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 2), false);
