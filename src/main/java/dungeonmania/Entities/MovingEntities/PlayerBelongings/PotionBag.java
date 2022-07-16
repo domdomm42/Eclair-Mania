@@ -14,6 +14,10 @@ public class PotionBag {
         return activePotion.getType();
     }
 
+    public Potion getActivePotion() {
+        return activePotion;
+    }
+
     public void usePotion(Potion potion) {
         potionQueue.add(potion);
     }

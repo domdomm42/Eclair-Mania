@@ -1,5 +1,6 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities;
 
+import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.StaticEntity;
 import dungeonmania.util.Position;
 
@@ -28,6 +29,9 @@ public abstract class CollectableEntity extends StaticEntity {
 
     public void setDurability(int durability) {
         this.durability = durability;
+        if (durability == 0) {
+            Dungeon.getPlayer().onDurabilityRunsOut(this);
+        }
     }
     
 }

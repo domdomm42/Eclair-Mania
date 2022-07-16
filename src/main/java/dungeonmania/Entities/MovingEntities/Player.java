@@ -84,9 +84,15 @@ public class Player extends MovingEntity {
                 * (inventory.getItemsOfType("bow").size() > 0 ? 2 : 1);
     }
 
+    public double getDefence() {
+        return (inventory.getItemsOfType("shield").size() > 0 ? Dungeon.getConfigValue("shield_defence") : 0);
+    }
+
     public List<CollectableEntity> getWeaponryUsed() {
         List<CollectableEntity> weaponryUsed = inventory.getItemsOfType("sword");
         weaponryUsed.addAll(inventory.getItemsOfType("bow"));
+        weaponryUsed.addAll(inventory.getItemsOfType("shield"));
+        if (activePotionEffect().equals("invincibility_potion")) weaponryUsed.add(potionBag.getActivePotion());
         return weaponryUsed;
     }
 
@@ -105,5 +111,9 @@ public class Player extends MovingEntity {
 
     public String activePotionEffect() {
         return potionBag.getActivePotionType();
+    }
+
+    public void onDurabilityRunsOut(CollectableEntity entity) {
+        inventory.removeItem(entity);
     }
 }
