@@ -25,22 +25,14 @@ public class ZombieToastSpawner extends StaticEntity {
 
     public void spawnZombie() {
         List<Position> adjacentPosition = getPosition().getAdjacentPositions();
-
-        //saves each tick and then mods it by rate
-        //id is zombie-int
-
         Map<String, String> creationArguments = new HashMap<String, String>();
-        
-        // int zombie = entities.stream().filter(entity -> entity.getType().equals("zombie")).size();
-
-
         creationArguments.put("zombie_toast", "zombie_toast-".concat(getId()));
 
         
         for (Position squares: adjacentPosition) {
             List<Entity> entity = Dungeon.getEntitiesAtPosition(squares);
             if (entity.isEmpty()) {
-                // int zombie_spawn_rate = Dungeon.getConfigValue("zombie_spawn_rate");
+
                 EntityFactory.createEntity("zombie_toast", creationArguments);
             }
         }
@@ -55,8 +47,6 @@ public class ZombieToastSpawner extends StaticEntity {
         num_ticks++;
     }
 
-    // not sure if right
-    // INTERACT player breaks zombietoastpawner at the tick
     public void interact() throws IllegalArgumentException, InvalidActionException {
         Inventory checkSword = Dungeon.getPlayer().getInventory();
 
