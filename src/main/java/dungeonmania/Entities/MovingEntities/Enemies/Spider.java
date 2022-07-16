@@ -15,7 +15,6 @@ public class Spider extends Enemy {
 
     @Override
     public void tick() {
-        
         getMovementStrategy().move();
     }
 
