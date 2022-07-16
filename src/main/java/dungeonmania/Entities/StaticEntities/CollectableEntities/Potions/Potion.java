@@ -1,10 +1,9 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.Potions;
 
-import dungeonmania.Dungeon;
-import dungeonmania.Entities.StaticEntities.CollectableEntities.Usable;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.util.Position;
 
-public abstract class Potion extends Usable {
+public abstract class Potion extends CollectableEntity {
 
     private int currentTicks;
     private int totalTicks;
@@ -30,5 +29,4 @@ public abstract class Potion extends Usable {
     public void setTotalTicks(int totalTicks) {
         this.totalTicks = totalTicks;
     }
-
 }
