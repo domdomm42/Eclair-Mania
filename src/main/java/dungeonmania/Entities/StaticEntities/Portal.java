@@ -1,20 +1,13 @@
 package dungeonmania.Entities.StaticEntities;
 
-import java.util.List;
-
 import dungeonmania.Dungeon;
-import dungeonmania.Entities.Entity;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Portal extends StaticEntity {
     private String color;
 
-<<<<<<< HEAD
-    public Portal(Position position, String id, Position endLocation) {
-=======
-    public Portal(Position position, String id, String type, boolean Isinteractable, String color) {
->>>>>>> origin/staticEntitiesFunctions
+    public Portal(Position position, String id, String color) {
         super(position, id, "portal", false);
         this.color = color;
     }
