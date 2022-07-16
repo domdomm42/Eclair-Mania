@@ -75,8 +75,7 @@ public class EntityFactory {
             case "bow":
                 return new Bow(id);
             case "shield":
-                return new Shield(position, id);
-
+                return new Shield(id);
         }
         throw new IllegalArgumentException("Entity type does not exist");
     }

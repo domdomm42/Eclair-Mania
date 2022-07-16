@@ -1,5 +1,6 @@
 package dungeonmania.Entities.StaticEntities;
 
+import dungeonmania.Dungeon;
 import dungeonmania.util.Position;
 
 public class FloorSwitch extends StaticEntity {
@@ -19,4 +20,10 @@ public class FloorSwitch extends StaticEntity {
         this.isTriggered = isTriggered;
     }
     
+    @Override
+    public void tick() {
+        super.tick();
+        if (Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "boulder") == null) setTriggered(false);
+        else setTriggered(true);
+    }
 }

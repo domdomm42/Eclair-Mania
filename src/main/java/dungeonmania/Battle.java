@@ -34,17 +34,18 @@ public class Battle {
     }
 
     private void generateRounds() {
+        if (rounds.size() > 0) return;
         if (player.activePotionEffect().equals("invincibility_potion")) {
-            rounds.add(new Round(0, initialEnemyHp, new ArrayList<CollectableEntity>()));
-            return;
-        }
-        while (player.getHealth() > 0 && enemy.getHealth() > 0) {
+            rounds.add(new Round(0, initialEnemyHp, player.getWeaponryUsed()));
+        } else while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             rounds.add(new Round(-enemy.getAttack(), -player.getAttack(), player.getWeaponryUsed()));
-            player.setHealth(player.getHealth() - (enemy.getAttack() / 10));
+            player.setHealth(player.getHealth() - ((enemy.getAttack() - player.getDefence()) / 10));
             enemy.setHealth(enemy.getHealth() - (player.getAttack() / 10));
         }
+        
         if (player.getHealth() <= 0) Dungeon.removeEntity(player);
         if (player.getHealth() <= 0) Dungeon.removeEntity(enemy);
+        player.getWeaponryUsed().forEach(weapon -> weapon.setDurability(weapon.getDurability() - 1));
     }
 
     public Player getPlayer() {
