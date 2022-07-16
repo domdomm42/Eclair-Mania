@@ -21,6 +21,10 @@ public class Inventory {
         return items.stream().anyMatch(item -> item.getType().equals(type));
     }
 
+    public boolean containsCollectableById(String id) {
+        return items.stream().anyMatch(item -> item.getId().equals(id));
+    }
+
     public void addItem(CollectableEntity item) {
         items.add(item);
     }

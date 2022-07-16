@@ -18,5 +18,12 @@ public class PotionBag {
         potionQueue.add(potion);
     }
 
-    public void tick() {}
+    public void tick() {
+        if (activePotion.getCurrentTicks() == activePotion.getTotalTicks()) {
+            if (potionQueue.isEmpty()) activePotion = null;
+            else activePotion = potionQueue.poll();
+            return;
+        }
+        activePotion.setCurrentTicks(activePotion.getCurrentTicks() + 1);
+    }
 }
