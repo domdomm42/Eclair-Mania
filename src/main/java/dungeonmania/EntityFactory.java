@@ -28,10 +28,12 @@ import dungeonmania.util.Position;
 
 public class EntityFactory {
     static public Entity createEntity(String type, Map<String, String> args) throws IllegalArgumentException {
-        Position position = new Position(Integer.parseInt(args.get("x")), Integer.parseInt(args.get("y")));
+        Position position;
+        if (!type.equals("bow") && !type.equals("shield")) position = new Position(Integer.parseInt(args.get("x")), Integer.parseInt(args.get("y")));
+        else position = Dungeon.getPlayer().getPosition();
         String id = args.get("id");
         String keyId = args.get("key");
-        String color = args.get("colour");
+        String color = args.get("color");
 
         switch (type) {
             case "player":
@@ -66,7 +68,7 @@ public class EntityFactory {
                 return new InvisibilityPotion(position, id);
             case "wood":
                 return new Wood(position, id);
-            case "arrows":
+            case "arrow":
                 return new Arrow(id, position);
             case "bomb":
                 return new Bomb(position, id);

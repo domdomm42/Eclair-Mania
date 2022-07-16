@@ -19,6 +19,10 @@ public class Bomb extends Usable {
     public void use() {
         if (this.isPickedUp()) {
             this.setPickedUp(false);
+            setPosition(Dungeon.getPlayer().getPosition());
+            Dungeon.addEntityToAddAfterTick(this);
+            Dungeon.getPlayer().getInventory().removeItem(this);
+            this.detonate();
             this.hasBeenPickedUp = true;
         }
     }
@@ -38,6 +42,7 @@ public class Bomb extends Usable {
             for (Entity e : entities) {
                 destroyEntityByBomb(e);
             }
+            Dungeon.addEntityToRemoveAfterTick(this);
         }
     }
 
@@ -74,18 +79,11 @@ public class Bomb extends Usable {
         int bombRadiusTopCoord = bombPosY + bombRadius;
         int bombRadiusBottomCoord = bombPosY - bombRadius;
 
-        if (entityPosY <= bombRadiusBottomCoord && entityPosY >= bombRadiusTopCoord &&
+        if (entityPosY >= bombRadiusBottomCoord && entityPosY <= bombRadiusTopCoord &&
             entityPosX <= bombRadiusRightCoord && entityPosX >= bombRadiusLeftCoord) {
             
             // Cannot destroy collectable entities which are in the players inventory
-            if (!(e instanceof CollectableEntity)) {
-                Dungeon.removeEntity(e);
-            } else {
-                CollectableEntity c = (CollectableEntity) e;
-                if (!c.isPickedUp()) {
-                    Dungeon.removeEntity(c);
-                }
-            }
+            Dungeon.addEntityToRemoveAfterTick(e);
         }
     }
 

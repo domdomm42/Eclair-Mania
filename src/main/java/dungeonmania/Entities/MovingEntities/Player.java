@@ -46,7 +46,7 @@ public class Player extends MovingEntity {
     }
 
     public void useItem(String itemId) throws InvalidActionException, IllegalArgumentException {
-        Entity entityToUse = Dungeon.getEntityFromId(itemId);
+        Entity entityToUse = Dungeon.getPlayer().getInventory().getItemFromId(itemId);
         if (!inventory.containsCollectableById(itemId)) throw new InvalidActionException("Item does not exist in player's inventory");
         if (entityToUse instanceof Usable) {
             ((Usable) entityToUse).use();
@@ -102,6 +102,8 @@ public class Player extends MovingEntity {
 
     public void pickup(CollectableEntity item) {
         inventory.addItem(item);
+        item.setPickedUp(true);
+        Dungeon.removeEntity(item);
     }
 
     @Override

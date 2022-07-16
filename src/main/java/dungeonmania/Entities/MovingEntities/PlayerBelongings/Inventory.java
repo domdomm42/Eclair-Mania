@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import dungeonmania.EntityFactory;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.response.models.ItemResponse;
 
 public class Inventory {
     private ArrayList<CollectableEntity> items;
@@ -51,15 +52,17 @@ public class Inventory {
 
     public ArrayList<String> getCraftableItems() {
         ArrayList<String> craftableItems = new ArrayList<String>();
+        if (canBuildBow()) craftableItems.add("bow");
+        if (canBuildShield()) craftableItems.add("shield");
         return craftableItems;
     }
 
     public boolean canBuildBow() {
-        return getItemsOfType("wood").size() >= 1 && getItemsOfType("arrows").size() >= 3;
+        return getItemsOfType("wood").size() >= 1 && getItemsOfType("arrow").size() >= 3;
     }
 
     public boolean canBuildShield() {
-        return getItemsOfType("wood").size() >= 2 && getItemsOfType("treasure").size() >= 1;
+        return getItemsOfType("wood").size() >= 2 && (getItemsOfType("key").size() >= 1 || getItemsOfType("treasure").size() >= 1);
     }
 
     public void removeCraftingMaterials(Map<String, Integer> craftingMaterials) {
@@ -71,11 +74,12 @@ public class Inventory {
         if (!canBuildEntity(type)) throw new InvalidActionException("not enough materials to build ".concat(type));
         if (type.equals("bow")) {
             craftingMaterials.put("wood", 1);
-            craftingMaterials.put("arrows", 3);
+            craftingMaterials.put("arrow", 3);
         }
         if (type.equals("shield")) {
             craftingMaterials.put("wood", 2);
-            craftingMaterials.put("treasure", 1);
+            if (getItemsOfType("treasure").size() >= 1) craftingMaterials.put("treasure", 1);
+            else craftingMaterials.put("key", 1);
         }
         removeCraftingMaterials(craftingMaterials);
         Map<String, String> newEntityArgs = new HashMap<String, String>();
@@ -87,5 +91,15 @@ public class Inventory {
         if (type.equals("bow")) return canBuildBow();
         if (type.equals("shield")) return canBuildShield();
         throw new IllegalArgumentException(type.concat(" cannot be built"));
+    }
+
+    public List<ItemResponse> toItemResponse() {
+        return items.stream().map(item -> new ItemResponse(item.getId(), item.getType())).collect(Collectors.toList());
+    }
+
+    public CollectableEntity getItemFromId(String id) {
+        return items.stream().filter(ent -> ent.getId().equals(id)).findFirst().map(entity -> {
+            return entity;
+        }).orElse(null);
     }
 }

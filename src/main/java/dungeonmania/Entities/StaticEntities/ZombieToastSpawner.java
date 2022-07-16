@@ -23,17 +23,20 @@ public class ZombieToastSpawner extends StaticEntity {
     public void spawnZombie() {
         List<Position> adjacentPosition = getPosition().getAdjacentPositions();
         Map<String, String> creationArguments = new HashMap<String, String>();
-        creationArguments.put("zombie_toast", "zombie_toast-".concat(getId()));
 
         
         for (Position squares: adjacentPosition) {
             List<Entity> entity = Dungeon.getEntitiesAtPosition(squares);
             if (entity.isEmpty()) {
-
-                EntityFactory.createEntity("zombie_toast", creationArguments);
+                creationArguments.put("x", Integer.toString(squares.getX()));
+                creationArguments.put("y", Integer.toString(squares.getY()));
+                creationArguments.put("id", "zombie".concat(Integer.toString(Dungeon.getEntities().size())));
+                Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity("zombie_toast", creationArguments));
+                return;
             }
         }
     }
+
     @Override
     public void tick() {
         if (num_ticks % zombie_spawn_rate == 0) {

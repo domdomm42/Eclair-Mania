@@ -24,6 +24,7 @@ public class ZombieMovementStrategy extends MovementStrategy {
         List<Position> movableAdjacentPositions = getMovableAdjacentPositions(cardinallyAdjacentPositions);
 
         Random rand = new Random();
+        if (movableAdjacentPositions.size() == 0) return; 
         int randomNumber = rand.nextInt(movableAdjacentPositions.size()); // random number, max is number of empty cardianlly adjacent positions
         Position nextPosition = movableAdjacentPositions.get(randomNumber);
 

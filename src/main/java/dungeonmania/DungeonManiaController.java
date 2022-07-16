@@ -6,6 +6,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public class DungeonManiaController {
@@ -39,6 +40,8 @@ public class DungeonManiaController {
             Dungeon.setupConfigFile(configName);
             Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
         } catch (FileNotFoundException exception) {
+            return null;
+        } catch (IOException exception) {
             return null;
         }
         return Dungeon.getDungeonResponse();

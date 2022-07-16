@@ -18,7 +18,6 @@ import com.google.gson.JsonParser;
 
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Player;
-import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
@@ -32,11 +31,12 @@ public class Dungeon {
     private static String dungeonName;
     private static JsonObject config;
     private static ArrayList<Entity> entities;
-    private static ArrayList<CollectableEntity> items;
     private static ArrayList<Battle> battles;
     private static Goal goals;
     private static Set<String> completedGoals;
     private static int enemiesKilled;
+    private static ArrayList<Entity> entitiesToAddAfterTick;
+    private static ArrayList<Entity> entitiesToRemoveAfterTick;
 
     public static int incrementKilledEntities() {
         return enemiesKilled + 1;
@@ -50,11 +50,12 @@ public class Dungeon {
         id = "dungeon";
         Dungeon.dungeonName = dungeonName;
         entities = new ArrayList<Entity>();
-        items = new ArrayList<CollectableEntity>();
+        entitiesToAddAfterTick = new ArrayList<Entity>();
+        entitiesToRemoveAfterTick = new ArrayList<Entity>();
         battles = new ArrayList<Battle>();
         completedGoals = new HashSet<String>();
         enemiesKilled = 0;
-        File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
+        File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
         JsonArray entities = obj.getAsJsonArray("entities");
@@ -63,11 +64,13 @@ public class Dungeon {
             Map<String, String> creationArguments = new HashMap<String, String>();
             creationArguments.put("x", entities.get(i).getAsJsonObject().get("x").getAsString());
             creationArguments.put("y", entities.get(i).getAsJsonObject().get("y").getAsString());
-            if (type.equals("door") || type.equals("key")) creationArguments.put("keyId", entities.get(i).getAsJsonObject().get("key").getAsString());
+            if (type.equals("portal")) System.out.println(entities.get(i).getAsJsonObject().get("colour").getAsString());
+            if (type.equals("door") || type.equals("key")) creationArguments.put("key", entities.get(i).getAsJsonObject().get("key").getAsString());
             if (type.equals("portal")) creationArguments.put("color", entities.get(i).getAsJsonObject().get("colour").getAsString());
             creationArguments.put("id", Integer.toString(Dungeon.entities.size()));
 
-            Dungeon.entities.add(EntityFactory.createEntity(type, creationArguments));
+            Entity requestedEntity = EntityFactory.createEntity(type, creationArguments);
+            if (requestedEntity != null ) Dungeon.entities.add(requestedEntity);
         }
         JsonObject goals = obj.getAsJsonObject("goal-condition");
         Dungeon.goals = new Goal(goals);
@@ -87,7 +90,7 @@ public class Dungeon {
     }
 
     public static void setupConfigFile(String configName) throws FileNotFoundException {
-        File configFile = new File("src/main/resources/configs/".concat(configName).concat(".json"));
+        File configFile = new File("src/test/resources/configs/".concat(configName).concat(".json"));
         FileReader configReader = new FileReader(configFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(configReader);
         Dungeon.config = obj;
@@ -99,6 +102,18 @@ public class Dungeon {
 
     public static void removeEntity(Entity entity) {
         entities.remove(entity);
+    }
+
+    public static void addEntity(Entity entity) {
+        entities.add(entity);
+    }
+
+    public static void addEntityToAddAfterTick(Entity entity) {
+        entitiesToAddAfterTick.add(entity);
+    }
+
+    public static void addEntityToRemoveAfterTick(Entity entity) {
+        entitiesToRemoveAfterTick.add(entity);
     }
 
     public static void addCompletedGoal(String goal) {
@@ -129,14 +144,15 @@ public class Dungeon {
 
     public static DungeonResponse getDungeonResponse() {
         List<EntityResponse> entityResponses = entities.stream().map(entity -> new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), entity.getIsInteractable())).collect(Collectors.toList());
-        List<ItemResponse> itemResponses = items.stream().map(item -> new ItemResponse(item.getId(), item.getType())).collect(Collectors.toList());
+        List<ItemResponse> itemResponses = getPlayer().getInventory().toItemResponse();
         List<BattleResponse> battleResponses = battles.stream().map(battle -> new BattleResponse(battle.getEnemy().getType(), battle.getRoundResponses(), battle.getInitialPlayerHp(), battle.getInitialEnemyHp())).collect(Collectors.toList());
 
         return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, getPlayer().getBuildables(), goals.toString());
     }
 
     public static void tick() {
-        entities.stream().filter(entity -> entity.getType().equals("player")).forEach(entity -> entity.tick());
+        entities.forEach(entity -> System.err.println(entity));
+        getPlayer().tick();
         entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick());
     }
 
@@ -156,16 +172,24 @@ public class Dungeon {
 
     public static void tick(Direction movementDirection) {
         tick();
-        entities.stream().filter(entity -> entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
+        getPlayer().tick(movementDirection);
         entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
         updateGoals();
+        entitiesToAddAfterTick.forEach(entity -> addEntity(entity));
+        entitiesToAddAfterTick = new ArrayList<Entity>();
+        entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
+        entitiesToRemoveAfterTick = new ArrayList<Entity>();
     }
     
     public static void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         tick();
-        for (Entity entity : entities.stream().filter(entity -> entity.getType().equals("player")).collect(Collectors.toList())) entity.tick(itemId);
-        for (Entity entity : entities.stream().filter(entity -> !entity.getType().equals("player")).collect(Collectors.toList())) entity.tick(itemId);
+        getPlayer().tick(itemId);
+        for (Entity entity : entities.stream().filter(entity -> !(entity.getType().equals("player"))).collect(Collectors.toList())) entity.tick(itemId);
         updateGoals();
+        entitiesToAddAfterTick.forEach(entity -> addEntity(entity));
+        entitiesToAddAfterTick = new ArrayList<Entity>();
+        entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
+        entitiesToRemoveAfterTick = new ArrayList<Entity>();
     }
 
     // only building the buildable string there, not all
@@ -173,6 +197,10 @@ public class Dungeon {
         tick();
         getPlayer().build(buildable);
         updateGoals();
+        entitiesToAddAfterTick.forEach(entity -> addEntity(entity));
+        entitiesToAddAfterTick = new ArrayList<Entity>();
+        entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
+        entitiesToRemoveAfterTick = new ArrayList<Entity>();
     }
 
     public static void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
@@ -181,6 +209,10 @@ public class Dungeon {
         if (entity == null) throw new IllegalArgumentException("No matching ID");
         entity.interact();
         updateGoals();
+        entitiesToAddAfterTick.forEach(entityToSpawn -> addEntity(entityToSpawn));
+        entitiesToAddAfterTick = new ArrayList<Entity>();
+        entitiesToRemoveAfterTick.forEach(entityToRemove -> removeEntity(entityToRemove));
+        entitiesToRemoveAfterTick = new ArrayList<Entity>();
     }
 
     public static ArrayList<Entity> getEntities() {

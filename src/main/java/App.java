@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 
 import dungeonmania.Dungeon;
 import dungeonmania.DungeonManiaController;
+import dungeonmania.Entities.StaticEntities.Portal;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.GenericResponseWrapper;
 import dungeonmania.util.Direction;
@@ -154,12 +155,13 @@ public class App implements SparkApplication {
     }
 
     public static void main(String[] args) throws Exception {
-        Dungeon.setupConfigFile("simple");
-        Dungeon.instantiateDungeonEntitiesAndGoals("boulders");
-        Dungeon.getEntities().forEach(entity -> {
-            System.out.println(entity.getType());
-            System.out.println(entity.getPosition());
-        });
-        // new App().init();
+        // Dungeon.setupConfigFile("simple");
+        // Dungeon.instantiateDungeonEntitiesAndGoals("portals");
+        // Dungeon.getEntities().forEach(entity -> {
+        //     if (entity instanceof Portal) System.out.println(((Portal) entity).getColor());
+        //     System.out.println(entity.getType());
+        //     System.out.println(entity.getPosition());
+        // });
+        new App().init();
     }
 }

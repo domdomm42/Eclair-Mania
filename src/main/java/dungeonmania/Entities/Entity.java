@@ -7,7 +7,7 @@ import dungeonmania.util.Position;
 public abstract class Entity {
     private String id, type;
     private Position position;
-    private boolean isInteractable = false;
+    private boolean isInteractable;
     
     public Entity(String id, String type, Position position, boolean isInteractable) {
         this.id = id;
@@ -89,5 +89,11 @@ public abstract class Entity {
         } else if (!type.equals(other.type))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Entity [id=" + id + ", isInteractable=" + isInteractable + ", position=" + position + ", type=" + type
+                + "]";
     }
 }
