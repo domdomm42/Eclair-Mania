@@ -8,20 +8,23 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Portal extends StaticEntity {
-    private Position endLocation;
+    private String color;
 
-    public Portal(Position position, String id, String type, boolean Isinteractable, Position endLocation) {
+    public Portal(Position position, String id, String type, boolean Isinteractable, String color) {
         super(position, id, "portal", false);
-        this.endLocation = endLocation;
+        this.color = color;
     }
 
-    public Position getEndLocation() {
-        return endLocation;
+    
+    public String getColor() {
+        return color;
     }
 
-    public void setEndLocation(Position endLocation) {
-        this.endLocation = endLocation;
+
+    public void setColor(String color) {
+        this.color = color;
     }
+
 
     // public Position checkIfAdjacentSquareIsWall(Position position) {
     //     List<Position> adjacentPosition = position.getAdjacentPositions();
