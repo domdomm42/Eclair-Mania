@@ -52,12 +52,12 @@ public abstract class Entity {
         this.isInteractable = isInteractable;
     }
 
-    public abstract void tick();
+    public void tick() { };
     // if bomb next to active switch then explode
 
     public void tick(Direction movementDirection) { } // only for player
 
-    public abstract void tick(String itemId) throws InvalidActionException, IllegalArgumentException;
+    public void tick(String itemId) throws InvalidActionException, IllegalArgumentException { };
     // use key
     // use potion
     // use drop bomb
@@ -92,6 +92,4 @@ public abstract class Entity {
             return false;
         return true;
     }
-
-    
 }
