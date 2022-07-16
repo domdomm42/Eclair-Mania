@@ -107,4 +107,20 @@ public final class Position {
         adjacentPositions.add(new Position(x-1, y));
         return adjacentPositions;
     }
+
+    // ADDED BY RUPIN
+    // - 0 -
+    // 3 p 1
+    // - 2 -
+    public List<Position> getCardinallyAdjacentPositions() {
+        List<Position> cardinallyAdjacentPositions = new ArrayList<>();
+        cardinallyAdjacentPositions.add(new Position(x  , y-1));
+        cardinallyAdjacentPositions.add(new Position(x+1, y));
+        cardinallyAdjacentPositions.add(new Position(x  , y+1));
+        cardinallyAdjacentPositions.add(new Position(x-1, y));
+        return cardinallyAdjacentPositions;
+    }
+
 }
+
+
