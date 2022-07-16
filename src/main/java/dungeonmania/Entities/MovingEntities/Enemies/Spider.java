@@ -8,7 +8,7 @@ public class Spider extends Enemy {
     private int positionIterator;
     private boolean isClockwise = true;
 
-    public Spider(String id, String type, Position position, int health, boolean isInteractable, MovementStrategy movementStrategy, int attack) {
+    public Spider(String id, String type, Position position, double health, boolean isInteractable, MovementStrategy movementStrategy, double attack) {
         super(id, type, position, health, isInteractable, movementStrategy, attack);
         getMovementStrategy().setEntity(this);
     }

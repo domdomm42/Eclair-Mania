@@ -12,8 +12,8 @@ import dungeonmania.response.models.RoundResponse;
 public class Battle {
     private Player player;
     private Enemy enemy;
-    private int initialPlayerHp;
-    private int initialEnemyHp;
+    private double initialPlayerHp;
+    private double initialEnemyHp;
     private ArrayList<Round> rounds;
 
     public Battle(Player player, Enemy enemy) {
@@ -25,11 +25,11 @@ public class Battle {
         generateRounds();
     }
 
-    public int getInitialPlayerHp() {
+    public double getInitialPlayerHp() {
         return initialPlayerHp;
     }
 
-    public int getInitialEnemyHp() {
+    public double getInitialEnemyHp() {
         return initialEnemyHp;
     }
 
@@ -40,7 +40,11 @@ public class Battle {
         }
         while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             rounds.add(new Round(-enemy.getAttack(), -player.getAttack(), player.getWeaponryUsed()));
+            player.setHealth(player.getHealth() - (enemy.getAttack() / 10));
+            enemy.setHealth(enemy.getHealth() - (player.getAttack() / 10));
         }
+        if (player.getHealth() <= 0) Dungeon.removeEntity(player);
+        if (player.getHealth() <= 0) Dungeon.removeEntity(enemy);
     }
 
     public Player getPlayer() {

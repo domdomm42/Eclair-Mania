@@ -9,11 +9,12 @@ public class LeafGoalExpression extends GoalExpression {
     }
 
     public String toString() {
+        if (isComplete()) return "";
         return this.getGoal();
     }
 
     @Override
     public void computeComplete() {
-        if (Dungeon.getCompletedGoals().stream().anyMatch(goal -> goal.equals(getGoal())));
+        if (Dungeon.getCompletedGoals().stream().anyMatch(goal -> goal.equals(getGoal()))) setComplete(true);
     }
 }

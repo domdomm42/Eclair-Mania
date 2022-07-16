@@ -7,7 +7,7 @@ public class Mercenary extends Enemy {
     private int bribePrice;
     private boolean isAlly = false;
     
-    public Mercenary(String id, String type, Position position, int health, boolean isInteractable, MovementStrategy movementStrategy, int attack, int bribePrice) {
+    public Mercenary(String id, String type, Position position, double health, boolean isInteractable, MovementStrategy movementStrategy, double attack, int bribePrice) {
         super(id, type, position, health, isInteractable, movementStrategy, attack);
         this.bribePrice = bribePrice;
     }
