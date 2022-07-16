@@ -55,7 +55,7 @@ public class Dungeon {
         battles = new ArrayList<Battle>();
         completedGoals = new HashSet<String>();
         enemiesKilled = 0;
-        File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName).concat(".json"));
+        File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
         JsonArray entities = obj.getAsJsonArray("entities");
@@ -90,7 +90,7 @@ public class Dungeon {
     }
 
     public static void setupConfigFile(String configName) throws FileNotFoundException {
-        File configFile = new File("src/test/resources/configs/".concat(configName).concat(".json"));
+        File configFile = new File("src/main/resources/configs/".concat(configName).concat(".json"));
         FileReader configReader = new FileReader(configFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(configReader);
         Dungeon.config = obj;
