@@ -38,11 +38,11 @@ public class PlayerMovementStrategy extends MovementStrategy {
             ((Boulder) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "boulder")).getMovementStrategy().move(direction);
             return;
         } 
+        player.setPosition(requestedPosition);
         if (entitiesOnPosition.stream().anyMatch(entity -> entity instanceof Enemy)) {
             Dungeon.addBattle(new Battle(player, (Enemy) entitiesOnPosition.stream().filter(entity -> entity instanceof Enemy).findFirst().get()));
             return;
         }
-        player.setPosition(requestedPosition);
         entitiesOnPosition.stream().filter(entity -> entity instanceof CollectableEntity).forEach(entity -> {
             CollectableEntity collectableEntity = (CollectableEntity) entity;
             player.pickup((CollectableEntity) entity);

@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.Dungeon;
+import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStrategy;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Usable;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -35,6 +38,20 @@ public class Player extends MovingEntity {
         super.tick();
         potionBag.tick();
     }
+
+    @Override
+    public void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
+        super.tick(itemId);
+        useItem(itemId);
+    }
+
+    public void useItem(String itemId) throws InvalidActionException, IllegalArgumentException {
+        Entity entityToUse = Dungeon.getEntityFromId(itemId);
+        if (!inventory.containsCollectableById(itemId)) throw new InvalidActionException("Item does not exist in player's inventory");
+        if (entityToUse instanceof Usable) {
+            ((Usable) entityToUse).use();
+        } else throw new IllegalArgumentException(itemId.concat(" is not Usable"));
+    }
     
     public Inventory getInventory() {
         return inventory;
@@ -48,6 +65,11 @@ public class Player extends MovingEntity {
         inventory.removeItem(key);
     }
 
+    public void usePotion(Potion potion) {
+        inventory.removeItem(potion);
+        potionBag.usePotion(potion);
+    }
+
     public PotionBag getPotionBag() {
         return potionBag;
     }
@@ -57,7 +79,7 @@ public class Player extends MovingEntity {
     }
 
     @Override
-    public int getAttack() {
+    public double getAttack() {
         return (super.getAttack() + inventory.getItemsOfType("sword").size() > 0 ? Dungeon.getConfigValue("sword_attack") : 0) 
                 * (inventory.getItemsOfType("bow").size() > 0 ? 2 : 1);
     }
