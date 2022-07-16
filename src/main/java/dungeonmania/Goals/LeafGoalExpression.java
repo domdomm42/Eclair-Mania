@@ -5,12 +5,12 @@ import dungeonmania.Dungeon;
 public class LeafGoalExpression extends GoalExpression {
 
     public LeafGoalExpression(String goal) {
-        super(goal);
+        super(":".concat(goal));
     }
 
     public String toString() {
         if (isComplete()) return "";
-        return this.getGoal();
+        return getGoal();
     }
 
     @Override

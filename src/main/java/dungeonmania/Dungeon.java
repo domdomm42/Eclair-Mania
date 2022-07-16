@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class Dungeon {
     private static int enemiesKilled;
     private static ArrayList<Entity> entitiesToAddAfterTick;
     private static ArrayList<Entity> entitiesToRemoveAfterTick;
+    private static int numberOfTicks;
 
     public static int incrementKilledEntities() {
         return enemiesKilled + 1;
@@ -55,7 +57,8 @@ public class Dungeon {
         battles = new ArrayList<Battle>();
         completedGoals = new HashSet<String>();
         enemiesKilled = 0;
-        File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName).concat(".json"));
+        numberOfTicks = 0;
+        File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
         JsonArray entities = obj.getAsJsonArray("entities");
@@ -90,7 +93,7 @@ public class Dungeon {
     }
 
     public static void setupConfigFile(String configName) throws FileNotFoundException {
-        File configFile = new File("src/test/resources/configs/".concat(configName).concat(".json"));
+        File configFile = new File("src/main/resources/configs/".concat(configName).concat(".json"));
         FileReader configReader = new FileReader(configFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(configReader);
         Dungeon.config = obj;
@@ -152,55 +155,82 @@ public class Dungeon {
 
     public static void tick() {
         entities.forEach(entity -> System.err.println(entity));
+
+        int spiderSpawnRate = Dungeon.getConfigValue("spider_spawn_rate");
+        if (numberOfTicks % spiderSpawnRate == 0) {
+            spawnSpider();
+        }
+        numberOfTicks++;
+
         getPlayer().tick();
         entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick());
+    }
+
+    private static void spawnSpider() {
+        int xMin = -20;
+        int xMax = 20;
+        int yMin = -20;
+        int yMax = 20;
+
+        Random rand = new Random();
+        int xRandom = xMin+ rand.nextInt(xMax - xMin + 1);
+        int yRandom = yMin+ rand.nextInt(yMax - yMin + 1);
+
+        Map<String, String> creationArgs = new HashMap<String, String>();
+        creationArgs.put("x", Integer.toString(xRandom));
+        creationArgs.put("y", Integer.toString(yRandom));
+        creationArgs.put("id", Integer.toString(Dungeon.getEntities().size()));
+
+        Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity("spider", creationArgs));
     }
 
     private static void updateGoals() {
         if (Dungeon.getEntitiesOfType("zombie_toast_spawner").size() == 0 && enemiesKilled > getConfigValue("enemy_goal")) completedGoals.add(":enemies");
     
-        if (getPlayer().getNumberOfTreasures() > getConfigValue("treasure_goal")) completedGoals.add(":treasure");
+        if (getPlayer().getNumberOfTreasures() >= getConfigValue("treasure_goal")) completedGoals.add(":treasure");
         else if (completedGoals.contains(":treasure")) completedGoals.remove(":treasure");
     
         if (getEntitiesOfType("switch").stream().allMatch(floorSwitch -> getFirstEntityOfTypeOnPosition(floorSwitch.getPosition(), "boulder") != null)) completedGoals.add(":boulders");
         else completedGoals.remove(":boulders");
 
-        if (goals.toString().contains(":treasure") || goals.toString().contains(":boulders") || goals.toString().contains(":enemies")) completedGoals.remove(":exit");
+        if ((goals.toString().contains(":treasure") && !completedGoals.contains(":treasure")) 
+        || (goals.toString().contains(":boulders") && !completedGoals.contains(":boulders")) 
+        || (goals.toString().contains(":enemies") && !completedGoals.contains(":enemies"))) completedGoals.remove(":exit");
         else if (getFirstEntityOfTypeOnPosition(getPlayer().getPosition(), "exit") != null) completedGoals.add(":exit");
         else completedGoals.remove(":exit");
+
+        goals.computeComplete();
+        System.err.println(completedGoals);
+        System.err.println(goals.toString());
+    }
+
+    public static void doAfterTick() {
+        entitiesToAddAfterTick.forEach(entity -> addEntity(entity));
+        entitiesToAddAfterTick = new ArrayList<Entity>();
+        entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
+        entitiesToRemoveAfterTick = new ArrayList<Entity>();
+        updateGoals();
     }
 
     public static void tick(Direction movementDirection) {
         tick();
         getPlayer().tick(movementDirection);
         entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
-        updateGoals();
-        entitiesToAddAfterTick.forEach(entity -> addEntity(entity));
-        entitiesToAddAfterTick = new ArrayList<Entity>();
-        entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
-        entitiesToRemoveAfterTick = new ArrayList<Entity>();
+        doAfterTick();
     }
     
     public static void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         tick();
         getPlayer().tick(itemId);
         for (Entity entity : entities.stream().filter(entity -> !(entity.getType().equals("player"))).collect(Collectors.toList())) entity.tick(itemId);
-        updateGoals();
-        entitiesToAddAfterTick.forEach(entity -> addEntity(entity));
-        entitiesToAddAfterTick = new ArrayList<Entity>();
-        entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
-        entitiesToRemoveAfterTick = new ArrayList<Entity>();
+        doAfterTick();
     }
 
     // only building the buildable string there, not all
     public static void build(String buildable) throws InvalidActionException, IllegalArgumentException {
         tick();
         getPlayer().build(buildable);
-        updateGoals();
-        entitiesToAddAfterTick.forEach(entity -> addEntity(entity));
-        entitiesToAddAfterTick = new ArrayList<Entity>();
-        entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
-        entitiesToRemoveAfterTick = new ArrayList<Entity>();
+        doAfterTick();
     }
 
     public static void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
@@ -208,11 +238,7 @@ public class Dungeon {
         Entity entity = getEntityFromId(entityId);
         if (entity == null) throw new IllegalArgumentException("No matching ID");
         entity.interact();
-        updateGoals();
-        entitiesToAddAfterTick.forEach(entityToSpawn -> addEntity(entityToSpawn));
-        entitiesToAddAfterTick = new ArrayList<Entity>();
-        entitiesToRemoveAfterTick.forEach(entityToRemove -> removeEntity(entityToRemove));
-        entitiesToRemoveAfterTick = new ArrayList<Entity>();
+        doAfterTick();
     }
 
     public static ArrayList<Entity> getEntities() {

@@ -5,7 +5,7 @@ import dungeonmania.Entities.MovingEntities.MovementStrategies.SpiderMovementStr
 import dungeonmania.util.Position;
 
 public class Spider extends Enemy {
-    private int numberOfTicks = 0;
+    private int numberOfTicks;
     private int positionIterator;
     private boolean isClockwise = true;
 
@@ -18,11 +18,13 @@ public class Spider extends Enemy {
     public Spider(String id, Position position) {
         super(id, "spider", position, Dungeon.getConfigValue("spider_health"), false, new SpiderMovementStrategy(), Dungeon.getConfigValue("spider_attack"));
         getMovementStrategy().setEntity(this);
+        this.numberOfTicks = 0;
     }
 
     @Override
     public void tick() {
         getMovementStrategy().move();
+        numberOfTicks += 1;
     }
 
     public int getNumberOfTicks() {

@@ -44,11 +44,11 @@ public class SpiderMovementStrategy extends MovementStrategy {
         // Move spider in specified direction
 
         if (spider.getIsClockwise()) {
-            spider.setPositionIterator((spider.getPositionIterator() + 1) % 9);
+            spider.setPositionIterator((spider.getPositionIterator() + 1) % 8);
             nextPosition = getNextPosition(currentPosition, spider, adjacentPositions);
             
         } else {
-            spider.setPositionIterator((spider.getPositionIterator() - 1) % 9);
+            spider.setPositionIterator((spider.getPositionIterator() - 1) % 8);
             nextPosition = getNextPosition(currentPosition, spider, adjacentPositions);
         }
 
@@ -63,9 +63,9 @@ public class SpiderMovementStrategy extends MovementStrategy {
         if (spider.getNumberOfTicks() == 0) { // move up
             nextPosition = adjacentPositions.get(1);
         } else if (spider.getIsClockwise()) { // move clockwise
-            nextPosition = adjacentPositions.get((spider.getPositionIterator() + 1) % 9);
+            nextPosition = adjacentPositions.get((spider.getPositionIterator() + 1) % 8);
         } else if (spider.getIsClockwise() == false ) {
-            nextPosition = adjacentPositions.get((spider.getPositionIterator() - 1) % 9);
+            nextPosition = adjacentPositions.get((spider.getPositionIterator() - 1) % 8);
         }
         
         return nextPosition;
