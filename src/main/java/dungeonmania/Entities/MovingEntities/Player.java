@@ -8,6 +8,7 @@ import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStr
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -28,9 +29,23 @@ public class Player extends MovingEntity {
         super.tick(direction);
         getMovementStrategy().move(direction);
     }
+
+    @Override
+    public void tick() {
+        super.tick();
+        potionBag.tick();
+    }
     
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public List<CollectableEntity> getInventory(String type) {
+        return inventory.getItemsOfType(type);
+    }
+
+    public void useKey(Key key) {
+        inventory.removeItem(key);
     }
 
     public PotionBag getPotionBag() {
@@ -60,5 +75,13 @@ public class Player extends MovingEntity {
     @Override
     public void build(String type) throws InvalidActionException, IllegalArgumentException {
         inventory.buildEntity(type);
+    }
+
+    public boolean hasCollectable(String type) {
+        return inventory.containsCollectable(type);
+    }
+
+    public String activePotionEffect() {
+        return potionBag.getActivePotionType();
     }
 }

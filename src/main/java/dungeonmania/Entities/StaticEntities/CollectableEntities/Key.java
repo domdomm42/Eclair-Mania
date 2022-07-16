@@ -1,11 +1,10 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities;
 
-public class Key extends Usable {
+import dungeonmania.util.Position;
 
-    @Override
-    public void use() {
-        // TODO Auto-generated method stub
-        
+public class Key extends CollectableEntity {
+
+    public Key(Position position, String id) {
+        super(false, 1, position, id, "key");
     }
-    
 }

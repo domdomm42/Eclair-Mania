@@ -7,6 +7,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.MovementStrategy;
 import dungeonmania.Entities.StaticEntities.Boulder;
+import dungeonmania.Entities.StaticEntities.FloorSwitch;
 // import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
 // import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.util.Direction;
@@ -18,10 +19,13 @@ public class BoulderMovementStrategy extends MovementStrategy {
         Boulder boulder = (Boulder) getEntity();
         Position requestedPosition = boulder.getPositionInDirection(direction);
         List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
-        if (entitiesOnPosition.stream().anyMatch(entity -> entity.getType() == "wall")) return;
-        if (entitiesOnPosition.stream().anyMatch(entity -> entity.getType() == "boulder")) return;
         
+        // check from list if entity is of type wall
+        if (entitiesOnPosition.stream().anyMatch(entity -> entity.getType() == "wall")) return;
+        // check from list if entity is of type boulder
+        if (entitiesOnPosition.stream().anyMatch(entity -> entity.getType() == "boulder")) return;
 
+        // else move boulder to location
         getEntity().setPosition(requestedPosition);
     }
 }

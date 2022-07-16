@@ -5,25 +5,28 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dungeonmania.Goals.CompositeGoalExpression;
+import dungeonmania.Goals.GoalExpression;
+import dungeonmania.Goals.LeafGoalExpression;
+
 public class Goal {
-    private boolean isComplex;
-    private ArrayList<Goal> goals;
-    private boolean isAnd;
+    private GoalExpression goal;
 
     public Goal(JSONObject goalJson) {
-        // JSONObject objective = goalJson.getJSONObject("goal_conditions");
-        // objective.getString(key)
-        goalJson.getString("goal");
-        
-
+        if (goalJson.getString("goal").equals("AND") || goalJson.getString("goal").equals("OR")) goal = new CompositeGoalExpression(goalJson);
+        else goal = new LeafGoalExpression(goalJson.getString("goal"));
     }
 
-    //composite goal and goal
-        //left right      leaf
+    public String toString() {
+        return goal.toString();
+    }
 
-    // check if complete by checking positons
     public boolean isComplete() {
+        return goal.isComplete();
+    }
 
+    public void computeComplete() {
+        goal.computeComplete();
     }
 
 
