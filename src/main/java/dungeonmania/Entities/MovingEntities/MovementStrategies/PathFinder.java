@@ -25,6 +25,7 @@ public class PathFinder {
     public Direction computePath() {
         while (!queue.isEmpty()) {
             PathNode pathNode = queue.poll();
+            if (visited.contains(pathNode)) continue;
             visited.add(pathNode);
             if (pathNode.getPosition().equals(toPosition)) {
                 return pathNode.getInitialDirection();
