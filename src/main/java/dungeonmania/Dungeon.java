@@ -25,6 +25,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.FileLoader;
 import dungeonmania.util.Position;
 
 public class Dungeon {
@@ -47,6 +48,8 @@ public class Dungeon {
     }
 
     public static void instantiateDungeonEntitiesAndGoals(String dungeonName) throws FileNotFoundException {
+        id = "dungeon";
+        Dungeon.dungeonName = dungeonName;
         File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName));
         FileReader reader = new FileReader(dungeonFile);
         JSONObject obj = new JSONObject( JsonParser.parseReader(reader) );
@@ -56,6 +59,8 @@ public class Dungeon {
             Map<String, String> creationArguments = new HashMap<String, String>();
             creationArguments.put("x", entities.getJSONObject(i).getString("x"));
             creationArguments.put("y", entities.getJSONObject(i).getString("y"));
+            creationArguments.put("keyId", entities.getJSONObject(i).getString("key"));
+            creationArguments.put("color", entities.getJSONObject(i).getString("colour"));
             creationArguments.put("id", Integer.toString(Dungeon.entities.size()));
 
             Dungeon.entities.add(EntityFactory.createEntity(type, creationArguments));

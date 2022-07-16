@@ -30,8 +30,8 @@ public class EntityFactory {
     static public Entity createEntity(String type, Map<String, String> args) throws IllegalArgumentException {
         Position position = new Position(Integer.parseInt(args.get("x")), Integer.parseInt(args.get("x")));
         String id = args.get("id");
-        
         String keyId = args.get("key");
+        String color = args.get("colour");
 
         switch (type) {
             case "player":
@@ -54,8 +54,8 @@ public class EntityFactory {
                 return new Door(position, "door-".concat(keyId));
             case "key":
                 return new Key(position, "key-".concat(keyId).concat("door-").concat(keyId));
-            //case "portal":
-                //return new Portal(position, id, endLocation);  ask about endlocation
+            case "portal":
+                return new Portal(position, id, color);
             case "zombie_toast_spawner":
                 return new ZombieToastSpawner(position, id);
             case "treasure":

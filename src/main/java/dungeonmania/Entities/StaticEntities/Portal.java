@@ -26,33 +26,32 @@ public class Portal extends StaticEntity {
         this.color = color;
     }
 
+    public Position getTeleportLocation(Direction direction) {
+        Position correspondingPortalLocation = Dungeon.getEntitiesOfType("portal").stream().filter(entity -> ((Portal) entity).getColor().equals(color)).filter(entity -> !entity.equals(this)).findFirst().map(entity -> {
+            return entity.getPosition();
+        }).orElse(null);
 
-    // public Position checkIfAdjacentSquareIsWall(Position position) {
-    //     List<Position> adjacentPosition = position.getAdjacentPositions();
-    
-    //     for (Position square: adjacentPosition) {
-    //         List<Entity> entity = Dungeon.getEntitiesAtPosition(position);
-    //         if (entity.contains("wall")) {
-    //             continue;
-    //         }
-
-    //         else {
-    //             return square;
-    //         }
-    //     }
-
-    //     return null;
-    // }
-
-    public Position getTeleportLocation(Position position, Direction direction) {
-        Position newPos = position.translateBy(direction);
+        Position preferredEndLocation = correspondingPortalLocation.translateBy(direction);
+        List<Position> adjacentPositions = correspondingPortalLocation.getCardinallyAdjacentPositions();
 
         
-        if (isPositionMovableForPlayer(newPos)) {
-            return newPos;
+        if (isPositionMovableForPlayer(preferredEndLocation)) {
+            return preferredEndLocation;
+        } else if (adjacentPositions.stream().anyMatch(location -> isPositionMovableForPlayer(location))) {
+            return adjacentPositions.stream().filter(location -> isPositionMovableForPlayer(location)).findFirst().get();
         } else {
-            return position;
+            return Dungeon.getPlayer().getPosition();
         }
+    }
+
+    public boolean isTeleporterValid() {
+        Position correspondingPortalLocation = Dungeon.getEntitiesOfType("portal").stream().filter(entity -> ((Portal) entity).getColor().equals(color)).filter(entity -> !entity.equals(this)).findFirst().map(entity -> {
+            return entity.getPosition();
+        }).orElse(null);
+
+        List<Position> adjacentPositions = correspondingPortalLocation.getCardinallyAdjacentPositions();
+
+        return adjacentPositions.stream().anyMatch(location -> isPositionMovableForPlayer(location));
     }
 
     public boolean isPositionMovableForPlayer(Position newPos) {
@@ -78,10 +77,4 @@ public class Portal extends StaticEntity {
         return true;
         
     }
-
-    public Position getEndLocation(Portal portal) {
-        // List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
-        return new Position(0, 0); //TODO
-    }
-
 }

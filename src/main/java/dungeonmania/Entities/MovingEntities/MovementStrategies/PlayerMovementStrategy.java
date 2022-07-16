@@ -22,8 +22,10 @@ public class PlayerMovementStrategy extends MovementStrategy {
         Player player = (Player) getEntity();
         Position requestedPosition = player.getPositionInDirection(direction);
         List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
-        if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) 
-            requestedPosition = ((Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal") ).getPosition(); //TODO
+        if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
+            Portal portal = (Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal");
+            requestedPosition = portal.getTeleportLocation(direction);
+        }
         if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
             Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
             if (!door.isUnlocked()) {
@@ -70,9 +72,8 @@ public class PlayerMovementStrategy extends MovementStrategy {
                 return false;
             } 
         } else if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
-            // NEED TO ADD IN PORTAL REQUIREMENTS
             Portal portal = (Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal");
-            if (portal.getTeleportLocation(requestedPosition).equals(requestedPosition)) {
+            if (portal.isTeleporterValid()) {
                 return true;
             } else {
                 return false;

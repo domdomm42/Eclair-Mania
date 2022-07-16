@@ -1,28 +1,19 @@
 package dungeonmania;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static dungeonmania.TestUtils.getPlayer;
 import static dungeonmania.TestUtils.getEntities;
-import static dungeonmania.TestUtils.getInventory;
 import static dungeonmania.TestUtils.getGoals;
-import static dungeonmania.TestUtils.countEntityOfType;
-import static dungeonmania.TestUtils.getValueFromConfigFile;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
-import dungeonmania.response.models.RoundResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -35,6 +26,7 @@ public class FloorSwitchTests {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "d_floorSwitchGoal");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
+        EntityResponse initBoulder = getEntities(initDungonRes, "boulder").get(0);
         EntityResponse initSwitch = getEntities(initDungonRes, "switch").get(0);
 
         // create the expected result
@@ -52,7 +44,7 @@ public class FloorSwitchTests {
         assertEquals(expectedPlayer, actualPlayer);
         assertEquals(expectedBoulder, actualBoulder);
         assertEquals(expectedSwitch, actualSwitch);
-        assertFalse(getGoals(res).contains(":boulders"));
+        assertFalse(getGoals(actualDungonRes).contains(":boulders"));
     }
 
     @Test
@@ -61,7 +53,8 @@ public class FloorSwitchTests {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "d_floorSwitchGoal");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
-        EntityResponse initSwitch = getEntities(actualDungonRes, "switch").get(0);
+        EntityResponse initBoulder = getEntities(initDungonRes, "boulder").get(0);
+        EntityResponse initSwitch = getEntities(initDungonRes, "switch").get(0);
 
         // create the expected result
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 3), false);
@@ -69,7 +62,8 @@ public class FloorSwitchTests {
         EntityResponse expectedSwitch = new EntityResponse(initSwitch.getId(), initSwitch.getType(), new Position(1, 3), false);
 
         // move player downward
-        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN).tick(Direction.DOWN);
+        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        actualDungonRes = dmc.tick(Direction.DOWN);
         EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
         EntityResponse actualBoulder = getEntities(actualDungonRes, "boulder").get(0);
         EntityResponse actualSwitch = getEntities(actualDungonRes, "switch").get(0);
@@ -78,7 +72,7 @@ public class FloorSwitchTests {
         assertEquals(expectedPlayer, actualPlayer);
         assertEquals(expectedBoulder, actualBoulder);
         assertEquals(expectedSwitch, actualSwitch);
-        assertTrue(getGoals(res).contains(":boulders"));
+        assertTrue(getGoals(actualDungonRes).contains(":boulders"));
         
     }
 }
