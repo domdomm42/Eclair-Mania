@@ -12,8 +12,7 @@ import dungeonmania.util.Position;
 public class ZombieMovementStrategy extends MovementStrategy {
     @Override
     public void move() {
-        ZombieToast zombieToast = (ZombieToast) getEntity();
-        Position currentPosition =  zombieToast.getPosition();
+        Position currentPosition =  getEntity().getPosition();
         List<Position> adjacentPositions = currentPosition.getAdjacentPositions();
 
         // get empty adjacent positions
@@ -23,7 +22,7 @@ public class ZombieMovementStrategy extends MovementStrategy {
         int randomNumber = rand.nextInt(emptyAdjacentPositions.size()); // random number, max is number of empty adjacent positions
 
         // move zombie to random adjacent position
-        zombieToast.setPosition(emptyAdjacentPositions.get(randomNumber));
+        getEntity().setPosition(emptyAdjacentPositions.get(randomNumber));
 
     }
 
