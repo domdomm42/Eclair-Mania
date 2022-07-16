@@ -5,7 +5,6 @@ import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.MovementStrategy;
 import dungeonmania.Entities.MovingEntities.Enemies.Spider;
 import dungeonmania.util.Position;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,6 +74,7 @@ public class SpiderMovementStrategy extends MovementStrategy {
         
         return nextPosition;
     }
+
 }
 
 
