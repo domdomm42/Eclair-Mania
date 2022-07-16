@@ -44,7 +44,9 @@ public class Inventory {
     }
 
     public CollectableEntity getFirstItemsOfType(String type) {
-        return items.stream().filter(item -> item.getType().equals(type)).findFirst().get();
+        return items.stream().filter(item -> item.getType().equals(type)).findFirst().map(item -> {
+            return item;
+        }).orElse(null);
     }
 
     public ArrayList<String> getCraftableItems() {
@@ -72,8 +74,8 @@ public class Inventory {
             craftingMaterials.put("arrows", 3);
         }
         if (type.equals("shield")) {
-            craftingMaterials.put("wood", 1);
-            craftingMaterials.put("arrows", 3);
+            craftingMaterials.put("wood", 2);
+            craftingMaterials.put("treasure", 1);
         }
         removeCraftingMaterials(craftingMaterials);
         Map<String, String> newEntityArgs = new HashMap<String, String>();

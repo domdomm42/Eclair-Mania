@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
@@ -33,10 +35,11 @@ public class Dungeon {
     private static ArrayList<CollectableEntity> items = new ArrayList<CollectableEntity>();
     private static ArrayList<Battle> battles = new ArrayList<Battle>();
     private static Goal goals;
-    private static List<String> completedGoals = new ArrayList<String>();;
+    private static Set<String> completedGoals = new HashSet<String>();
+    private static int enemiesKilled = 0;
 
-    public static void setId(String id) {
-        Dungeon.id = id;
+    public static int incrementKilledEntities() {
+        return enemiesKilled + 1;
     }
 
     public static void addBattle(Battle battle) {
@@ -59,17 +62,19 @@ public class Dungeon {
         }
         JSONObject goals = obj.getJSONObject("goal-conditions");
         Dungeon.goals = new Goal(goals);
+        enemiesKilled = 0;
     }
 
     public static Player getPlayer() {
-        Entity player = entities.stream().filter(entity -> entity.getType().equals("player")).findFirst().get();
-        if (player.getClass() == Player.class) return (Player) player;
-        return null;
+        return entities.stream().filter(entity -> entity.getType().equals("player")).findFirst().map(playerEntity -> {
+            return (Player) playerEntity;
+        }).orElse(null);
     }
 
     public static Entity getEntityFromId(String id) {
-        Entity entity = entities.stream().filter(ent -> ent.getId().equals(id)).findFirst().get();
-        return entity;
+        return entities.stream().filter(ent -> ent.getId().equals(id)).findFirst().map(entity -> {
+            return entity;
+        }).orElse(null);
     }
 
     public static void setupConfigFile(String configName) throws FileNotFoundException {
@@ -91,7 +96,7 @@ public class Dungeon {
         completedGoals.add(goal);
     }
 
-    public static List<String> getCompletedGoals() {
+    public static Set<String> getCompletedGoals() {
         return completedGoals;
     }
 
@@ -99,12 +104,18 @@ public class Dungeon {
         return Dungeon.entities.stream().filter(entity -> entity.getPosition().equals(position)).collect(Collectors.toList());
     }
 
+    public static List<Entity> getEntitiesOfType(String type) {
+        return Dungeon.entities.stream().filter(entity -> entity.getType().equals(type)).collect(Collectors.toList());
+    }
+
     public static boolean isEntityOnPosition(Position position, String type) {
         return getEntitiesAtPosition(position).stream().anyMatch(entity -> entity.getType().equals(type));
     }
 
     public static Entity getFirstEntityOfTypeOnPosition(Position position, String type) {
-        return getEntitiesAtPosition(position).stream().filter(entity -> entity.getType().equals(type)).findFirst().get();
+        return getEntitiesAtPosition(position).stream().filter(entity -> entity.getType().equals(type)).findFirst().map(entity -> {
+            return entity;
+        }).orElse(null);
     }
 
     public static DungeonResponse getDungeonResponse() {
@@ -116,29 +127,51 @@ public class Dungeon {
     }
 
     public static void tick() {
-        entities.sort((Entity e1, Entity e2) -> e1.getType().equals("player") ? -1 : 0); //NEED TO CHECK THIS
-        entities.forEach(entity -> entity.tick());
+        entities.stream().filter(entity -> entity.getType().equals("player")).forEach(entity -> entity.tick());
+        entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick());
+    }
+
+    private static void updateGoals() {
+        if (Dungeon.getEntitiesOfType("zombie_toast_spawner").size() == 0 && enemiesKilled > getConfigValue("enemy_goal")) completedGoals.add(":enemies");
+    
+        if (getPlayer().getNumberOfTreasures() > getConfigValue("treasure_goal")) completedGoals.add(":treasure");
+        else if (completedGoals.contains(":treasure")) completedGoals.remove(":treasure");
+    
+        if (getEntitiesOfType("switch").stream().allMatch(floorSwitch -> getFirstEntityOfTypeOnPosition(floorSwitch.getPosition(), "boulder") != null)) completedGoals.add(":boulders");
+        else completedGoals.remove(":boulders");
+
+        if (goals.toString().contains(":treasure") || goals.toString().contains(":boulders") || goals.toString().contains(":enemies")) completedGoals.remove(":exit");
+        else if (getFirstEntityOfTypeOnPosition(getPlayer().getPosition(), "exit") != null) completedGoals.add(":exit");
+        else completedGoals.remove(":exit");
     }
 
     public static void tick(Direction movementDirection) {
         tick();
-        entities.forEach(entity -> entity.tick(movementDirection));
+        entities.stream().filter(entity -> entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
+        entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
+        updateGoals();
     }
     
     public static void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         tick();
-        for (Entity entity : entities) entity.tick(itemId);
+        for (Entity entity : entities.stream().filter(entity -> entity.getType().equals("player")).collect(Collectors.toList())) entity.tick(itemId);
+        for (Entity entity : entities.stream().filter(entity -> !entity.getType().equals("player")).collect(Collectors.toList())) entity.tick(itemId);
+        updateGoals();
     }
 
     // only building the buildable string there, not all
     public static void build(String buildable) throws InvalidActionException, IllegalArgumentException {
         tick();
-        for (Entity entity : entities) entity.build(buildable);
+        getPlayer().build(buildable);
+        updateGoals();
     }
 
     public static void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         tick();
-        for (Entity entity : entities) entity.interact(entityId);
+        Entity entity = getEntityFromId(entityId);
+        if (entity == null) throw new IllegalArgumentException("No matching ID");
+        entity.interact();
+        updateGoals();
     }
 
     public static ArrayList<Entity> getEntities() {

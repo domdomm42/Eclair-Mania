@@ -65,6 +65,10 @@ public class Player extends MovingEntity {
         inventory.removeItem(key);
     }
 
+    public void useSwordToBreakZombieToastSpawner() {
+        if (hasCollectable("sword")) inventory.removeItem(inventory.getFirstItemsOfType("sword"));
+    }
+
     public void usePotion(Potion potion) {
         inventory.removeItem(potion);
         potionBag.usePotion(potion);
@@ -115,5 +119,9 @@ public class Player extends MovingEntity {
 
     public void onDurabilityRunsOut(CollectableEntity entity) {
         inventory.removeItem(entity);
+    }
+
+    public int getNumberOfTreasures() {
+        return inventory.getItemsOfType("treasure").size();
     }
 }

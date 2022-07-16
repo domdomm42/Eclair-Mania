@@ -20,10 +20,6 @@ public abstract class Entity {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getType() {
         return type;
     }
@@ -64,7 +60,9 @@ public abstract class Entity {
 
     public void build(String buildable) throws InvalidActionException, IllegalArgumentException  { }
 
-    public void interact(String entityId) throws InvalidActionException, IllegalArgumentException  { }
+    public void interact() throws InvalidActionException, IllegalArgumentException  {
+        throw new InvalidActionException("Not a valid entity to interact with");
+    }
 
     @Override
     public boolean equals(Object obj) {

@@ -44,7 +44,10 @@ public class Battle {
         }
         
         if (player.getHealth() <= 0) Dungeon.removeEntity(player);
-        if (player.getHealth() <= 0) Dungeon.removeEntity(enemy);
+        if (enemy.getHealth() <= 0) {
+            Dungeon.removeEntity(enemy);
+            Dungeon.incrementKilledEntities();
+        }
         player.getWeaponryUsed().forEach(weapon -> weapon.setDurability(weapon.getDurability() - 1));
     }
 

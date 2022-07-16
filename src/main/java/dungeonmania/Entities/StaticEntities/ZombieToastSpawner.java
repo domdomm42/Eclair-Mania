@@ -34,20 +34,17 @@ public class ZombieToastSpawner extends StaticEntity {
 
     // not sure if right
     // INTERACT player breaks zombietoastpawner at the tick
+    @Override
     public void interact() throws IllegalArgumentException, InvalidActionException {
-        Inventory checkSword = Dungeon.getPlayer().getInventory();
-
-        List<CollectableEntity> listOfSwords = checkSword.getItemsOfType("sword");
-
         // if player does not have sword then player cant destroy zombietoastspawner
-        if (listOfSwords.isEmpty()) {
+        if (!Dungeon.getPlayer().hasCollectable("sword")) {
             return;
         }
 
         // if player has sword then destroy zombietoastspawner 
         else {
             if (Position.isAdjacent(Dungeon.getPlayer().getPosition(), this.getPosition())) {
-                Dungeon.tick("sword");
+                Dungeon.getPlayer().useSwordToBreakZombieToastSpawner();
                 Dungeon.removeEntity(this);
             }
         }
