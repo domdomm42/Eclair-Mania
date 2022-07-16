@@ -1,6 +1,10 @@
 package dungeonmania.Entities.StaticEntities;
 
+import java.util.List;
+
 import dungeonmania.Dungeon;
+import dungeonmania.Entities.Entity;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -40,21 +44,44 @@ public class Portal extends StaticEntity {
     //     return null;
     // }
 
-    public Position checkIfAdjacentSquareIsWall(Position position, Direction direction) {
-
+    public Position getTeleportLocation(Position position, Direction direction) {
         Position newPos = position.translateBy(direction);
-        if (Dungeon.isEntityOnPosition(newPos, "wall")) {
-            return null;
-        }
 
-        else {
+        
+        if (isPositionMovableForPlayer(newPos)) {
             return newPos;
+        } else {
+            return position;
         }
-    
-    
+    }
+
+    public boolean isPositionMovableForPlayer(Position newPos) {
+        List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(newPos);
+
+        if (Dungeon.isEntityOnPosition(newPos, "wall")) {
+            return false;
+        } else if (Dungeon.isEntityOnPosition(newPos, "door")) {
+            Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(newPos, "door");
+            if (!door.isUnlocked()) {
+                return false;
+            } 
+        } else if (Dungeon.isEntityOnPosition(newPos, "bomb")) {
+            Bomb bomb = (Bomb) entitiesOnPosition.stream().filter(entity -> entity instanceof Bomb).findFirst().get();
+            if (bomb.isHasBeenPickedUp()) {
+                return false;
+            }
+        } else if (Dungeon.isEntityOnPosition(newPos, "boulder")) {
+            return false;
+        } else if (Dungeon.isEntityOnPosition(newPos, "zombie_toast_spawner")) {
+            return false;
+        }   
+        return true;
         
     }
 
-
+    public Position getEndLocation(Portal portal) {
+        // List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
+        return new Position(0, 0); //TODO
+    }
 
 }

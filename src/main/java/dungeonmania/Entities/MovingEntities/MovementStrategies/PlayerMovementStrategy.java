@@ -71,7 +71,13 @@ public class PlayerMovementStrategy extends MovementStrategy {
             } 
         } else if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
             // NEED TO ADD IN PORTAL REQUIREMENTS
-            return true;
+            Portal portal = (Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal");
+            if (portal.getTeleportLocation(requestedPosition).equals(requestedPosition)) {
+                return true;
+            } else {
+                return false;
+            }
+            
         } else if (Dungeon.isEntityOnPosition(requestedPosition, "bomb")) {
             Bomb bomb = (Bomb) entitiesOnPosition.stream().filter(entity -> entity instanceof Bomb).findFirst().get();
             if (bomb.isHasBeenPickedUp()) {
