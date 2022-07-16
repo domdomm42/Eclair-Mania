@@ -9,7 +9,6 @@ import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
 import dungeonmania.Entities.MovingEntities.Enemies.Spider;
 import dungeonmania.util.Position;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 
@@ -30,13 +29,13 @@ public class SpiderMovementStrategy extends MovementStrategy {
             return;
         }
         
-        if (numberOfTicks == 0 && isNextPositionBoulder(nextPosition, spider)) { //if boulder is above spawn --> spider stays stationary
+        if (numberOfTicks == 0 && isValidMove(nextPosition) == false) { //if boulder is above spawn --> spider stays stationary
             return;
-        } else if (numberOfTicks == 0 && !isNextPositionBoulder(nextPosition, spider)) { // spider spawns, next move is up
+        } else if (numberOfTicks == 0 && isValidMove(nextPosition)) { // spider spawns, next move is up
             spider.setPositionIterator(1);
             getEntity().setPosition(nextPosition);
             return;
-        } else if (isNextPositionBoulder(nextPosition, spider)) { // if the next move is boulder, switch direction of spider
+        } else if (isValidMove(nextPosition) == false) { // if the next move is boulder, switch direction of spider
             spider.setIsClockwise(!spider.getIsClockwise());
         } 
 
@@ -57,18 +56,6 @@ public class SpiderMovementStrategy extends MovementStrategy {
         spider.addOneToNumberOfTicks(); // increment number of ticks of spider
     }
 
-    public boolean isNextPositionBoulder(Position nextPosition, Spider spider) {
-
-            List<Entity> entitiesAtPosition = Dungeon.getEntitiesAtPosition(nextPosition).stream().filter(entity -> entity.getType().equals("boulder")).collect(Collectors.toList());
-            if (entitiesAtPosition.isEmpty() == false) {
-                // spider.setIsClockwise(!spider.getIsClockwise());
-                return true;
-            }
-
-            return false;
-            
-           
-    }
 
     public Position getNextPosition(Position currentPosition, Spider spider, List<Position> adjacentPositions) {
         Position nextPosition = new Position (1,1,1);
@@ -84,6 +71,15 @@ public class SpiderMovementStrategy extends MovementStrategy {
         return nextPosition;
     }
 
+    @Override
+    public boolean isValidMove(Position position) {
+        if(Dungeon.isEntityOnPosition(position, "boulder")) {
+            return false;
+        } else {
+            return true;
+        }
+        
+    }
 }
 
 

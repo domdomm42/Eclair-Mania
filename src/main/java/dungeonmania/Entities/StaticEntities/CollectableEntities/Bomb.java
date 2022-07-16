@@ -1,7 +1,6 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities;
 
 import java.util.ArrayList;
-
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.util.Direction;

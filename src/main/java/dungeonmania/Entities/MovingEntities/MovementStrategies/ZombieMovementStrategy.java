@@ -21,11 +21,11 @@ public class ZombieMovementStrategy extends MovementStrategy {
         List<Position> cardinallyAdjacentPositions = currentPosition.getCardinallyAdjacentPositions();
 
         // get empty adjacent positions
-        List<Position> emptyAdjacentPositions = getEmptyAdjacentPositions(cardinallyAdjacentPositions);
+        List<Position> movableAdjacentPositions = getMovableAdjacentPositions(cardinallyAdjacentPositions);
 
         Random rand = new Random();
-        int randomNumber = rand.nextInt(emptyAdjacentPositions.size()); // random number, max is number of empty cardianlly adjacent positions
-        Position nextPosition = emptyAdjacentPositions.get(randomNumber);
+        int randomNumber = rand.nextInt(movableAdjacentPositions.size()); // random number, max is number of empty cardianlly adjacent positions
+        Position nextPosition = movableAdjacentPositions.get(randomNumber);
 
         // if player is also on next position --> battle
         List<Entity> entitiesOnPosition =  Dungeon.getEntitiesAtPosition(nextPosition);
@@ -39,20 +39,29 @@ public class ZombieMovementStrategy extends MovementStrategy {
 
     }
 
-    public List<Position> getEmptyAdjacentPositions (List<Position> cardinallyAdjacentPositions) {
-        List<Position> emptyAdjacentPositions = new ArrayList<Position>();
+    public List<Position> getMovableAdjacentPositions (List<Position> cardinallyAdjacentPositions) {
+        List<Position> movableAdjacentPositions = new ArrayList<Position>();
         for (Position position: cardinallyAdjacentPositions) {
-            if (Dungeon.getEntitiesAtPosition(position).isEmpty()) {
-                emptyAdjacentPositions.add(position);
-            } else if (Dungeon.isEntityOnPosition(position, "switch") || Dungeon.isEntityOnPosition(position, "exit")) {
-                emptyAdjacentPositions.add(position);
-            } else if (Dungeon.isEntityOnPosition(position, "door")) {
-                Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(position, "door");
-                if (door.isUnlocked()) {
-                    emptyAdjacentPositions.add(position);
-                }
-            } 
+            if (isValidMove(position)) {
+                movableAdjacentPositions.add(position);
+            }
         }
-        return emptyAdjacentPositions;
+        return movableAdjacentPositions;
     }
+
+    @Override
+    public boolean isValidMove(Position position) {
+        if (Dungeon.getEntitiesAtPosition(position).isEmpty()) {
+            return true;
+        } else if (Dungeon.isEntityOnPosition(position, "switch") || Dungeon.isEntityOnPosition(position, "exit")) {
+            return true;
+        } else if (Dungeon.isEntityOnPosition(position, "door")) {
+            Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(position, "door");
+            if (door.isUnlocked()) {
+                return true;
+            }
+        } 
+        return false;
+    }
+    
 }

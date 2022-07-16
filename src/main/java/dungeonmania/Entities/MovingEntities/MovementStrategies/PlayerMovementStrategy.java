@@ -49,4 +49,23 @@ public class PlayerMovementStrategy extends MovementStrategy {
             collectableEntity.setPickedUp(true);
         });
     }
+
+    @Override
+    public boolean isValidMove(Position requestedPosition) {
+        if (Dungeon.isEntityOnPosition(requestedPosition, "wall")) {
+            return false;
+        } else if (Dungeon.isEntityOnPosition(requestedPosition, "boulder")) {
+            return true;
+        } else if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
+            Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
+            if (!door.isUnlocked()) {
+                if (player.getInventory("key").stream().filter(entity -> door.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) {
+
+                } 
+
+            } else {
+                return true;
+            }
+        }
+    }
 }

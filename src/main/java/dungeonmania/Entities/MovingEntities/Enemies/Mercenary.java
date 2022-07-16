@@ -9,11 +9,6 @@ public class Mercenary extends Enemy {
     private int bribeRadius = Dungeon.getConfigValue("bribe_radius");
     private boolean isAlly = false;
     
-    /* 
-    public Mercenary(String id, String type, Position position, double health, boolean isInteractable, MovementStrategy movementStrategy, double attack, int bribePrice) {
-        super(id, type, position, health, isInteractable, movementStrategy, attack);
-        this.bribePrice = bribePrice;
-    }*/
     
     public Mercenary(String id, Position position) {
         super(id, "mercenary", position, Dungeon.getConfigValue("mercenary_health"), true, new MercenaryMovementStrategy(), Dungeon.getConfigValue("mercenary_attack"));
