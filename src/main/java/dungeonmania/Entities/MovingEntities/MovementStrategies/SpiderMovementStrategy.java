@@ -18,7 +18,6 @@ public class SpiderMovementStrategy extends MovementStrategy {
 
         
         Spider spider = (Spider) getEntity();
-        boolean isClockwise = spider.getIsClockwise();
 
         int numberOfTicks = spider.getNumberOfTicks();
         List<Position> adjacentPositions = currentPosition.getAdjacentPositions();
@@ -35,7 +34,7 @@ public class SpiderMovementStrategy extends MovementStrategy {
         } 
 
         // get nextPosition 
-        // case 1: if already was moving clockwise and not boulder next position stays the same
+        // case 1: if already was moving clockwise or anti clockwise and not boulder next position stays the same
         // case 2: if there is a boulder --> direction switches and next position is in the opposite direction
         if (spider.getIsClockwise()) {
             spider.setPositionIterator((spider.getPositionIterator() + 1) % 9);
