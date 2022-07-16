@@ -36,6 +36,8 @@ public class CompositeGoalExpression extends GoalExpression {
 
     @Override
     public void computeComplete() {
+        left.computeComplete();
+        right.computeComplete();
         if (getGoal().equals("AND")) {
             setComplete(left.isComplete() && right.isComplete());
         } else if (getGoal().equals("OR")) {
