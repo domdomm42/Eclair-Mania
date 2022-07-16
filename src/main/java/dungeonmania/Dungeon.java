@@ -130,6 +130,7 @@ public class Dungeon {
         for (Entity entity : entities) entity.tick(itemId);
     }
 
+    // only building the buildable string there, not all
     public static void build(String buildable) throws InvalidActionException, IllegalArgumentException {
         tick();
         for (Entity entity : entities) entity.build(buildable);
@@ -138,6 +139,9 @@ public class Dungeon {
     public static void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         tick();
         for (Entity entity : entities) entity.interact(entityId);
+    }
 
+    public static ArrayList<Entity> getEntities() {
+        return entities;
     }
 }
