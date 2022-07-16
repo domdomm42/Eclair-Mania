@@ -29,13 +29,17 @@ public class Dungeon {
     private static String id;
     private static String dungeonName;
     private static JSONObject config;
-    private static ArrayList<Entity> entities;
-    private static ArrayList<CollectableEntity> items;
-    private static ArrayList<Battle> battles;
+    private static ArrayList<Entity> entities = new ArrayList<Entity>();
+    private static ArrayList<CollectableEntity> items = new ArrayList<CollectableEntity>();
+    private static ArrayList<Battle> battles = new ArrayList<Battle>();
     private static Goal goals;
 
     public static void setId(String id) {
         Dungeon.id = id;
+    }
+
+    public static void addBattle(Battle battle) {
+        battles.add(battle);
     }
 
     public static void instantiateDungeonEntitiesAndGoals(String dungeonName) throws FileNotFoundException {
@@ -78,7 +82,7 @@ public class Dungeon {
         return config.getInt(key);
     }
 
-    public static List<Entity> getEntityAtPosition(Position position) {
+    public static List<Entity> getEntitiesAtPosition(Position position) {
         return Dungeon.entities.stream().filter(entity -> entity.getPosition() == position).collect(Collectors.toList());
     }
 
@@ -91,6 +95,7 @@ public class Dungeon {
     }
 
     public static void tick() {
+        entities.sort((Entity e1, Entity e2) -> e1.getType() == "player" ? -1 : 0); //NEED TO CHECK THIS
         entities.forEach(entity -> entity.tick());
     }
 
@@ -101,16 +106,28 @@ public class Dungeon {
     
     public static void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         tick();
-        entities.forEach(entity -> entity.tick(itemId));
+        for (Entity entity : entities) entity.tick(itemId);
     }
 
     public static void build(String buildable) throws InvalidActionException, IllegalArgumentException {
         tick();
-        entities.forEach(entity -> entity.build(buildable));
+        for (Entity entity : entities) entity.build(buildable);
     }
 
     public static void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         tick();
-        entities.forEach(entity -> entity.interact(entityId));
+        for (Entity entity : entities) entity.interact(entityId);
+
     }
+
+    //
+    public static ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+    public static void setEntities(ArrayList<Entity> entities) {
+        Dungeon.entities = entities;
+    }
+    //
+    
 }

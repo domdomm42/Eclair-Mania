@@ -17,7 +17,7 @@ public class Inventory {
         items = new ArrayList<CollectableEntity>();
     }
 
-    private void addItem(CollectableEntity item) {
+    public void addItem(CollectableEntity item) {
         items.add(item);
     }
 
