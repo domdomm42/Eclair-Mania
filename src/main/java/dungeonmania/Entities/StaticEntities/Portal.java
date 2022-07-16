@@ -21,7 +21,6 @@ public class Portal extends StaticEntity {
         return color;
     }
 
-
     public void setColor(String color) {
         this.color = color;
     }

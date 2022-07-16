@@ -28,7 +28,7 @@ import dungeonmania.util.Position;
 
 public class EntityFactory {
     static public Entity createEntity(String type, Map<String, String> args) throws IllegalArgumentException {
-        Position position = new Position(Integer.parseInt(args.get("x")), Integer.parseInt(args.get("x")));
+        Position position = new Position(Integer.parseInt(args.get("x")), Integer.parseInt(args.get("y")));
         String id = args.get("id");
         String keyId = args.get("key");
         String color = args.get("colour");

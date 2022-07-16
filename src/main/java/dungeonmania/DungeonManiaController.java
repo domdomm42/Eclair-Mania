@@ -36,8 +36,8 @@ public class DungeonManiaController {
      */
     public DungeonResponse newGame(String dungeonName, String configName) {
         try {
-            Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
             Dungeon.setupConfigFile(configName);
+            Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
         } catch (FileNotFoundException exception) {
             return null;
         }

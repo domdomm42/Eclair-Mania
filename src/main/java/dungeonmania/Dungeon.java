@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import dungeonmania.Entities.Entity;
@@ -25,19 +25,18 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
-import dungeonmania.util.FileLoader;
 import dungeonmania.util.Position;
 
 public class Dungeon {
     private static String id;
     private static String dungeonName;
-    private static JSONObject config;
-    private static ArrayList<Entity> entities = new ArrayList<Entity>();
-    private static ArrayList<CollectableEntity> items = new ArrayList<CollectableEntity>();
-    private static ArrayList<Battle> battles = new ArrayList<Battle>();
+    private static JsonObject config;
+    private static ArrayList<Entity> entities;
+    private static ArrayList<CollectableEntity> items;
+    private static ArrayList<Battle> battles;
     private static Goal goals;
-    private static Set<String> completedGoals = new HashSet<String>();
-    private static int enemiesKilled = 0;
+    private static Set<String> completedGoals;
+    private static int enemiesKilled;
 
     public static int incrementKilledEntities() {
         return enemiesKilled + 1;
@@ -50,22 +49,27 @@ public class Dungeon {
     public static void instantiateDungeonEntitiesAndGoals(String dungeonName) throws FileNotFoundException {
         id = "dungeon";
         Dungeon.dungeonName = dungeonName;
-        File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName));
+        entities = new ArrayList<Entity>();
+        items = new ArrayList<CollectableEntity>();
+        battles = new ArrayList<Battle>();
+        completedGoals = new HashSet<String>();
+        enemiesKilled = 0;
+        File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
-        JSONObject obj = new JSONObject( JsonParser.parseReader(reader) );
-        JSONArray entities = obj.getJSONArray("entities");
-        for (int i = 0; i < entities.length(); i++) {
-            String type = entities.getJSONObject(i).getString("type");
+        JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
+        JsonArray entities = obj.getAsJsonArray("entities");
+        for (int i = 0; i < entities.size(); i++) {;
+            String type = entities.get(i).getAsJsonObject().get("type").getAsString();
             Map<String, String> creationArguments = new HashMap<String, String>();
-            creationArguments.put("x", entities.getJSONObject(i).getString("x"));
-            creationArguments.put("y", entities.getJSONObject(i).getString("y"));
-            creationArguments.put("keyId", entities.getJSONObject(i).getString("key"));
-            creationArguments.put("color", entities.getJSONObject(i).getString("colour"));
+            creationArguments.put("x", entities.get(i).getAsJsonObject().get("x").getAsString());
+            creationArguments.put("y", entities.get(i).getAsJsonObject().get("y").getAsString());
+            if (type.equals("door") || type.equals("key")) creationArguments.put("keyId", entities.get(i).getAsJsonObject().get("key").getAsString());
+            if (type.equals("portal")) creationArguments.put("color", entities.get(i).getAsJsonObject().get("colour").getAsString());
             creationArguments.put("id", Integer.toString(Dungeon.entities.size()));
 
             Dungeon.entities.add(EntityFactory.createEntity(type, creationArguments));
         }
-        JSONObject goals = obj.getJSONObject("goal-conditions");
+        JsonObject goals = obj.getAsJsonObject("goal-condition");
         Dungeon.goals = new Goal(goals);
         enemiesKilled = 0;
     }
@@ -83,14 +87,14 @@ public class Dungeon {
     }
 
     public static void setupConfigFile(String configName) throws FileNotFoundException {
-        File configFile = new File("src/test/resources/dungeons/".concat(configName));
+        File configFile = new File("src/main/resources/configs/".concat(configName).concat(".json"));
         FileReader configReader = new FileReader(configFile);
-        JSONObject configObj = new JSONObject( JsonParser.parseReader(configReader) );
-        config = configObj;
+        JsonObject obj = (JsonObject) JsonParser.parseReader(configReader);
+        Dungeon.config = obj;
     }
 
     public static int getConfigValue(String key) {
-        return config.getInt(key);
+        return Integer.parseInt(config.get(key).getAsString());
     }
 
     public static void removeEntity(Entity entity) {

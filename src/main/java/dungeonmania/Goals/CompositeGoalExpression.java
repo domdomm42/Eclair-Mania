@@ -1,6 +1,6 @@
 package dungeonmania.Goals;
 
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 
 public class CompositeGoalExpression extends GoalExpression {
     private GoalExpression left;
@@ -12,20 +12,20 @@ public class CompositeGoalExpression extends GoalExpression {
         this.right = right;
     }
 
-    public CompositeGoalExpression(JSONObject goalJson) {
-        super(goalJson.getString("goal"));
-        if (goalJson.getJSONArray("subgoals").getJSONObject(0).getString("goal").equals("AND") 
-        || goalJson.getJSONArray("subgoals").getJSONObject(0).getString("goal").equals("OR")) {
-            this.left = new CompositeGoalExpression(goalJson.getJSONArray("subgoals").getJSONObject(0));
+    public CompositeGoalExpression(JsonObject goalJson) {
+        super(goalJson.get("goal").getAsString());
+        if (goalJson.getAsJsonArray("subgoals").get(0).getAsJsonObject().get("goal").getAsString().equals("AND") 
+        || goalJson.getAsJsonArray("subgoals").get(0).getAsJsonObject().get("goal").getAsString().equals("OR")) {
+            this.left = new CompositeGoalExpression(goalJson.getAsJsonArray("subgoals").get(0).getAsJsonObject());
         } else {
-            this.left = new LeafGoalExpression(goalJson.getJSONArray("subgoals").getJSONObject(0).getString("goal"));
+            this.left = new LeafGoalExpression(goalJson.getAsJsonArray("subgoals").get(0).getAsJsonObject().get("goal").getAsString());
         }
 
-        if (goalJson.getJSONArray("subgoals").getJSONObject(1).getString("goal").equals("AND") 
-        || goalJson.getJSONArray("subgoals").getJSONObject(1).getString("goal").equals("OR")) {
-            this.right = new CompositeGoalExpression(goalJson.getJSONArray("subgoals").getJSONObject(1));
+        if (goalJson.getAsJsonArray("subgoals").get(1).getAsJsonObject().get("goal").getAsString().equals("AND") 
+        || goalJson.getAsJsonArray("subgoals").get(1).getAsJsonObject().get("goal").getAsString().equals("OR")) {
+            this.right = new CompositeGoalExpression(goalJson.getAsJsonArray("subgoals").get(1).getAsJsonObject());
         } else {
-            this.right = new LeafGoalExpression(goalJson.getJSONArray("subgoals").getJSONObject(1).getString("goal"));
+            this.right = new LeafGoalExpression(goalJson.getAsJsonArray("subgoals").get(1).getAsJsonObject().get("goal").getAsString());
         }
     }
 

@@ -23,6 +23,7 @@ public class PotionBag {
     }
 
     public void tick() {
+        if (activePotion == null) return;
         if (activePotion.getCurrentTicks() == activePotion.getTotalTicks()) {
             if (potionQueue.isEmpty()) activePotion = null;
             else activePotion = potionQueue.poll();
