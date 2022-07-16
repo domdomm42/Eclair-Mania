@@ -7,6 +7,9 @@ import java.util.List;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
+import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.exceptions.InvalidActionException;
 
 public class ZombieToastSpawner extends StaticEntity {
 
@@ -18,7 +21,7 @@ public class ZombieToastSpawner extends StaticEntity {
         List<Position> adjacentPosition = position.getAdjacentPositions();
 
         for (Position squares: adjacentPosition) {
-            List<Entity> entity = Dungeon.getEntityAtPosition(position);
+            List<Entity> entity = Dungeon.getEntitiesAtPosition(position);
             if (entity.isEmpty()) {
 
                 // fill in once zombie toast is completed
@@ -27,6 +30,27 @@ public class ZombieToastSpawner extends StaticEntity {
             }
         }
         
+    }
+
+    // not sure if right
+    // INTERACT player breaks zombietoastpawner at the tick
+    public void interact() throws IllegalArgumentException, InvalidActionException {
+        Inventory checkSword = Dungeon.getPlayer().getInventory();
+
+        List<CollectableEntity> listOfSwords = checkSword.getItemsOfType("sword");
+
+        // if player does not have sword then player cant destroy zombietoastspawner
+        if (listOfSwords.isEmpty()) {
+            return;
+        }
+
+        // if player has sword then destroy zombietoastspawner 
+        else {
+            if (Position.isAdjacent(Dungeon.getPlayer().getPosition(), this.getPosition())) {
+                Dungeon.tick("sword");
+                Dungeon.getEntities().remove("zombie_toast_spawner");
+            }
+        }
     }
 
     
