@@ -34,7 +34,7 @@ public class Battle {
     }
 
     private void generateRounds() {
-        if (player.activePotionEffect() == "invincibility_potion") {
+        if (player.activePotionEffect().equals("invincibility_potion")) {
             rounds.add(new Round(0, initialEnemyHp, new ArrayList<CollectableEntity>()));
             return;
         }

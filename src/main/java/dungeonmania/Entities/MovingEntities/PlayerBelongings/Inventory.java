@@ -18,14 +18,14 @@ public class Inventory {
     }
 
     public boolean containsCollectable(String type) {
-        return items.stream().anyMatch(item -> item.getType() == type);
+        return items.stream().anyMatch(item -> item.getType().equals(type));
     }
 
     public void addItem(CollectableEntity item) {
         items.add(item);
     }
 
-    private void removeItem(CollectableEntity item) {
+    public void removeItem(CollectableEntity item) {
         items.remove(item);
     }
 
@@ -36,11 +36,11 @@ public class Inventory {
     }
 
     public List<CollectableEntity> getItemsOfType(String type) {
-        return items.stream().filter(item -> item.getType() == type).collect(Collectors.toList());
+        return items.stream().filter(item -> item.getType().equals(type)).collect(Collectors.toList());
     }
 
     public CollectableEntity getFirstItemsOfType(String type) {
-        return items.stream().filter(item -> item.getType() == type).findFirst().get();
+        return items.stream().filter(item -> item.getType().equals(type)).findFirst().get();
     }
 
     public ArrayList<String> getCraftableItems() {
@@ -63,11 +63,11 @@ public class Inventory {
     public void buildEntity(String type) throws InvalidActionException, IllegalArgumentException {
         Map<String, Integer> craftingMaterials = new HashMap<String, Integer>();
         if (!canBuildEntity(type)) throw new InvalidActionException("not enough materials to build ".concat(type));
-        if (type == "bow") {
+        if (type.equals("bow")) {
             craftingMaterials.put("wood", 1);
             craftingMaterials.put("arrows", 3);
         }
-        if (type == "shield") {
+        if (type.equals("shield")) {
             craftingMaterials.put("wood", 1);
             craftingMaterials.put("arrows", 3);
         }
@@ -78,8 +78,8 @@ public class Inventory {
     }
 
     public boolean canBuildEntity(String type) throws InvalidActionException, IllegalArgumentException {
-        if (type == "bow") return canBuildBow();
-        if (type == "shield") return canBuildShield();
+        if (type.equals("bow")) return canBuildBow();
+        if (type.equals("shield")) return canBuildShield();
         throw new IllegalArgumentException(type.concat(" cannot be built"));
     }
 }

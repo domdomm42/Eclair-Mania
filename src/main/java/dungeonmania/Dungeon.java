@@ -33,6 +33,7 @@ public class Dungeon {
     private static ArrayList<CollectableEntity> items = new ArrayList<CollectableEntity>();
     private static ArrayList<Battle> battles = new ArrayList<Battle>();
     private static Goal goals;
+    private static List<String> completedGoals = new ArrayList<String>();;
 
     public static void setId(String id) {
         Dungeon.id = id;
@@ -61,13 +62,13 @@ public class Dungeon {
     }
 
     public static Player getPlayer() {
-        Entity player = entities.stream().filter(entity -> entity.getType() == "player").findFirst().get();
+        Entity player = entities.stream().filter(entity -> entity.getType().equals("player")).findFirst().get();
         if (player.getClass() == Player.class) return (Player) player;
         return null;
     }
 
     public static Entity getEntityFromId(String id) {
-        Entity entity = entities.stream().filter(ent -> ent.getId() == id).findFirst().get();
+        Entity entity = entities.stream().filter(ent -> ent.getId().equals(id)).findFirst().get();
         return entity;
     }
 
@@ -86,8 +87,24 @@ public class Dungeon {
         entities.remove(entity);
     }
 
+    public static void addCompletedGoal(String goal) {
+        completedGoals.add(goal);
+    }
+
+    public static List<String> getCompletedGoals() {
+        return completedGoals;
+    }
+
     public static List<Entity> getEntitiesAtPosition(Position position) {
-        return Dungeon.entities.stream().filter(entity -> entity.getPosition() == position).collect(Collectors.toList());
+        return Dungeon.entities.stream().filter(entity -> entity.getPosition().equals(position)).collect(Collectors.toList());
+    }
+
+    public static boolean isEntityOnPosition(Position position, String type) {
+        return getEntitiesAtPosition(position).stream().anyMatch(entity -> entity.getType().equals(type));
+    }
+
+    public static Entity getFirstEntityOfTypeOnPosition(Position position, String type) {
+        return getEntitiesAtPosition(position).stream().filter(entity -> entity.getType().equals(type)).findFirst().get();
     }
 
     public static DungeonResponse getDungeonResponse() {
@@ -99,7 +116,7 @@ public class Dungeon {
     }
 
     public static void tick() {
-        entities.sort((Entity e1, Entity e2) -> e1.getType() == "player" ? -1 : 0); //NEED TO CHECK THIS
+        entities.sort((Entity e1, Entity e2) -> e1.getType().equals("player") ? -1 : 0); //NEED TO CHECK THIS
         entities.forEach(entity -> entity.tick());
     }
 

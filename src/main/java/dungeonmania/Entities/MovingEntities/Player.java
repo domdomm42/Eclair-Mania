@@ -8,6 +8,7 @@ import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStr
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -37,6 +38,14 @@ public class Player extends MovingEntity {
     
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public List<CollectableEntity> getInventory(String type) {
+        return inventory.getItemsOfType(type);
+    }
+
+    public void useKey(Key key) {
+        inventory.removeItem(key);
     }
 
     public PotionBag getPotionBag() {
