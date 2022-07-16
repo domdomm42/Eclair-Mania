@@ -5,7 +5,7 @@ import dungeonmania.util.Position;
 
 public class ZombieToast extends Enemy {
     
-    public ZombieToast(String id, String type, Position position, int health, boolean isInteractable, MovementStrategy movementStrategy, int attack) {
+    public ZombieToast(String id, String type, Position position, double health, boolean isInteractable, MovementStrategy movementStrategy, double attack) {
         super(id, type, position, health, isInteractable, movementStrategy, health);
     }
     

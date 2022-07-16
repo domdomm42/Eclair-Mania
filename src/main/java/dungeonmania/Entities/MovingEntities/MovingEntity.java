@@ -9,7 +9,7 @@ public class MovingEntity extends Entity {
     private final double attack;
     private MovementStrategy movementStrategy;
     
-    public MovingEntity(String id, String type, Position position, int health, boolean isInteractable, MovementStrategy movementStrategy, int attack) {
+    public MovingEntity(String id, String type, Position position, double health, boolean isInteractable, MovementStrategy movementStrategy, double attack) {
         super(id, type, position, isInteractable);
         this.health = health;
         this.movementStrategy = movementStrategy;
