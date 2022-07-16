@@ -1,7 +1,6 @@
 package dungeonmania.Entities.MovingEntities.Enemies;
 
 import dungeonmania.Dungeon;
-import dungeonmania.Entities.MovingEntities.MovementStrategy;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.ZombieMovementStrategy;
 import dungeonmania.util.Position;
 
@@ -12,8 +11,8 @@ public class ZombieToast extends Enemy {
     }
     */
 
-    public ZombieToast(String id, Position position, boolean isInteractable) {
-        super(id, "zombie_toast", position, Dungeon.getConfigValue("zombie_health"), isInteractable, new ZombieMovementStrategy(), Dungeon.getConfigValue("zombie_attack"));
+    public ZombieToast(String id, Position position) {
+        super(id, "zombie_toast", position, Dungeon.getConfigValue("zombie_health"), false, new ZombieMovementStrategy(), Dungeon.getConfigValue("zombie_attack"));
         getMovementStrategy().setEntity(this);
     }
     

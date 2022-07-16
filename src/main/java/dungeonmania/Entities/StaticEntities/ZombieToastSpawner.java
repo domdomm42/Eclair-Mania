@@ -10,7 +10,7 @@ import dungeonmania.Entities.Entity;
 
 public class ZombieToastSpawner extends StaticEntity {
 
-    public ZombieToastSpawner(Position position, String id, String type, boolean Isinteractable) {
+    public ZombieToastSpawner(Position position, String id) {
         super(position, id, "zombie_toast_spawner", true);
     }
 

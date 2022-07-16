@@ -1,7 +1,6 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities;
 
-import java.util.HashMap;
-import java.util.Map;
+
 
 import dungeonmania.Dungeon;
 import dungeonmania.exceptions.InvalidActionException;

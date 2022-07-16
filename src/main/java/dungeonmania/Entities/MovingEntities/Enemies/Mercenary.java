@@ -15,8 +15,8 @@ public class Mercenary extends Enemy {
         this.bribePrice = bribePrice;
     }*/
     
-    public Mercenary(String id, Position position, boolean isInteractable) {
-        super(id, "mercenary", position, Dungeon.getConfigValue("mercenary_health"), isInteractable, new MercenaryMovementStrategy(), Dungeon.getConfigValue("mercenary_attack"));
+    public Mercenary(String id, Position position) {
+        super(id, "mercenary", position, Dungeon.getConfigValue("mercenary_health"), true, new MercenaryMovementStrategy(), Dungeon.getConfigValue("mercenary_attack"));
         getMovementStrategy().setEntity(this);
     }
 
@@ -24,4 +24,6 @@ public class Mercenary extends Enemy {
     public void tick() {
         getMovementStrategy().move();
     }
+
+    // when mercenary turns into ally switch isinteractable to false
 }
