@@ -51,7 +51,7 @@ public class SpiderMovementStrategy extends MovementStrategy {
 
     public boolean isNextPositionBoulder(Position nextPosition, Spider spider) {
 
-            List<Entity> entitiesAtPosition = Dungeon.getEntityAtPosition(nextPosition).stream().filter(entity -> entity.getType() == "boulder").collect(Collectors.toList());
+            List<Entity> entitiesAtPosition = Dungeon.getEntitiesAtPosition(nextPosition).stream().filter(entity -> entity.getType().equals("boulder")).collect(Collectors.toList());
             if (entitiesAtPosition.isEmpty() == false) {
                 // spider.setIsClockwise(!spider.getIsClockwise());
                 return true;
