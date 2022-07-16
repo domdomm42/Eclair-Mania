@@ -1,6 +1,8 @@
 package dungeonmania.Entities.MovingEntities.Enemies;
 
+import dungeonmania.Dungeon;
 import dungeonmania.Entities.MovingEntities.MovementStrategy;
+import dungeonmania.Entities.MovingEntities.MovementStrategies.SpiderMovementStrategy;
 import dungeonmania.util.Position;
 
 public class Spider extends Enemy {
@@ -10,6 +12,11 @@ public class Spider extends Enemy {
 
     public Spider(String id, String type, Position position, double health, boolean isInteractable, MovementStrategy movementStrategy, double attack) {
         super(id, type, position, health, isInteractable, movementStrategy, attack);
+        getMovementStrategy().setEntity(this);
+    }
+
+    public Spider(String id, Position position, boolean isInteractable) {
+        super(id, "spider", position, Dungeon.getConfigValue("spider_health"), isInteractable, new SpiderMovementStrategy(), Dungeon.getConfigValue("spider_attack"));
         getMovementStrategy().setEntity(this);
     }
 
