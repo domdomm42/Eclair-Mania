@@ -34,9 +34,13 @@ public class DungeonManiaController {
     /**
      * /game/new
      */
-    public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException, FileNotFoundException {
-        Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
-        Dungeon.setupConfigFile(configName);
+    public DungeonResponse newGame(String dungeonName, String configName) {
+        try {
+            Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
+            Dungeon.setupConfigFile(configName);
+        } catch (FileNotFoundException exception) {
+            return null;
+        }
         return Dungeon.getDungeonResponse();
     }
 
