@@ -1,11 +1,13 @@
 package dungeonmania.Entities.MovingEntities.MovementStrategies;
 
+import dungeonmania.Battle;
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.MovementStrategy;
+import dungeonmania.Entities.MovingEntities.Player;
+import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
 import dungeonmania.Entities.MovingEntities.Enemies.Spider;
 import dungeonmania.util.Position;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,13 +17,18 @@ public class SpiderMovementStrategy extends MovementStrategy {
     @Override
     public void move() {
         Position currentPosition = getEntity().getPosition();
-
-        
         Spider spider = (Spider) getEntity();
-
         int numberOfTicks = spider.getNumberOfTicks();
         List<Position> adjacentPositions = currentPosition.getAdjacentPositions();
+        
         Position nextPosition = getNextPosition(currentPosition, spider, adjacentPositions);
+        List<Entity> entitiesOnPosition =  Dungeon.getEntitiesAtPosition(nextPosition);
+
+        // check for next position being player, if player battle
+        if (entitiesOnPosition.stream().anyMatch(entity -> entity instanceof Player)) {
+            Dungeon.addBattle(new Battle((Player) entitiesOnPosition.stream().filter(entity -> entity instanceof Player).findFirst().get(), (Enemy) spider));
+            return;
+        }
         
         if (numberOfTicks == 0 && isNextPositionBoulder(nextPosition, spider)) { //if boulder is above spawn --> spider stays stationary
             return;
@@ -29,13 +36,14 @@ public class SpiderMovementStrategy extends MovementStrategy {
             spider.setPositionIterator(1);
             getEntity().setPosition(nextPosition);
             return;
-        } else if ((spider.getIsClockwise() && isNextPositionBoulder(nextPosition, spider)) || (!spider.getIsClockwise() && isNextPositionBoulder(nextPosition, spider))) { // if the next move is boulder, switch direction of spider
+        } else if (isNextPositionBoulder(nextPosition, spider)) { // if the next move is boulder, switch direction of spider
             spider.setIsClockwise(!spider.getIsClockwise());
         } 
 
-        // get nextPosition 
         // case 1: if already was moving clockwise or anti clockwise and not boulder next position stays the same
         // case 2: if there is a boulder --> direction switches and next position is in the opposite direction
+        // Move spider in specified direction
+
         if (spider.getIsClockwise()) {
             spider.setPositionIterator((spider.getPositionIterator() + 1) % 9);
             nextPosition = getNextPosition(currentPosition, spider, adjacentPositions);
@@ -67,7 +75,7 @@ public class SpiderMovementStrategy extends MovementStrategy {
         
         if (spider.getNumberOfTicks() == 0) { // move up
             nextPosition = adjacentPositions.get(1);
-        } else if (spider.getIsClockwise() /* && isNextPositionBoulder(nextPosition) == false */) { // move clockwise
+        } else if (spider.getIsClockwise()) { // move clockwise
             nextPosition = adjacentPositions.get((spider.getPositionIterator() + 1) % 9);
         } else if (spider.getIsClockwise() == false ) {
             nextPosition = adjacentPositions.get((spider.getPositionIterator() - 1) % 9);
@@ -75,6 +83,7 @@ public class SpiderMovementStrategy extends MovementStrategy {
         
         return nextPosition;
     }
+
 }
 
 

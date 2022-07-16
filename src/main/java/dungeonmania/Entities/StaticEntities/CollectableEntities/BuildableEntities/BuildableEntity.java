@@ -1,6 +1,5 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities;
 
-import java.util.Map;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;

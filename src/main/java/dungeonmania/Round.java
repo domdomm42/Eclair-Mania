@@ -1,7 +1,6 @@
 package dungeonmania;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.response.models.RoundResponse;

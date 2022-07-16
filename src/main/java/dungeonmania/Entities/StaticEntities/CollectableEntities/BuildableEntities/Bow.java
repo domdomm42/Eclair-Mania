@@ -1,14 +1,8 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 import dungeonmania.Dungeon;
-import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.util.Position;
 
 public class Bow extends BuildableEntity {
 

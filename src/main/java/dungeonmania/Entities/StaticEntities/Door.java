@@ -1,18 +1,16 @@
 package dungeonmania.Entities.StaticEntities;
 
+import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.util.Position;
 
 public class Door extends StaticEntity {
     private boolean isUnlocked;
-    private Key keyThatUnlock;
 
 
-    public Door(Position position, String id, String type, boolean Isinteractable, Key keyThatUnlock, boolean isUnlocked) {
+    public Door(Position position, String id) {
         super(position, id, "door", false);
-
-        this.keyThatUnlock = keyThatUnlock;
-        this.isUnlocked = isUnlocked;
+        this.isUnlocked = false;
     }
 
 
@@ -27,13 +25,10 @@ public class Door extends StaticEntity {
 
 
     public Key getKeyThatUnlock() {
-        return keyThatUnlock;
+        return (Key) Dungeon.getEntityFromId("key-".concat(getId()));
     }
 
 
-    public void setKeyThatUnlock(Key keyThatUnlock) {
-        this.keyThatUnlock = keyThatUnlock;
-    }
 
 
     
