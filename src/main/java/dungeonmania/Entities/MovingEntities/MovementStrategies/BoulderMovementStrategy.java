@@ -20,8 +20,6 @@ public class BoulderMovementStrategy extends MovementStrategy {
         List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
         if (entitiesOnPosition.stream().anyMatch(entity -> entity.getType() == "wall")) return;
         if (entitiesOnPosition.stream().anyMatch(entity -> entity.getType() == "boulder")) return;
-        
-
         getEntity().setPosition(requestedPosition);
     }
 }

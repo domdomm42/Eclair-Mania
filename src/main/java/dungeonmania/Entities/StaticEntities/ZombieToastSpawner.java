@@ -48,7 +48,7 @@ public class ZombieToastSpawner extends StaticEntity {
         else {
             if (Position.isAdjacent(Dungeon.getPlayer().getPosition(), this.getPosition())) {
                 Dungeon.tick("sword");
-                Dungeon.getEntities().remove("zombie_toast_spawner");
+                Dungeon.removeEntity(this);
             }
         }
     }

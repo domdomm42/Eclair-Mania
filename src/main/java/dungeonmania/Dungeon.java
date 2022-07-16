@@ -145,11 +145,6 @@ public class Dungeon {
         return entities;
     }
 
-    //
-    public static ArrayList<Entity> getEntities() {
-        return entities;
-    }
-
     public static void setEntities(ArrayList<Entity> entities) {
         Dungeon.entities = entities;
     }
