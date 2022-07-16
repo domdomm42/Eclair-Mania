@@ -2,9 +2,8 @@ package dungeonmania.Entities.StaticEntities;
 
 import dungeonmania.util.Position;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.BoulderMovementStrategy;
+
 import dungeonmania.Entities.MovingEntities.MovementStrategy;
-
-
 
 public class Boulder extends StaticEntity {
     private MovementStrategy boulderMovementStrategy;
@@ -18,4 +17,5 @@ public class Boulder extends StaticEntity {
     public MovementStrategy getMovementStrategy() {
         return boulderMovementStrategy;
     }
+
 }

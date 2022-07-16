@@ -11,6 +11,7 @@ import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
 import dungeonmania.Entities.StaticEntities.Boulder;
 import dungeonmania.Entities.StaticEntities.Door;
 import dungeonmania.Entities.StaticEntities.Portal;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -22,7 +23,7 @@ public class PlayerMovementStrategy extends MovementStrategy {
         Position requestedPosition = player.getPositionInDirection(direction);
         List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
         if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) 
-            requestedPosition = ((Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal") ).getEndLocation();
+            requestedPosition = ((Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal") ).getPosition(); //TODO
         if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
             Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
             if (!door.isUnlocked()) {
@@ -47,6 +48,11 @@ public class PlayerMovementStrategy extends MovementStrategy {
         }
         entitiesOnPosition.stream().filter(entity -> entity instanceof CollectableEntity).forEach(entity -> {
             CollectableEntity collectableEntity = (CollectableEntity) entity;
+            if (collectableEntity instanceof Bomb) {
+                if (((Bomb) collectableEntity).isHasBeenPickedUp()) {
+                    return;
+                }
+            }
             player.pickup((CollectableEntity) entity);
             collectableEntity.setPickedUp(true);
         });
@@ -54,20 +60,24 @@ public class PlayerMovementStrategy extends MovementStrategy {
 
     @Override
     public boolean isValidMove(Position requestedPosition) {
+        List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
+        
         if (Dungeon.isEntityOnPosition(requestedPosition, "wall")) {
             return false;
-        } else if (Dungeon.isEntityOnPosition(requestedPosition, "boulder")) {
-            return true;
         } else if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
             Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
             if (!door.isUnlocked()) {
-                if (player.getInventory("key").stream().filter(entity -> door.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) {
-
-                } 
-
-            } else {
-                return true;
+                return false;
+            } 
+        } else if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
+            // NEED TO ADD IN PORTAL REQUIREMENTS
+            return true;
+        } else if (Dungeon.isEntityOnPosition(requestedPosition, "bomb")) {
+            Bomb bomb = (Bomb) entitiesOnPosition.stream().filter(entity -> entity instanceof Bomb).findFirst().get();
+            if (bomb.isHasBeenPickedUp()) {
+                return false;
             }
-        }
+        } 
+        return true;
     }
 }
