@@ -8,6 +8,8 @@ public class Mercenary extends Enemy {
     private int bribePrice = Dungeon.getConfigValue("bribe_amount");
     private int bribeRadius = Dungeon.getConfigValue("bribe_radius");
     private boolean isAlly = false;
+
+    
     
     
     public Mercenary(String id, Position position) {

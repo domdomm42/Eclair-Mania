@@ -27,17 +27,17 @@ public class SpiderMovementStrategy extends MovementStrategy {
                 spider.setPositionIterator((spider.getPositionIterator() + 1) % 8);
             } else {
                 spider.setIsClockwise(false);
-                spider.setPosition(adjacentPositions.get((spider.getPositionIterator() - 2) % 8));
-                spider.setPositionIterator((spider.getPositionIterator() - 1) % 8);
+                spider.setPosition(adjacentPositions.get(((spider.getPositionIterator() - 2) + 8) % 8));
+                spider.setPositionIterator(((spider.getPositionIterator() - 2) + 8 -1) % 8);
             }
         } else if (spider.getIsClockwise() == false) {
             if (isValidMove(adjacentPositions.get(spider.getPositionIterator()))) {
                 spider.setPosition(adjacentPositions.get((spider.getPositionIterator())));
-                spider.setPositionIterator((spider.getPositionIterator() - 1) % 8);
+                spider.setPositionIterator(((spider.getPositionIterator() - 1) + 8) % 8);
             } else {
-                spider.setIsClockwise(false);
-                spider.setPosition(adjacentPositions.get((spider.getPositionIterator() + 2) % 8));
-                spider.setPositionIterator((spider.getPositionIterator() + 1) % 8);
+                spider.setIsClockwise(true);
+                spider.setPosition(adjacentPositions.get(((spider.getPositionIterator() + 2))% 8));
+                spider.setPositionIterator((spider.getPositionIterator() + 3) % 8);
             }
         }
 
