@@ -95,9 +95,6 @@ public class IntegrationTests {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(0, countEntityOfType(res, "mercenary"));
 
-        // Exit portal
-        res = dmc.tick(Direction.LEFT);
-        res = dmc.tick(Direction.LEFT);
     }
 
     @Test
