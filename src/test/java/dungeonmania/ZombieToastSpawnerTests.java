@@ -18,7 +18,6 @@ import static dungeonmania.TestUtils.getInventory;
 import static dungeonmania.TestUtils.getPlayer;
 
 public class ZombieToastSpawnerTests {
-    @Test
     @DisplayName("User destroys spawner")
     public void PlayerDestroysSpawner() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
