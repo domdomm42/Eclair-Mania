@@ -40,9 +40,10 @@
         },
         {
         
-            "type": "mercenary",
-            "x": 6,
-            "y": 2
+            "type": "key",
+            "x": 7,
+            "y": 2,
+            "key": 2
         },
         {
         
@@ -74,12 +75,6 @@
         },
         {
         
-            "type": "exit",
-            "x": 1,
-            "y": 4
-        },
-        {
-        
             "type": "invincibility_potion",
             "x": 2,
             "y": 4
@@ -103,10 +98,15 @@
             "colour": "red"
         },
         {
-            "type": "mercenary",
-            "x": 8,
+            "type": "door",
+            "x": 7,
             "y": 4,
-            "colour": "red"
+            "key": "2"
+        },
+        {
+            "type": "exit",
+            "x": 8,
+            "y": 4
         },
         {
             "type": "wall",
