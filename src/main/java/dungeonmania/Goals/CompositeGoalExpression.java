@@ -31,8 +31,8 @@ public class CompositeGoalExpression extends GoalExpression {
 
     public String toString() {
         if (isComplete()) return "";
-        if (left.isComplete() && !right.isComplete()) return left.getGoal();
-        if (right.isComplete() && !left.isComplete()) return right.getGoal();
+        if (left.isComplete() && !right.isComplete()) return right.toString();
+        if (right.isComplete() && !left.isComplete()) return left.toString();
         return "( ".concat(left.toString().concat(" ").concat(getGoal()).concat(" ").concat(right.toString()).concat(" )"));
     }
 

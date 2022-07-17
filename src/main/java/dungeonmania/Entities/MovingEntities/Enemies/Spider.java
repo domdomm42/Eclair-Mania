@@ -2,6 +2,7 @@ package dungeonmania.Entities.MovingEntities.Enemies;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.SpiderMovementStrategy;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Spider extends Enemy {
@@ -18,7 +19,13 @@ public class Spider extends Enemy {
     }
 
     @Override
-    public void tick() {
+    public void tick(Direction playerMovementDirection) {
+        getMovementStrategy().move();
+        numberOfTicks += 1;
+    }
+
+    @Override
+    public void tick(String playerAction) {
         getMovementStrategy().move();
         numberOfTicks += 1;
     }

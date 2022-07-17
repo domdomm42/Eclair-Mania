@@ -51,12 +51,13 @@ public abstract class Entity {
     public void tick() { };
     // if bomb next to active switch then explode
 
-    public void tick(Direction movementDirection) { } // only for player
+    public void tick(Direction movementDirection) {
+        tick();
+    } // only for player
 
-    public void tick(String itemId) throws InvalidActionException, IllegalArgumentException { };
-    // use key
-    // use potion
-    // use drop bomb
+    public void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
+        tick();
+    };
 
     public void build(String buildable) throws InvalidActionException, IllegalArgumentException  { }
 

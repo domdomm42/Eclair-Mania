@@ -2,9 +2,11 @@ package dungeonmania.Entities.MovingEntities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
+import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStrategy;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
@@ -19,6 +21,15 @@ import dungeonmania.util.Position;
 public class Player extends MovingEntity {
     Inventory inventory;
     PotionBag potionBag;
+    Position lastPosition;
+
+    public Position getLastPosition() {
+        return lastPosition;
+    }
+
+    public void setLastPosition(Position lastPosition) {
+        this.lastPosition = lastPosition;
+    }
 
     public Player(String id, Position position) {
         super(id, "player", position, Dungeon.getConfigValue("player_health"), false, new PlayerMovementStrategy(), Dungeon.getConfigValue("player_attack"));
@@ -84,12 +95,18 @@ public class Player extends MovingEntity {
 
     @Override
     public double getAttack() {
-        return (super.getAttack() + inventory.getItemsOfType("sword").size() > 0 ? Dungeon.getConfigValue("sword_attack") : 0) 
-                * (inventory.getItemsOfType("bow").size() > 0 ? 2 : 1);
+        double attack = super.getAttack();
+        if (inventory.containsCollectable("sword")) attack += Dungeon.getConfigValue("sword_attack");
+        if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) attack += Dungeon.getConfigValue("ally_attack");
+        if (inventory.containsCollectable("bow")) attack *= 2;
+        return attack;
     }
 
     public double getDefence() {
-        return (inventory.getItemsOfType("shield").size() > 0 ? Dungeon.getConfigValue("shield_defence") : 0);
+        double defence = getDefence();
+        if (inventory.containsCollectable("sword")) defence += Dungeon.getConfigValue("shield_defence");
+        if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) defence += Dungeon.getConfigValue("ally_defence");
+        return defence;
     }
 
     public List<CollectableEntity> getWeaponryUsed() {
@@ -125,5 +142,10 @@ public class Player extends MovingEntity {
 
     public int getNumberOfTreasures() {
         return inventory.getItemsOfType("treasure").size();
+    }
+
+    public void bribeMercenary() {
+        IntStream.range(0, Dungeon.getConfigValue("bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
+        
     }
 }
