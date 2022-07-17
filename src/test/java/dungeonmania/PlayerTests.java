@@ -47,7 +47,7 @@ public class PlayerTests {
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 1), false);
 
         // move player downward
-        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        DungeonResponse actualDungonRes = dmc.tick(Direction.RIGHT);
         EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
 
         // assert after movement
@@ -65,7 +65,7 @@ public class PlayerTests {
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 0), false);
 
         // move player downward
-        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        DungeonResponse actualDungonRes = dmc.tick(Direction.UP);
         EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
 
         // assert after movement
@@ -83,7 +83,7 @@ public class PlayerTests {
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(0, 1), false);
 
         // move player downward
-        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        DungeonResponse actualDungonRes = dmc.tick(Direction.LEFT);
         EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
 
         // assert after movement
