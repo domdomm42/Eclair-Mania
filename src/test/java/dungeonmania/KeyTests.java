@@ -37,7 +37,7 @@ public class KeyTests {
     public void cantUseWrongKey() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughOpenDoor", "c_DoorsKeysTest_cantUseKey");
+        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_cantUseKey", "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
 
         // pick up key
         res = dmc.tick(Direction.RIGHT);

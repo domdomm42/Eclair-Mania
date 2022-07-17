@@ -77,6 +77,7 @@ public class BombTests {
         res = dmc.tick(Direction.LEFT);
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
 
         // Check Bomb exploded with radius 2
         //
@@ -84,6 +85,7 @@ public class BombTests {
         //              Bomb                Treasure
         //
         //              Treasure
+        
         assertEquals(0, getEntities(res, "bomb").size());
         assertEquals(0, getEntities(res, "boulder").size());
         assertEquals(0, getEntities(res, "switch").size());

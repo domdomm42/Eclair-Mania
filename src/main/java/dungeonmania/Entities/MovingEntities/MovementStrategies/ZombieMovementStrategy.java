@@ -11,6 +11,7 @@ import dungeonmania.Entities.MovingEntities.MovementStrategy;
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
 import dungeonmania.Entities.StaticEntities.Door;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.util.Position;
 
 public class ZombieMovementStrategy extends MovementStrategy {
@@ -52,17 +53,25 @@ public class ZombieMovementStrategy extends MovementStrategy {
 
     @Override
     public boolean isValidMove(Position position) {
-        if (Dungeon.getEntitiesAtPosition(position).isEmpty()) {
-            return true;
-        } else if (Dungeon.isEntityOnPosition(position, "switch") || Dungeon.isEntityOnPosition(position, "exit")) {
-            return true;
+        List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(position);
+        
+        if (Dungeon.isEntityOnPosition(position, "wall")) {
+            return false;
         } else if (Dungeon.isEntityOnPosition(position, "door")) {
             Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(position, "door");
-            if (door.isUnlocked()) {
-                return true;
+            if (!door.isUnlocked()) {
+                return false;
+            } 
+        } else if (Dungeon.isEntityOnPosition(position, "portal")) {
+            return false;
+            
+        } else if (Dungeon.isEntityOnPosition(position, "bomb")) {
+            Bomb bomb = (Bomb) entitiesOnPosition.stream().filter(entity -> entity instanceof Bomb).findFirst().get();
+            if (bomb.isHasBeenPickedUp()) {
+                return false;
             }
         } 
-        return false;
+        return true;
     }
     
 }
