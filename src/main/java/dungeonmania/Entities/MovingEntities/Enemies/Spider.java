@@ -10,8 +10,6 @@ public class Spider extends Enemy {
     private boolean isClockwise = true;
     private Position spawnPosition;
 
-    
-
     public Spider(String id, Position position) {
         super(id, "spider", position, Dungeon.getConfigValue("spider_health"), false, new SpiderMovementStrategy(), Dungeon.getConfigValue("spider_attack"));
         getMovementStrategy().setEntity(this);
