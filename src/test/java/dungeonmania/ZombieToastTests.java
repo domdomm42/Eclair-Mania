@@ -10,42 +10,38 @@ import org.junit.jupiter.api.Test;
 import dungeonmania.response.models.DungeonResponse;
 
 import dungeonmania.util.Direction;
-import dungeonmania.util.Position;
 
 public class ZombieToastTests {
     @Test
     @DisplayName("Spawnable at zombie spawners")
     public void ZombieToastSpawn() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_spiderTest_basicMovement");
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_movementTest_testMovementDown");
 
-        // for each 2 tick, spawn zombie
+        // for each tick, spawn zombie
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.LEFT);
         res = dmc.tick(Direction.RIGHT);
 
-        // check that there are 2 zombie toasts as we have ran 4 ticks
-        assertEquals(2, getEntities(res, "ZombieToast").size());
+        // check that there is 4 zombies
+        assertEquals(4, getEntities(res, "zombie_toast").size());
 
     }
 
     // not done
     @Test
-    @DisplayName("Portal has no effect")
+    @DisplayName("Portal has no effect on zombie hence zombie dont spawn as they are blocked")
     public void PortalNoEffectOnZombieToast() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_zombieToastTests_spawnZombies");
+        DungeonResponse res = dmc.newGame("d_zombieTest_zombieDontPortal", "c_movementTest_testMovementDown");
 
-        Position pos = getEntities(res, "zombie_toast").get(0).getPosition();
-        // for each 2 tick, spawn zombie
-        res = dmc.tick(Direction.UP);
+
+        // for each tick, spawn zombie
         res = dmc.tick(Direction.DOWN);
-
-
-        // one zombie exist checks that its location is not teleported
-        assertEquals(1, getEntities(res, "zombie_toast").get(0).getPosition());
-
+        assertEquals(0, getEntities(res, "zombie_toast").size());
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(0, getEntities(res, "zombie_toast").size());
     }
 
 
