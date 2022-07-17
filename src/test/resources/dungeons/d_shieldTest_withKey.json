@@ -19,12 +19,18 @@
             "type": "wood",
             "x": 3,
             "y": 1
-        },
-        {
-            "type": "key",
+        },{
+            "type" : "key",
             "x" : 4,
-            "y" : 1
+            "y" : 1,
+            "key" : 1
+        }, {
+            "type" : "door",
+            "x" : 10,
+            "y" : 10,
+            "key" : 1
         }
+
     ],
     "goal-condition": {
         "goal": "exit"
