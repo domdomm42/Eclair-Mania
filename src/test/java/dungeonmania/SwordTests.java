@@ -87,6 +87,7 @@ public class SwordTests {
         // // check if 2 swords are in inventory
         // assertEquals(2, getInventory(initDungeonRes, "sword").size());
         //simulate a battle
+
         BattleResponse battle = res.getBattles().get(0);
         // assert that player wins, taht means sword doubled in damage
         assertBattleCalculations("spider", battle, true, "c_swordTests_sworddamage.json");

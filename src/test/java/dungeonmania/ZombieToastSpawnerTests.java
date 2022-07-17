@@ -8,28 +8,40 @@ import static dungeonmania.TestUtils.getEntities;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
+
+import static dungeonmania.TestUtils.getInventory;
+import static dungeonmania.TestUtils.getPlayer;
 
 public class ZombieToastSpawnerTests {
     @Test
     @DisplayName("User destroys spawner")
-    public void PlayerDestroysSpawner() {
+    public void PlayerDestroysSpawner() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_zombieToastTests_destroySpawn", "c_movementTest_testMovementDown");
+        DungeonResponse initDungonRes = dmc.newGame("d_zombieToastTests_destroySpawn", "c_movementTest_testMovementDown");
+        EntityResponse initPlayer = getPlayer(initDungonRes).get();
 
-        // player picks up sword, if player is next to zombie toast then destroy it
-        res = dmc.tick(Direction.UP);
-        assertEquals(1, getEntities(res, "sword").size());
+        
+        // create the expected player position
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 2), false);
 
-        res = dmc.tick(Direction.LEFT);
-        // res = dmc.tick(Direction.RIGHT);
+        // move up again
+        DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
+        EntityResponse actualPlayer = getPlayer(actualDungonRes).get();
+        assertEquals(expectedPlayer, actualPlayer);
 
-        // String swordId = getInventory(res, "sword").get(0).getId();
-        // res = assertDoesNotThrow(() -> dmc.tick(swordId));
+        // check if treasure is in the inventory
+        assertEquals(1, getInventory(actualDungonRes, "sword").size());
 
-       
-        assertEquals(0, getEntities(res, "zombie_toast_spawner").size());
+        actualDungonRes = dmc.tick(Direction.DOWN);
+        actualDungonRes = dmc.tick(Direction.DOWN);
+        actualDungonRes= dmc.interact("5");
+
+        assertEquals(0, getEntities(actualDungonRes, "zombie_toast_spawner").size());
 
     }
 
