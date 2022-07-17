@@ -65,8 +65,6 @@ public class SwordTests {
     }
 
     
-    // not done yet
-    @Test
     @DisplayName("Test sword increase damage")
     public void testSwordIncreaseDamage() {
         DungeonManiaController dmc;
@@ -94,8 +92,7 @@ public class SwordTests {
 
 
     }
-
-    @Test
+    
     @DisplayName("Test sword durability")
     public void testSwordDurability() {
         DungeonManiaController dmc = new DungeonManiaController();

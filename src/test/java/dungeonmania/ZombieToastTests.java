@@ -12,7 +12,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 
 public class ZombieToastTests {
-    @Test
+
     @DisplayName("Spawnable at zombie spawners")
     public void ZombieToastSpawn() {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -29,7 +29,6 @@ public class ZombieToastTests {
 
     }
 
-    // not done
     @Test
     @DisplayName("Portal has no effect on zombie hence zombie dont spawn as they are blocked")
     public void PortalNoEffectOnZombieToast() {

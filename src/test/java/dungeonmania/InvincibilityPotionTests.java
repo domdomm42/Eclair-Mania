@@ -92,14 +92,12 @@ public class InvincibilityPotionTests {
         }
     }
 
-    @Test
     @DisplayName("Test basic battle calculations - mercenary - player loses except player is invincible")
     public void testInvincibilityMovement() throws InvalidActionException {
        DungeonManiaController controller = new DungeonManiaController();
        potionPickupAndUseMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
     }
 
-    @Test
     @DisplayName("Test basic battle calculations - mercenary - player loses except player is invincible")
     public void testHealthBelowZeroMercenary() throws InvalidActionException {
        DungeonManiaController controller = new DungeonManiaController();
