@@ -33,12 +33,6 @@
         },
         {
         
-            "type": "mercenary",
-            "x": 7,
-            "y": 2
-        },
-        {
-        
             "type": "wall",
             "x": 8,
             "y": 2

@@ -38,12 +38,6 @@
         },
         {
         
-            "type": "mercenary",
-            "x": 7,
-            "y": 2
-        },
-        {
-        
             "type": "wall",
             "x": 8,
             "y": 2
@@ -83,35 +77,14 @@
         },
         {
         
-            "type": "exit",
-            "x": 1,
-            "y": 4
-        },
-        {
-        
             "type": "sword",
             "x": 3,
             "y": 4
         },
         {
-        
-            "type": "key",
-            "x": 4,
-            "y": 4,
-            "key": 1
-        },
-        {
-        
-            "type": "door",
-            "x": 5,
-            "y": 4,
-            "key": 1
-        },
-        {
-            "type": "zombie_toast_spawner",
-            "x": 3,
-            "y": 4,
-            "colour": "red"
+            "type": "exit",
+            "x": 8,
+            "y": 4
         },
         {
             "type": "wall",
