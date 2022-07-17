@@ -20,6 +20,15 @@ import dungeonmania.util.Position;
 public class Player extends MovingEntity {
     Inventory inventory;
     PotionBag potionBag;
+    Position lastPosition;
+
+    public Position getLastPosition() {
+        return lastPosition;
+    }
+
+    public void setLastPosition(Position lastPosition) {
+        this.lastPosition = lastPosition;
+    }
 
     public Player(String id, Position position) {
         super(id, "player", position, Dungeon.getConfigValue("player_health"), false, new PlayerMovementStrategy(), Dungeon.getConfigValue("player_attack"));
@@ -85,8 +94,10 @@ public class Player extends MovingEntity {
 
     @Override
     public double getAttack() {
-        return (super.getAttack() + inventory.getItemsOfType("sword").size() > 0 ? Dungeon.getConfigValue("sword_attack") : 0) 
-                * (inventory.getItemsOfType("bow").size() > 0 ? 2 : 1);
+        double attack = super.getAttack();
+        if (inventory.containsCollectable("sword")) attack += Dungeon.getConfigValue("sword_attack");
+        if (inventory.containsCollectable("bow")) attack *= 2;
+        return attack;
     }
 
     public double getDefence() {

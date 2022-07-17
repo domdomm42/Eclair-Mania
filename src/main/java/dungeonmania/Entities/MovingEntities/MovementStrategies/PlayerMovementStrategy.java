@@ -43,6 +43,7 @@ public class PlayerMovementStrategy extends MovementStrategy {
             ((Boulder) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "boulder")).getMovementStrategy().move(direction);
             if (Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "boulder") != null) return;
         } 
+        player.setLastPosition(player.getPosition());
         player.setPosition(requestedPosition);
         if (entitiesOnPosition.stream().anyMatch(entity -> entity instanceof Enemy) && !player.activePotionEffect().equals("invisibility_potion")) {
             if (Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "mercenary") != null && ((Mercenary) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "mercenary")).isAlly()) return;

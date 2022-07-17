@@ -1,8 +1,10 @@
 package dungeonmania;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.response.models.ItemResponse;
 import dungeonmania.response.models.RoundResponse;
 
 public class Round {
@@ -28,7 +30,6 @@ public class Round {
     public List<CollectableEntity> getWeaponryUsed() { return weaponryUsed; }
 
     public RoundResponse toRoundResponse() {
-        return null;
-        // return new RoundResponse(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed.stream().map(weapon -> weapon.getId()).collect(Collectors.toList()));
+        return new RoundResponse(deltaPlayerHealth, deltaEnemyHealth, weaponryUsed.stream().map(weapon -> new ItemResponse(weapon.getId(), weapon.getType())).collect(Collectors.toList()));
     }
 }

@@ -19,6 +19,7 @@ import com.google.gson.JsonParser;
 
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Player;
+import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
@@ -151,6 +152,7 @@ public class Dungeon {
         List<BattleResponse> battleResponses = battles.stream().map(battle -> new BattleResponse(battle.getEnemy().getType(), battle.getRoundResponses(), battle.getInitialPlayerHp(), battle.getInitialEnemyHp())).collect(Collectors.toList());
 
         List<String> buildables = getPlayer() != null ? getPlayer().getBuildables() : new ArrayList<String>();
+        System.err.println(battleResponses.size());
         return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, buildables, goals.toString());
     }
 
@@ -164,6 +166,11 @@ public class Dungeon {
             }
         }
         numberOfTicks++;
+
+        getEntitiesOfType("mercenary").forEach(merc -> {
+            Mercenary mercenary = (Mercenary) merc;
+            if (getPlayer() != null && Position.isAdjacent(merc.getPosition(), getPlayer().getPosition()) && mercenary.isAlly()) mercenary.setHasReachedPlayer(true);
+        });
 
         if (getPlayer() != null) getPlayer().tick();
         entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick());

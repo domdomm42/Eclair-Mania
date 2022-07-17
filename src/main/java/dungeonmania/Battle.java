@@ -38,7 +38,7 @@ public class Battle {
             rounds.add(new Round(0, initialEnemyHp, player.getWeaponryUsed()));
             enemy.setHealth(0);
         } else while (player.getHealth() > 0 && enemy.getHealth() > 0) {
-            rounds.add(new Round(-enemy.getAttack(), -player.getAttack(), player.getWeaponryUsed()));
+            rounds.add(new Round(-(enemy.getAttack() / 10), -(player.getAttack() / 5), player.getWeaponryUsed()));
             player.setHealth(player.getHealth() - ((enemy.getAttack() - player.getDefence()) / 10));
             enemy.setHealth(enemy.getHealth() - (player.getAttack() / 10));
         }
