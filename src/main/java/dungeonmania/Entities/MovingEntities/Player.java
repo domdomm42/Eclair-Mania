@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
+import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStrategy;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
@@ -96,12 +97,16 @@ public class Player extends MovingEntity {
     public double getAttack() {
         double attack = super.getAttack();
         if (inventory.containsCollectable("sword")) attack += Dungeon.getConfigValue("sword_attack");
+        if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) attack += Dungeon.getConfigValue("ally_attack");
         if (inventory.containsCollectable("bow")) attack *= 2;
         return attack;
     }
 
     public double getDefence() {
-        return (inventory.getItemsOfType("shield").size() > 0 ? Dungeon.getConfigValue("shield_defence") : 0);
+        double defence = getDefence();
+        if (inventory.containsCollectable("sword")) defence += Dungeon.getConfigValue("shield_defence");
+        if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) defence += Dungeon.getConfigValue("ally_defence");
+        return defence;
     }
 
     public List<CollectableEntity> getWeaponryUsed() {
