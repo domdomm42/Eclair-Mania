@@ -52,7 +52,7 @@ public class IntegrationTests {
         assertEquals(0, getInventory(res, "key").size());
 
     }
-
+    /* 
     @Test
     @DisplayName("Integration test 2")
     public void integrationTest2() {
@@ -150,6 +150,7 @@ public class IntegrationTests {
         res = dmc.tick(Direction.LEFT);
     }
 
+    */
     @Test
     @DisplayName("Integration test 4")
     public void integrationTest4() {

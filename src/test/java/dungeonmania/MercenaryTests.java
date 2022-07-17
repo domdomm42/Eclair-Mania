@@ -31,7 +31,7 @@ public class MercenaryTests {
         
         // create the expected result
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 2), false);
-        EntityResponse expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(3, 1), false);
+        EntityResponse expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(3, 1), true);
 
 
         // move player downward
@@ -50,7 +50,7 @@ public class MercenaryTests {
 
         // create expected result 
         expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 3), false);
-        expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(2, 1), false);
+        expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(2, 1), true);
 
         // assert after movement
         assertEquals(expectedPlayer, actualPlayer);
@@ -63,22 +63,23 @@ public class MercenaryTests {
 
         // create expected result 
         expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 4), false);
-        expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(2, 2), false);
+        expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(1, 1), true);
 
         // assert after movement
         assertEquals(expectedPlayer, actualPlayer);
         assertEquals(expectedMercenary, actualMercenary);
 
     }   
-
+    
+    @Test
     @DisplayName("Test that a mercenary would stop if it cannot move closer to player (if it is blocked by a wall and there is no direct path)") 
     public void testMercenaryStopAtWall() {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse initDungonRes = dmc.newGame("d_mercenaryTest_enclosedMercenary", "c_movementTest_testMovementDown");
         EntityResponse initMercenary = getEntities(initDungonRes, "mercenary").get(0);
 
-        // Expected result mercenary moves to left
-        EntityResponse expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(3, 4), false);
+        // Expected result mercenary stays still
+        EntityResponse expectedMercenary = new EntityResponse(initMercenary.getId(), initMercenary.getType(), new Position(4, 4), true);
         
         // Move player downward
         DungeonResponse actualDungonRes = dmc.tick(Direction.DOWN);
@@ -97,7 +98,7 @@ public class MercenaryTests {
         
     }
 
-    
+    @Test
     @DisplayName("Test that a mercenary can be bribed in a certain radius")
     public void testMercenaryBribe() {
         /*
@@ -142,6 +143,7 @@ public class MercenaryTests {
 
     }
 
+    @Test
     @DisplayName("Test a mercenary can't be bribed outside radius") 
     public void testMercenaryAutomaticBribeCase() {
         DungeonManiaController dmc = new DungeonManiaController();
