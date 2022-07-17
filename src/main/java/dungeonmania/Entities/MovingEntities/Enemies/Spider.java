@@ -3,12 +3,10 @@ package dungeonmania.Entities.MovingEntities.Enemies;
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.SpiderMovementStrategy;
 import dungeonmania.util.Position;
-import java.util.Random;
 
 public class Spider extends Enemy {
     private int numberOfTicks;
     private int positionIterator;
-    private int spider_spawn_rate;
     private boolean isClockwise = true;
     private Position spawnPosition;
 
@@ -19,7 +17,6 @@ public class Spider extends Enemy {
         getMovementStrategy().setEntity(this);
         this.numberOfTicks = 0;
         this.spawnPosition = position;
-        this.spider_spawn_rate = Dungeon.getConfigValue("spider_spawn_rate");
     }
 
     @Override
