@@ -99,6 +99,7 @@ public class Dungeon {
     }
 
     public static int getConfigValue(String key) {
+        if (config.get(key).isJsonNull()) return 0;
         return Integer.parseInt(config.get(key).getAsString());
     }
 
