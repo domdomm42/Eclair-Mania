@@ -1,8 +1,7 @@
 package dungeonmania;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +25,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.FileLoader;
 import dungeonmania.util.Position;
 
 public class Dungeon {
@@ -49,7 +49,7 @@ public class Dungeon {
         battles.add(battle);
     }
 
-    public static void instantiateDungeonEntitiesAndGoals(String dungeonName) throws FileNotFoundException {
+    public static void instantiateDungeonEntitiesAndGoals(String dungeonName) throws FileNotFoundException, IOException {
         id = "dungeon";
         Dungeon.dungeonName = dungeonName;
         entities = new ArrayList<Entity>();
@@ -60,9 +60,8 @@ public class Dungeon {
         enemiesKilled = 0;
         numberOfTicks = 0;
         EntityFactory.resetTotalEntitiesCreated();
-        File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
-        FileReader reader = new FileReader(dungeonFile);
-        JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
+        String dungeonFile = FileLoader.loadResourceFile("dungeons/".concat(dungeonName).concat(".json"));
+        JsonObject obj = (JsonObject) JsonParser.parseString(dungeonFile);
         JsonArray entities = obj.getAsJsonArray("entities");
         for (int i = 0; i < entities.size(); i++) {;
             String type = entities.get(i).getAsJsonObject().get("type").getAsString();
@@ -93,10 +92,9 @@ public class Dungeon {
         }).orElse(null);
     }
 
-    public static void setupConfigFile(String configName) throws FileNotFoundException {
-        File configFile = new File("src/main/resources/configs/".concat(configName).concat(".json"));
-        FileReader configReader = new FileReader(configFile);
-        JsonObject obj = (JsonObject) JsonParser.parseReader(configReader);
+    public static void setupConfigFile(String configName) throws FileNotFoundException, IOException {
+        String configFile = FileLoader.loadResourceFile("configs/".concat(configName).concat(".json"));
+        JsonObject obj = (JsonObject) JsonParser.parseString(configFile);
         Dungeon.config = obj;
     }
 
