@@ -152,13 +152,10 @@ public class Dungeon {
         List<BattleResponse> battleResponses = battles.stream().map(battle -> new BattleResponse(battle.getEnemy().getType(), battle.getRoundResponses(), battle.getInitialPlayerHp(), battle.getInitialEnemyHp())).collect(Collectors.toList());
 
         List<String> buildables = getPlayer() != null ? getPlayer().getBuildables() : new ArrayList<String>();
-        System.err.println(battleResponses.size());
         return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, buildables, goals.toString());
     }
 
     public static void tick() {
-        entities.forEach(entity -> System.err.println(entity));
-
         int spiderSpawnRate = Dungeon.getConfigValue("spider_spawn_rate");
         if (!(spiderSpawnRate == 0)) {
             if (numberOfTicks % spiderSpawnRate == 0) {
@@ -232,7 +229,6 @@ public class Dungeon {
         getPlayer().tick(itemId);
         for (Entity entity : entities.stream().filter(entity -> !(entity.getType().equals("player"))).collect(Collectors.toList())) entity.tick(itemId);
         doAfterTick();
-        System.err.println(getPlayer().activePotionEffect());
     }
 
     // only building the buildable string there, not all

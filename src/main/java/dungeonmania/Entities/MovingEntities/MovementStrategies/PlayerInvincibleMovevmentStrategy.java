@@ -5,7 +5,6 @@ import java.util.List;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.MovingEntities.MovementStrategy;
-import dungeonmania.Entities.MovingEntities.MovingEntity;
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.StaticEntities.Door;
 import dungeonmania.util.Position;
@@ -23,13 +22,11 @@ public class PlayerInvincibleMovevmentStrategy extends MovementStrategy {
         List<Position> movableAdjacentPositions = getMovableAdjacentPositions(cardinallyAdjacentPositions);
 
         Position nextPosition = movableAdjacentPositions.stream().filter(position -> {
-            PathFinder pathfinder = new PathFinder(position, Dungeon.getPlayer().getPosition(), (MovingEntity) getEntity());
-            if (pathfinder.getMoveDirection() == null) return false;
-            if (position.translateBy(pathfinder.getMoveDirection()).equals(currentPosition)) return true;
+            if (Math.abs(player.getPosition().getX() - position.getX()) > Math.abs(player.getPosition().getX() - currentPosition.getX())
+            || Math.abs(player.getPosition().getY() - position.getY()) > Math.abs(player.getPosition().getY() - currentPosition.getY())) return true;
             return false;
         }).findFirst().map(position -> position).orElse(null);
         if (nextPosition == null) return;
-        System.err.println(nextPosition.toString());
         getEntity().setPosition(nextPosition);
 
     }
