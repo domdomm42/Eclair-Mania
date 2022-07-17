@@ -51,8 +51,6 @@ public class IntegrationTests {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(0, getInventory(res, "key").size());
 
-        // Exit
-        res = dmc.tick(Direction.RIGHT);
     }
 
     @Test
@@ -99,10 +97,6 @@ public class IntegrationTests {
 
         // Exit portal
         res = dmc.tick(Direction.LEFT);
-        res = dmc.tick(Direction.LEFT);
-        res = dmc.tick(Direction.LEFT);
-
-        // Exit
         res = dmc.tick(Direction.LEFT);
     }
 
@@ -157,8 +151,6 @@ public class IntegrationTests {
         // Go to exit
         res = dmc.tick(Direction.LEFT);
         res = dmc.tick(Direction.LEFT);
-        res = dmc.tick(Direction.LEFT);
-        res = dmc.tick(Direction.LEFT);
     }
 
     @Test
@@ -198,9 +190,5 @@ public class IntegrationTests {
         // Fight mercenary
         res = dmc.tick(Direction.RIGHT);
         assertEquals(0, countEntityOfType(initDungonRes, "mercenary"));
-
-        // Exit
-        res = dmc.tick(Direction.RIGHT);
-        res = dmc.tick(Direction.RIGHT);
     }
 }
