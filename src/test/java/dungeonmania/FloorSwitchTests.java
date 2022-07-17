@@ -24,7 +24,7 @@ public class FloorSwitchTests {
     @DisplayName("Test player pushes boulder on switch")
     public void testPushBoulderOnSwitch() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("d_movementTest_testMovementDown", "d_floorSwitchGoal");
+        DungeonResponse initDungonRes = dmc.newGame("d_floorSwitchGoal", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungonRes).get();
         EntityResponse initBoulder = getEntities(initDungonRes, "boulder").get(0);
         EntityResponse initSwitch = getEntities(initDungonRes, "switch").get(0);

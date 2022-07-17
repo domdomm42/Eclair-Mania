@@ -58,7 +58,7 @@ public class Dungeon {
         completedGoals = new HashSet<String>();
         enemiesKilled = 0;
         numberOfTicks = 0;
-        File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
+        File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
         JsonArray entities = obj.getAsJsonArray("entities");
@@ -93,7 +93,7 @@ public class Dungeon {
     }
 
     public static void setupConfigFile(String configName) throws FileNotFoundException {
-        File configFile = new File("src/main/resources/configs/".concat(configName).concat(".json"));
+        File configFile = new File("src/test/resources/configs/".concat(configName).concat(".json"));
         FileReader configReader = new FileReader(configFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(configReader);
         Dungeon.config = obj;
@@ -157,8 +157,10 @@ public class Dungeon {
         entities.forEach(entity -> System.err.println(entity));
 
         int spiderSpawnRate = Dungeon.getConfigValue("spider_spawn_rate");
-        if (numberOfTicks % spiderSpawnRate == 0) {
+        if (!(spiderSpawnRate == 0)) {
+            if (numberOfTicks % spiderSpawnRate == 0) {
             spawnSpider();
+            }
         }
         numberOfTicks++;
 
@@ -179,7 +181,8 @@ public class Dungeon {
         Map<String, String> creationArgs = new HashMap<String, String>();
         creationArgs.put("x", Integer.toString(xRandom));
         creationArgs.put("y", Integer.toString(yRandom));
-        creationArgs.put("id", Integer.toString(Dungeon.getEntities().size()));
+        creationArgs.put("id", Integer.toString(Dungeon.getEntities().size()) + 20); //TO DO: 
+
 
         Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity("spider", creationArgs));
     }

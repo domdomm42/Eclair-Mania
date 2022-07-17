@@ -31,7 +31,7 @@ public class ArrowsTests {
         assertEquals(expectedPlayer, actualPlayer);
 
         // check if treasure is in the inventory
-        assertEquals(1, getInventory(actualDungonRes, "arrows").size());
+        assertEquals(1, getInventory(actualDungonRes, "arrow").size());
 
     }
 }
