@@ -55,5 +55,4 @@ public class PlayerInvincibleMovevmentStrategy extends MovementStrategy {
         } 
         return false;
     }
-    
 }
