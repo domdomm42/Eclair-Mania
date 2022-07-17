@@ -27,58 +27,89 @@ import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Invisibi
 import dungeonmania.util.Position;
 
 public class EntityFactory {
+    private static int totalEntitiesCreated;
+
+    public static void resetTotalEntitiesCreated() {
+        totalEntitiesCreated = 0;
+    }
+
     static public Entity createEntity(String type, Map<String, String> args) throws IllegalArgumentException {
         Position position;
         if (!type.equals("bow") && !type.equals("shield")) position = new Position(Integer.parseInt(args.get("x")), Integer.parseInt(args.get("y")));
         else position = Dungeon.getPlayer().getPosition();
-        String id = args.get("id");
+        String id = Integer.toString(totalEntitiesCreated);
         String keyId = args.get("key");
         String color = args.get("color");
+        Entity entity;
 
         switch (type) {
             case "player":
-                return new Player(id, position);
+                entity = new Player(id, position);
+                break;
             case "spider":
-                return new Spider(id, position);
+                entity = new Spider(id, position);
+                break;
             case "zombie_toast":
-                return new ZombieToast(id, position);
+                entity = new ZombieToast(id, position);
+                break;
             case "mercenary":
-                return new Mercenary(id, position);
+                entity = new Mercenary(id, position);
+                break;
             case "wall":
-                return new Wall(position, id);
+                entity = new Wall(position, id);
+                break;
             case "exit":
-                return new Exit(position, id);
+                entity = new Exit(position, id);
+                break;
             case "boulder":
-                return new Boulder(position, id);
+                entity = new Boulder(position, id);
+                break;
             case "switch": 
-                return new FloorSwitch(position, id);
+                entity = new FloorSwitch(position, id);
+                break;
             case "door":
-                return new Door(position, "door-".concat(keyId));
+                entity = new Door(position, "door-".concat(keyId));
+                break;
             case "key":
-                return new Key(position, "key-".concat(keyId).concat("door-").concat(keyId));
+                entity = new Key(position, "key-".concat(keyId).concat("door-").concat(keyId));
+                break;
             case "portal":
-                return new Portal(position, id, color);
+                entity = new Portal(position, id, color);
+                break;
             case "zombie_toast_spawner":
-                return new ZombieToastSpawner(position, id);
+                entity = new ZombieToastSpawner(position, id);
+                break;
             case "treasure":
-                return new Treasure(position, id);
+                entity = new Treasure(position, id);
+                break;
             case "invincibility_potion":
-                return new InvincibilityPotion(position, id);
+                entity = new InvincibilityPotion(position, id);
+                break;
             case "invisibility_potion":
-                return new InvisibilityPotion(position, id);
+                entity = new InvisibilityPotion(position, id);
+                break;
             case "wood":
-                return new Wood(position, id);
+                entity = new Wood(position, id);
+                break;
             case "arrow":
-                return new Arrow(id, position);
+                entity = new Arrow(id, position);
+                break;
             case "bomb":
-                return new Bomb(position, id);
+                entity = new Bomb(position, id);
+                break;
             case "sword":
-                return new Sword(position, id);
+                entity = new Sword(position, id);
+                break;
             case "bow":
-                return new Bow(id);
+                entity = new Bow(id);
+                break;
             case "shield":
-                return new Shield(id);
+                entity = new Shield(id);
+                break;
+            default :
+                throw new IllegalArgumentException("Entity type does not exist");
         }
-        throw new IllegalArgumentException("Entity type does not exist");
+        totalEntitiesCreated += 1;
+        return entity;
     }
 }

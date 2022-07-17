@@ -58,6 +58,7 @@ public class Dungeon {
         completedGoals = new HashSet<String>();
         enemiesKilled = 0;
         numberOfTicks = 0;
+        EntityFactory.resetTotalEntitiesCreated();
         File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(reader);

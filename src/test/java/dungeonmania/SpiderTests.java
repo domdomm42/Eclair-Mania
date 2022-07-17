@@ -27,7 +27,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class SpiderTests {
-    Test
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
