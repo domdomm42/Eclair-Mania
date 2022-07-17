@@ -11,6 +11,7 @@ public class PotionBag {
     public PotionBag() {}
 
     public String getActivePotionType() {
+        if (activePotion == null) return "";
         return activePotion.getType();
     }
 
