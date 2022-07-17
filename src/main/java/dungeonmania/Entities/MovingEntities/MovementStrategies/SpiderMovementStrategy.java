@@ -31,8 +31,7 @@ public class SpiderMovementStrategy extends MovementStrategy {
             if (isValidMove(adjacentPositions.get(spider.getPositionIterator()))) {
                 spider.setPosition(adjacentPositions.get((spider.getPositionIterator())));
                 spider.setPositionIterator((spider.getPositionIterator() + 1) % 8);
-            }
-            
+            } 
             /* 
             if (spider.getPositionIterator() == 0) {
                 spider.setPosition(adjacentPositions.get(0));

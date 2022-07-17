@@ -20,7 +20,7 @@ public class WallTests {
     @DisplayName("Testing the wall stops movement of player")
     public void testPlayerMovement() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungeonRes = dmc.newGame("d_wallTest_playerMovement", "c_movementTest_testMovement");
+        DungeonResponse initDungeonRes = dmc.newGame("d_wallTest_playerMovement", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungeonRes).get();
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1), false);
 
