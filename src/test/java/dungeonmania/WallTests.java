@@ -20,7 +20,7 @@ public class WallTests {
     @DisplayName("Testing the wall stops movement of player")
     public void testPlayerMovement() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungeonRes = dmc.newGame("d_wallTest_playerMovement", "c_movementTest_testMovement");
+        DungeonResponse initDungeonRes = dmc.newGame("d_wallTest_playerMovement", "c_movementTest_testMovementDown");
         EntityResponse initPlayer = getPlayer(initDungeonRes).get();
         EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(1, 1), false);
 
@@ -49,16 +49,15 @@ public class WallTests {
     @DisplayName("Testing the wall enemy interactions")
     public void testEnemyMovement() {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungeonRes = dmc.newGame("d_wallTest_enemyMovement", "c_movementTest_testMovement");
+        DungeonResponse initDungeonRes = dmc.newGame("d_wallTest_enemyMovement", "c_movementTest_testMovementDown");
 
         List<EntityResponse> initSpider = getEntities(initDungeonRes, "spider");
         List<EntityResponse> initMercenary = getEntities(initDungeonRes, "mercenary");
 
         DungeonResponse actualDungeonResponse = dmc.tick(Direction.DOWN);
-        List<EntityResponse> initZombieToast = getEntities(initDungeonRes, "zombie_toast");
 
-        EntityResponse expectedSpider = new EntityResponse(initSpider.get(0).getId(), initSpider.get(0).getType(), new Position(10, 11), false);
-        EntityResponse expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), false);
+        EntityResponse expectedSpider = new EntityResponse(initSpider.get(0).getId(), initSpider.get(0).getType(), new Position(10, 9), false);
+        EntityResponse expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), true);
 
         EntityResponse actualSpider = getEntities(actualDungeonResponse, "spider").get(0);
         EntityResponse actualMercenary = getEntities(actualDungeonResponse, "mercenary").get(0);
@@ -68,43 +67,34 @@ public class WallTests {
 
         actualDungeonResponse = dmc.tick(Direction.DOWN);
 
-        EntityResponse expectedZombie = new EntityResponse(initZombieToast.get(0).getId(), initZombieToast.get(0).getType(), new Position(1, 1), false);
-        expectedSpider = new EntityResponse(initSpider.get(0).getId(), initSpider.get(0).getType(), new Position(11, 11), false);
-        expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), false);
+        expectedSpider = new EntityResponse(initSpider.get(0).getId(), initSpider.get(0).getType(), new Position(11, 9), false);
+        expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), true);
 
-        EntityResponse actualZombie = getEntities(actualDungeonResponse, "zombie_toast").get(0);
         actualSpider = getEntities(actualDungeonResponse, "spider").get(0);
         actualMercenary = getEntities(actualDungeonResponse, "mercenary").get(0);
 
-        assertEquals(expectedZombie, actualZombie);
         assertEquals(expectedSpider, actualSpider);
         assertEquals(expectedMercenary, actualMercenary);
 
         actualDungeonResponse = dmc.tick(Direction.DOWN);
 
-        expectedZombie = new EntityResponse(initZombieToast.get(0).getId(), initZombieToast.get(0).getType(), new Position(1, 1), false);
         expectedSpider = new EntityResponse(initSpider.get(0).getId(), initSpider.get(0).getType(), new Position(11, 10), false);
-        expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), false);
+        expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), true);
 
-        actualZombie = getEntities(actualDungeonResponse, "zombie_toast").get(0);
         actualSpider = getEntities(actualDungeonResponse, "spider").get(0);
         actualMercenary = getEntities(actualDungeonResponse, "mercenary").get(0);
 
-        assertEquals(expectedZombie, actualZombie);
         assertEquals(expectedSpider, actualSpider);
         assertEquals(expectedMercenary, actualMercenary);
         
         actualDungeonResponse = dmc.tick(Direction.DOWN);
 
-        expectedZombie = new EntityResponse(initZombieToast.get(0).getId(), initZombieToast.get(0).getType(), new Position(1, 1), false);
-        expectedSpider = new EntityResponse(initSpider.get(0).getId(), initSpider.get(0).getType(), new Position(11, 9), false);
-        expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), false);
+        expectedSpider = new EntityResponse(initSpider.get(0).getId(), initSpider.get(0).getType(), new Position(11, 11), false);
+        expectedMercenary = new EntityResponse(initMercenary.get(0).getId(), initMercenary.get(0).getType(), new Position(20, 20), true);
 
-        actualZombie = getEntities(actualDungeonResponse, "zombie_toast").get(0);
         actualSpider = getEntities(actualDungeonResponse, "spider").get(0);
         actualMercenary = getEntities(actualDungeonResponse, "mercenary").get(0);
 
-        assertEquals(expectedZombie, actualZombie);
         assertEquals(expectedSpider, actualSpider);
         assertEquals(expectedMercenary, actualMercenary);
     }
