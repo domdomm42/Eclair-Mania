@@ -30,7 +30,6 @@ public class ZombieToastSpawner extends StaticEntity {
             if (entity.isEmpty()) {
                 creationArguments.put("x", Integer.toString(squares.getX()));
                 creationArguments.put("y", Integer.toString(squares.getY()));
-                creationArguments.put("id", "zombie".concat(Integer.toString(Dungeon.getEntities().size())));
                 Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity("zombie_toast", creationArguments));
                 return;
             }

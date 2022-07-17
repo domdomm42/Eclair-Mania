@@ -83,7 +83,6 @@ public class Inventory {
         }
         removeCraftingMaterials(craftingMaterials);
         Map<String, String> newEntityArgs = new HashMap<String, String>();
-        newEntityArgs.put("id", "bow".concat(Integer.toString(getItemsOfType("bow").size())));
         addItem((CollectableEntity) EntityFactory.createEntity(type, newEntityArgs));
     }
 

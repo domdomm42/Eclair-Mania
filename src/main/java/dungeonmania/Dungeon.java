@@ -71,7 +71,6 @@ public class Dungeon {
             if (type.equals("portal")) System.out.println(entities.get(i).getAsJsonObject().get("colour").getAsString());
             if (type.equals("door") || type.equals("key")) creationArguments.put("key", entities.get(i).getAsJsonObject().get("key").getAsString());
             if (type.equals("portal")) creationArguments.put("color", entities.get(i).getAsJsonObject().get("colour").getAsString());
-            creationArguments.put("id", Integer.toString(Dungeon.entities.size()));
 
             Entity requestedEntity = EntityFactory.createEntity(type, creationArguments);
             if (requestedEntity != null ) Dungeon.entities.add(requestedEntity);
@@ -182,8 +181,6 @@ public class Dungeon {
         Map<String, String> creationArgs = new HashMap<String, String>();
         creationArgs.put("x", Integer.toString(xRandom));
         creationArgs.put("y", Integer.toString(yRandom));
-        creationArgs.put("id", Integer.toString(Dungeon.getEntities().size()) + 20); //TO DO: 
-
 
         Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity("spider", creationArgs));
     }
