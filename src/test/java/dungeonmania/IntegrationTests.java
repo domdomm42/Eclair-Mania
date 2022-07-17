@@ -155,42 +155,41 @@ public class IntegrationTests {
         res = dmc.tick(Direction.LEFT);
     }
 
-    // @Test
-    // @DisplayName("Integration test 4")
-    // public void integrationTest4() {
-    //     DungeonManiaController dmc = new DungeonManiaController();
-    //     DungeonResponse initDungonRes = dmc.newGame("d_integrationTest_4", "c_movementTest_testMovementDown");
-    //     EntityResponse initPlayer = getPlayer(initDungonRes).get();
+    @Test
+    @DisplayName("Integration test 4")
+    public void integrationTest4() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_integrationTest_4", "c_movementTest_testMovementDown");
 
-    //     assertEquals(2, countEntityOfType(initDungonRes, "mercenary"));
+        assertEquals(2, countEntityOfType(initDungonRes, "mercenary"));
 
-    //     // Pick up 3 wood and fight mercenary
-    //     DungeonResponse res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.RIGHT);
-    //     assertEquals(3, getInventory(res, "wood").size());
-    //     assertEquals(1, countEntityOfType(initDungonRes, "mercenary"));
+        // Pick up 3 wood and fight mercenary
+        DungeonResponse res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(3, getInventory(res, "wood").size());
+        assertEquals(1, countEntityOfType(res, "mercenary"));
         
-    //     // Pick up 3 arrows
-    //     res = dmc.tick(Direction.DOWN);
-    //     res = dmc.tick(Direction.LEFT);
-    //     res = dmc.tick(Direction.LEFT);
-    //     assertEquals(3, countEntityOfType(initDungonRes, "arrow"));
+        // Pick up 3 arrows
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.LEFT);
+        res = dmc.tick(Direction.LEFT);
+        assertEquals(3, getInventory(res, "arrow").size());
 
-    //     // Pick up treasure
-    //     res = dmc.tick(Direction.DOWN);
-    //     assertEquals(3, countEntityOfType(initDungonRes, "treasure"));
+        // Pick up treasure
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(1, getInventory(res, "treasure").size());
 
-    //     // Get key
-    //     res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.RIGHT);
-    //     assertEquals(1, countEntityOfType(initDungonRes, "key"));
+        // Get key
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getInventory(res, "key").size());
 
-    //     // Unlock door
-    //     res = dmc.tick(Direction.RIGHT);
+        // Unlock door
+        res = dmc.tick(Direction.RIGHT);
 
-    //     // Fight mercenary
-    //     res = dmc.tick(Direction.RIGHT);
-    //     assertEquals(0, countEntityOfType(initDungonRes, "mercenary"));
-    // }
+        // Fight mercenary
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "mercenary").size());
+    }
 }
