@@ -10,11 +10,16 @@ public class Spider extends Enemy {
     private int positionIterator;
     private int spider_spawn_rate;
     private boolean isClockwise = true;
+    private Position spawnPosition;
+
+    
 
     public Spider(String id, Position position) {
         super(id, "spider", position, Dungeon.getConfigValue("spider_health"), false, new SpiderMovementStrategy(), Dungeon.getConfigValue("spider_attack"));
         getMovementStrategy().setEntity(this);
         this.numberOfTicks = 0;
+        this.spawnPosition = position;
+        this.spider_spawn_rate = Dungeon.getConfigValue("spider_spawn_rate");
     }
 
     @Override
@@ -43,9 +48,14 @@ public class Spider extends Enemy {
         this.isClockwise = isClockwise;
     }
 
-    public void addOneToNumberOfTicks() {
-        this.numberOfTicks += 1;
+    
+
+
+    public Position getSpawnPosition() {
+        return spawnPosition;
     }
+
+    
 
     
     

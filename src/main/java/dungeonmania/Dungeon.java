@@ -57,10 +57,7 @@ public class Dungeon {
         battles = new ArrayList<Battle>();
         completedGoals = new HashSet<String>();
         enemiesKilled = 0;
-<<<<<<< HEAD
-=======
         numberOfTicks = 0;
->>>>>>> feature/player
         File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
@@ -182,7 +179,8 @@ public class Dungeon {
         Map<String, String> creationArgs = new HashMap<String, String>();
         creationArgs.put("x", Integer.toString(xRandom));
         creationArgs.put("y", Integer.toString(yRandom));
-        creationArgs.put("id", Integer.toString(Dungeon.getEntities().size()));
+        creationArgs.put("id", Integer.toString(Dungeon.getEntities().size()) + 20); //TO DO: 
+
 
         Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity("spider", creationArgs));
     }
