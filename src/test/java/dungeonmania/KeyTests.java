@@ -2,6 +2,7 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ public class KeyTests {
     public void cantUseWrongKey() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_useKeyWalkThroughOpenDoor", "c_DoorsKeysTest_cantUseKey");
+        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_cantUseKey", "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
 
         // pick up key
         res = dmc.tick(Direction.RIGHT);
@@ -45,7 +46,7 @@ public class KeyTests {
         assertEquals(1, getInventory(res, "key").size());
 
         // try to walk through door and check key is still there and player has not moved
-        res = dmc.tick(Direction.RIGHT);
+        assertThrows(Exception.class,()-> {dmc.tick(Direction.RIGHT);});
         assertEquals(1, getInventory(res, "key").size());
         assertEquals(pos, getEntities(res, "player").get(0).getPosition());
     }

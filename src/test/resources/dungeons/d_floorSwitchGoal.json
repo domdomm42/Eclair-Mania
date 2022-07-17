@@ -14,12 +14,10 @@
             "y" : 3
         }
     ],
+
     "goal-condition": {
         "goal": "AND",
         "subgoals": [
-            {
-                "goal": "AND",
-                "subgoals": [
                     {
                         "goal": "exit"
                     },
@@ -27,6 +25,6 @@
                         "goal": "boulder"
                     }
                 ]
-            }]
+            
     }
 }
