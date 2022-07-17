@@ -1,5 +1,6 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities.Potions;
 
+import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Usable;
 import dungeonmania.util.Position;
 
@@ -28,5 +29,10 @@ public abstract class Potion extends Usable {
 
     public void setTotalTicks(int totalTicks) {
         this.totalTicks = totalTicks;
+    }
+
+    @Override
+    public void use() {
+        Dungeon.getPlayer().usePotion(this);
     }
 }

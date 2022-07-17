@@ -30,7 +30,7 @@ public class ZombieMovementStrategy extends MovementStrategy {
 
         // if player is also on next position --> battle
         List<Entity> entitiesOnPosition =  Dungeon.getEntitiesAtPosition(nextPosition);
-        if (entitiesOnPosition.stream().anyMatch(entity -> entity instanceof Player)) {
+        if (entitiesOnPosition.stream().anyMatch(entity -> entity instanceof Player) && !Dungeon.getPlayer().activePotionEffect().equals("invisibility_potion")) {
             Dungeon.addBattle(new Battle((Player) entitiesOnPosition.stream().filter(entity -> entity instanceof Player).findFirst().get(), (Enemy) this.getEntity()));
             return;
         }

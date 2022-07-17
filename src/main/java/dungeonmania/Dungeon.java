@@ -41,7 +41,7 @@ public class Dungeon {
     private static int numberOfTicks;
 
     public static int incrementKilledEntities() {
-        return enemiesKilled + 1;
+        return enemiesKilled += 1;
     }
 
     public static void addBattle(Battle battle) {
@@ -59,7 +59,7 @@ public class Dungeon {
         enemiesKilled = 0;
         numberOfTicks = 0;
         EntityFactory.resetTotalEntitiesCreated();
-        File dungeonFile = new File("src/test/resources/dungeons/".concat(dungeonName).concat(".json"));
+        File dungeonFile = new File("src/main/resources/dungeons/".concat(dungeonName).concat(".json"));
         FileReader reader = new FileReader(dungeonFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(reader);
         JsonArray entities = obj.getAsJsonArray("entities");
@@ -93,7 +93,7 @@ public class Dungeon {
     }
 
     public static void setupConfigFile(String configName) throws FileNotFoundException {
-        File configFile = new File("src/test/resources/configs/".concat(configName).concat(".json"));
+        File configFile = new File("src/main/resources/configs/".concat(configName).concat(".json"));
         FileReader configReader = new FileReader(configFile);
         JsonObject obj = (JsonObject) JsonParser.parseReader(configReader);
         Dungeon.config = obj;
@@ -147,10 +147,11 @@ public class Dungeon {
 
     public static DungeonResponse getDungeonResponse() {
         List<EntityResponse> entityResponses = entities.stream().map(entity -> new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), entity.getIsInteractable())).collect(Collectors.toList());
-        List<ItemResponse> itemResponses = getPlayer().getInventory().toItemResponse();
+        List<ItemResponse> itemResponses = getPlayer() != null ? getPlayer().getInventory().toItemResponse() : new ArrayList<ItemResponse>();
         List<BattleResponse> battleResponses = battles.stream().map(battle -> new BattleResponse(battle.getEnemy().getType(), battle.getRoundResponses(), battle.getInitialPlayerHp(), battle.getInitialEnemyHp())).collect(Collectors.toList());
 
-        return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, getPlayer().getBuildables(), goals.toString());
+        List<String> buildables = getPlayer() != null ? getPlayer().getBuildables() : new ArrayList<String>();
+        return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, buildables, goals.toString());
     }
 
     public static void tick() {
@@ -159,12 +160,12 @@ public class Dungeon {
         int spiderSpawnRate = Dungeon.getConfigValue("spider_spawn_rate");
         if (!(spiderSpawnRate == 0)) {
             if (numberOfTicks % spiderSpawnRate == 0) {
-            spawnSpider();
+                spawnSpider();
             }
         }
         numberOfTicks++;
 
-        getPlayer().tick();
+        if (getPlayer() != null) getPlayer().tick();
         entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick());
     }
 
@@ -186,7 +187,8 @@ public class Dungeon {
     }
 
     private static void updateGoals() {
-        if (Dungeon.getEntitiesOfType("zombie_toast_spawner").size() == 0 && enemiesKilled > getConfigValue("enemy_goal")) completedGoals.add(":enemies");
+        if (getPlayer() == null) return;
+        if (Dungeon.getEntitiesOfType("zombie_toast_spawner").size() == 0 && enemiesKilled >= getConfigValue("enemy_goal")) completedGoals.add(":enemies");
     
         if (getPlayer().getNumberOfTreasures() >= getConfigValue("treasure_goal")) completedGoals.add(":treasure");
         else if (completedGoals.contains(":treasure")) completedGoals.remove(":treasure");
@@ -201,8 +203,6 @@ public class Dungeon {
         else completedGoals.remove(":exit");
 
         goals.computeComplete();
-        System.err.println(completedGoals);
-        System.err.println(goals.toString());
     }
 
     public static void doAfterTick() {
@@ -216,7 +216,7 @@ public class Dungeon {
     public static void tick(Direction movementDirection) {
         tick();
         getPlayer().tick(movementDirection);
-        entities.stream().filter(entity -> !entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
+        entities.stream().filter(entity -> entity != null && !entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
         doAfterTick();
     }
     
@@ -225,21 +225,18 @@ public class Dungeon {
         getPlayer().tick(itemId);
         for (Entity entity : entities.stream().filter(entity -> !(entity.getType().equals("player"))).collect(Collectors.toList())) entity.tick(itemId);
         doAfterTick();
+        System.err.println(getPlayer().activePotionEffect());
     }
 
     // only building the buildable string there, not all
     public static void build(String buildable) throws InvalidActionException, IllegalArgumentException {
-        tick();
         getPlayer().build(buildable);
-        doAfterTick();
     }
 
     public static void interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        tick();
         Entity entity = getEntityFromId(entityId);
         if (entity == null) throw new IllegalArgumentException("No matching ID");
         entity.interact();
-        doAfterTick();
     }
 
     public static ArrayList<Entity> getEntities() {

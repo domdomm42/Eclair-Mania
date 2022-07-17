@@ -2,6 +2,7 @@ package dungeonmania.Entities.MovingEntities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
@@ -125,5 +126,10 @@ public class Player extends MovingEntity {
 
     public int getNumberOfTreasures() {
         return inventory.getItemsOfType("treasure").size();
+    }
+
+    public void bribeMercenary() {
+        IntStream.range(0, Dungeon.getConfigValue("bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
+        
     }
 }

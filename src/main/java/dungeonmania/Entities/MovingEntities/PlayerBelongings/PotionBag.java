@@ -1,5 +1,6 @@
 package dungeonmania.Entities.MovingEntities.PlayerBelongings;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
@@ -8,7 +9,9 @@ public class PotionBag {
     private Potion activePotion;
     private Queue<Potion> potionQueue;
 
-    public PotionBag() {}
+    public PotionBag() {
+        potionQueue = new LinkedList<Potion>();
+    }
 
     public String getActivePotionType() {
         if (activePotion == null) return "";
@@ -20,16 +23,17 @@ public class PotionBag {
     }
 
     public void usePotion(Potion potion) {
-        potionQueue.add(potion);
+        if (activePotion != null) potionQueue.add(potion);
+        else activePotion = potion;
+        
     }
 
     public void tick() {
         if (activePotion == null) return;
-        if (activePotion.getCurrentTicks() == activePotion.getTotalTicks()) {
+        activePotion.setCurrentTicks(activePotion.getCurrentTicks() + 1);
+        if (activePotion.getCurrentTicks() > activePotion.getTotalTicks()) {
             if (potionQueue.isEmpty()) activePotion = null;
             else activePotion = potionQueue.poll();
-            return;
         }
-        activePotion.setCurrentTicks(activePotion.getCurrentTicks() + 1);
     }
 }
