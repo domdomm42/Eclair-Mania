@@ -53,7 +53,7 @@ public class SunStoneTests {
 
         // walk through door and check Sun Stone is still there
         res = dmc.tick(Direction.RIGHT);
-        assertEquals(1, getInventory(res, "key").size());
+        assertEquals(1, getInventory(res, "sun_stone").size());
         assertNotEquals(pos, getEntities(res, "player").get(0).getPosition());
 
     }

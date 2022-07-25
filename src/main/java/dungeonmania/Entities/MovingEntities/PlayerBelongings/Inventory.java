@@ -62,7 +62,7 @@ public class Inventory {
     }
 
     public boolean canBuildShield() {
-        return getItemsOfType("wood").size() >= 2 && (getItemsOfType("key").size() >= 1 || getItemsOfType("treasure").size() >= 1);
+        return getItemsOfType("wood").size() >= 2 && (getItemsOfType("key").size() >= 1 || getItemsOfType("treasure").size() >= 1 || getItemsOfType("sun_stone").size() >= 1); // ADDED FOR SUNSTONE
     }
 
     public void removeCraftingMaterials(Map<String, Integer> craftingMaterials) {

@@ -17,6 +17,7 @@ import dungeonmania.Entities.StaticEntities.ZombieToastSpawner;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Arrow;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.SunStone;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Sword;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Treasure;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Wood;
@@ -105,6 +106,9 @@ public class EntityFactory {
                 break;
             case "shield":
                 entity = new Shield(id);
+                break;
+            case "sun_stone":
+                entity = new SunStone(position, id);
                 break;
             default :
                 throw new IllegalArgumentException("Entity type does not exist");
