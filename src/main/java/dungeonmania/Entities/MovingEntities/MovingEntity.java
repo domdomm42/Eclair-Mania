@@ -4,7 +4,7 @@ import dungeonmania.Entities.Entity;
 import dungeonmania.util.Position;
 
 
-public class MovingEntity extends Entity {
+public abstract class MovingEntity extends Entity {
     private double health;
     private final double attack;
     private MovementStrategy movementStrategy;
@@ -40,5 +40,4 @@ public class MovingEntity extends Entity {
         return true;
         
     }
-
 }

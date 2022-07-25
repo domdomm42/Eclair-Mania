@@ -1,5 +1,7 @@
 package dungeonmania.Entities;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -96,5 +98,13 @@ public abstract class Entity {
     public String toString() {
         return "Entity [id=" + id + ", isInteractable=" + isInteractable + ", position=" + position + ", type=" + type
                 + "]";
+    }
+
+    public JsonObject toJsonObject() {
+        JsonObject entityDetails = new JsonObject();
+        entityDetails.addProperty("type", type);
+        entityDetails.addProperty("x", position.getX());
+        entityDetails.addProperty("y", position.getY());
+        return entityDetails;
     }
 }
