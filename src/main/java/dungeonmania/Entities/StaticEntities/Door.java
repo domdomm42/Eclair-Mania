@@ -1,5 +1,7 @@
 package dungeonmania.Entities.StaticEntities;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.util.Position;
@@ -26,5 +28,12 @@ public class Door extends StaticEntity {
 
     public Key getKeyThatUnlock() {
         return (Key) Dungeon.getPlayer().getInventory().getItemFromId("key-".concat(getId().replace("door-", "")).concat(getId()));
+    }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject doorJson = super.toJsonObject();
+        doorJson.addProperty("key", Integer.parseInt(getId().split("-")[1]));
+        return doorJson;
     }
 }

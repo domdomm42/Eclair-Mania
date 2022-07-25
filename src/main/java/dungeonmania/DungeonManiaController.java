@@ -6,6 +6,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DungeonManiaController {
@@ -37,7 +38,7 @@ public class DungeonManiaController {
     public DungeonResponse newGame(String dungeonName, String configName) {
         try {
             Dungeon.setupConfigFile(configName);
-            Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
+            Dungeon.startNewGame(dungeonName);
         } catch (IOException exception) {
             return null;
         }

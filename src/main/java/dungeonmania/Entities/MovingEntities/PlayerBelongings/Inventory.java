@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.EntityFactory;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.exceptions.InvalidActionException;
@@ -82,8 +84,9 @@ public class Inventory {
             else craftingMaterials.put("key", 1);
         }
         removeCraftingMaterials(craftingMaterials);
-        Map<String, String> newEntityArgs = new HashMap<String, String>();
-        addItem((CollectableEntity) EntityFactory.createEntity(type, newEntityArgs));
+        JsonObject entityDetails = new JsonObject();
+        entityDetails.addProperty("type", type);
+        addItem((CollectableEntity) EntityFactory.createEntity(entityDetails));
     }
 
     public boolean canBuildEntity(String type) throws InvalidActionException, IllegalArgumentException {
