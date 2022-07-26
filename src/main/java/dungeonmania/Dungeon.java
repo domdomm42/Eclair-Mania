@@ -86,6 +86,8 @@ public class Dungeon {
         JsonObject dungeon = new JsonObject();
         dungeon.add("entities", entitiesToJsonArray());
         dungeon.add("goal-condition", originalGoals);
+        dungeon.add("inventory", getPlayer().getInventory().toJsonArray());
+        dungeon.add("potionBag", getPlayer().getInventory().toJsonArray());
         return dungeon;
     }
 

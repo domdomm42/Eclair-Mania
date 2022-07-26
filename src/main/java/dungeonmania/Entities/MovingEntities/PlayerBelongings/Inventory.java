@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import dungeonmania.EntityFactory;
@@ -103,5 +104,11 @@ public class Inventory {
         return items.stream().filter(ent -> ent.getId().equals(id)).findFirst().map(entity -> {
             return entity;
         }).orElse(null);
+    }
+    
+    public JsonArray toJsonArray() {
+        JsonArray inventory = new JsonArray();
+        items.forEach(item -> inventory.add(item.toJsonObject()));
+        return inventory;
     }
 }

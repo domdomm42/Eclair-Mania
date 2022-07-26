@@ -1,5 +1,6 @@
 package dungeonmania;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import dungeonmania.Entities.Entity;
@@ -35,51 +36,52 @@ public class EntityFactory {
 
     static public Entity createEntity(JsonObject entityDetails) throws IllegalArgumentException {
         String type = entityDetails.get("type").getAsString();
-        Position position = new Position(entityDetails.get("x").getAsInt(), entityDetails.get("y").getAsInt());
         String id = Integer.toString(totalEntitiesCreated);
-        String keyId = entityDetails.get("key").getAsString();
-        String color = entityDetails.get("color").getAsString();
+        JsonElement x = entityDetails.get("x");
+        JsonElement y = entityDetails.get("y");
+        JsonElement keyId = entityDetails.get("key");
+        JsonElement color = entityDetails.get("colour");
         totalEntitiesCreated += 1;
 
         switch (type) {
             case "player":
-                return new Player(id, position);
+                return new Player(id, new Position(x.getAsInt(), y.getAsInt()));
             case "spider":
-                return new Spider(id, position);
+                return new Spider(id, new Position(x.getAsInt(), y.getAsInt()));
             case "zombie_toast":
-                return new ZombieToast(id, position);
+                return new ZombieToast(id, new Position(x.getAsInt(), y.getAsInt()));
             case "mercenary":
-                return new Mercenary(id, position);
+                return new Mercenary(id, new Position(x.getAsInt(), y.getAsInt()));
             case "wall":
-                return new Wall(position, id);
+                return new Wall(new Position(x.getAsInt(), y.getAsInt()), id);
             case "exit":
-                return new Exit(position, id);
+                return new Exit(new Position(x.getAsInt(), y.getAsInt()), id);
             case "boulder":
-                return new Boulder(position, id);
+                return new Boulder(new Position(x.getAsInt(), y.getAsInt()), id);
             case "switch": 
-                return new FloorSwitch(position, id);
+                return new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id);
             case "door":
-                return new Door(position, "door-".concat(keyId));
+                return new Door(new Position(x.getAsInt(), y.getAsInt()), "door-".concat(keyId.getAsString()));
             case "key":
-                return new Key(position, "key-".concat(keyId).concat("door-").concat(keyId));
+                return new Key(new Position(x.getAsInt(), y.getAsInt()), "key-".concat(keyId.getAsString()).concat("door-").concat(keyId.getAsString()));
             case "portal":
-                return new Portal(position, id, color);
+                return new Portal(new Position(x.getAsInt(), y.getAsInt()), id, color.getAsString());
             case "zombie_toast_spawner":
-                return new ZombieToastSpawner(position, id);
+                return new ZombieToastSpawner(new Position(x.getAsInt(), y.getAsInt()), id);
             case "treasure":
-                return new Treasure(position, id);
+                return new Treasure(new Position(x.getAsInt(), y.getAsInt()), id);
             case "invincibility_potion":
-                return new InvincibilityPotion(position, id);
+                return new InvincibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
             case "invisibility_potion":
-                return new InvisibilityPotion(position, id);
+                return new InvisibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
             case "wood":
-                return new Wood(position, id);
+                return new Wood(new Position(x.getAsInt(), y.getAsInt()), id);
             case "arrow":
-                return new Arrow(id, position);
+                return new Arrow(id, new Position(x.getAsInt(), y.getAsInt()));
             case "bomb":
-                return new Bomb(position, id);
+                return new Bomb(new Position(x.getAsInt(), y.getAsInt()), id);
             case "sword":
-                return new Sword(position, id);
+                return new Sword(new Position(x.getAsInt(), y.getAsInt()), id);
             case "bow":
                 return new Bow(id);
             case "shield":
