@@ -1,6 +1,7 @@
 package dungeonmania.Entities.StaticEntities;
 
 import dungeonmania.Dungeon;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.Wire;
 import dungeonmania.util.Position;
 
 public class FloorSwitch extends StaticEntity {
@@ -24,6 +25,14 @@ public class FloorSwitch extends StaticEntity {
     public void tick() {
         super.tick();
         if (Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "boulder") == null) setTriggered(false);
-        else setTriggered(true);
+        else {
+            setTriggered(true);
+
+            //activate surrounding wires
+            if (Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "wire") != null) {
+                Wire wire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "wire");
+                wire.ActivateWire();
+            } 
+        }
     }
 }
