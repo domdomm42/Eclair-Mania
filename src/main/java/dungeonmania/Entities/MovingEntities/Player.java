@@ -143,6 +143,10 @@ public class Player extends MovingEntity {
     public int getNumberOfTreasures() {
         return inventory.getItemsOfType("treasure").size();
     }
+    
+    public int getNumberOfSunStones() {
+        return inventory.getItemsOfType("sun_stone").size();
+    }
 
     public void bribeMercenary() {
         IntStream.range(0, Dungeon.getConfigValue("bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
