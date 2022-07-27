@@ -24,6 +24,8 @@ public class PlayerMovementStrategy extends MovementStrategy {
         if (player == null) return;
         Position requestedPosition = player.getPositionInDirection(direction);
         List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
+
+        // if enter portal
         if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
             Portal portal = (Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal");
             requestedPosition = portal.getTeleportLocation(direction);
