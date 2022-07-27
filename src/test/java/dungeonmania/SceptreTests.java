@@ -16,7 +16,7 @@ public class SceptreTests {
     @DisplayName("Player attempts to build Sceptre")
     public void testAttemptMakeSceptre() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        dmc.newGame("d_spectreTest_build", "c_spectreTest");
+        dmc.newGame("d_sceptreTest_build", "c_sceptreTest");
 
         DungeonResponse res = dmc.tick(Direction.DOWN);
 
@@ -29,10 +29,10 @@ public class SceptreTests {
     @DisplayName("Player builds Spectre from 1 wood + 1 key + 1 sun stone")
     public void testMakeSceptre1() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        dmc.newGame("d_spectreTest_build", "c_spectreTest");
+        DungeonResponse res = dmc.newGame("d_sceptreTest_build", "c_sceptreTest");
 
         // pick up items
-        DungeonResponse res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
 
@@ -52,7 +52,7 @@ public class SceptreTests {
     @DisplayName("Player builds Spectre from 1 wood + 1 treasure + 1 sun stone")
     public void testMakeSceptre2() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        dmc.newGame("d_spectreTest_build", "c_spectreTest");
+        dmc.newGame("d_sceptreTest_build", "c_sceptreTest");
 
         // pick up items
         DungeonResponse res = dmc.tick(Direction.DOWN);
@@ -76,7 +76,7 @@ public class SceptreTests {
     @DisplayName("Player builds Spectre from 2 arrows + 1 treasure + 1 sun stone")
     public void testMakeSceptre3() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        dmc.newGame("d_spectreTest_build", "c_spectreTest");
+        dmc.newGame("d_sceptreTest_build", "c_sceptreTest");
 
         // pick up items
         DungeonResponse res = dmc.tick(Direction.DOWN);
@@ -104,7 +104,7 @@ public class SceptreTests {
     @DisplayName("Player builds Spectre from 2 arrows + 1 key + 1 sun stone")
     public void testMakeSceptre4() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        dmc.newGame("d_spectreTest_build", "c_spectreTest");
+        dmc.newGame("d_sceptreTest_build", "c_sceptreTest");
 
         // pick up items
         DungeonResponse res = dmc.tick(Direction.DOWN);
