@@ -13,6 +13,19 @@ import dungeonmania.util.Direction;
 public class SceptreTests {
     
     @Test
+    @DisplayName("Player attempts to build Sceptre")
+    public void testAttemptMakeSceptre() throws IllegalArgumentException, InvalidActionException {
+        DungeonManiaController dmc = new DungeonManiaController();
+        dmc.newGame("d_spectreTest_build", "c_spectreTest");
+
+        DungeonResponse res = dmc.tick(Direction.DOWN);
+
+        // build Sceptre with nothing
+        assertThrows(InvalidActionException.class, () -> dmc.build("sceptre"));
+        assertEquals(0, getInventory(res, "sceptre").size());
+    }
+
+    @Test
     @DisplayName("Player builds Spectre from 1 wood + 1 key + 1 sun stone")
     public void testMakeSceptre1() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -115,4 +128,6 @@ public class SceptreTests {
         assertEquals(0, getInventory(res, "sun_stone").size());
         assertEquals(1, getInventory(res, "sceptre").size()); 
     }
+
+
 }
