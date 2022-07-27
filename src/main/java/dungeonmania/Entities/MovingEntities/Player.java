@@ -103,7 +103,7 @@ public class Player extends MovingEntity {
     }
 
     public double getDefence() {
-        double defence = getDefence();
+        double defence = 0;
         if (inventory.containsCollectable("sword")) defence += Dungeon.getConfigValue("shield_defence");
         if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) defence += Dungeon.getConfigValue("ally_defence");
         return defence;
@@ -146,6 +146,5 @@ public class Player extends MovingEntity {
 
     public void bribeMercenary() {
         IntStream.range(0, Dungeon.getConfigValue("bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
-        
     }
 }

@@ -2,9 +2,9 @@ package dungeonmania.Entities.StaticEntities;
 
 import dungeonmania.util.Position;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import com.google.gson.JsonObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.EntityFactory;
@@ -22,15 +22,15 @@ public class ZombieToastSpawner extends StaticEntity {
 
     public void spawnZombie() {
         List<Position> adjacentPosition = getPosition().getAdjacentPositions();
-        Map<String, String> creationArguments = new HashMap<String, String>();
 
-        
         for (Position squares: adjacentPosition) {
             List<Entity> entity = Dungeon.getEntitiesAtPosition(squares);
             if (entity.isEmpty()) {
-                creationArguments.put("x", Integer.toString(squares.getX()));
-                creationArguments.put("y", Integer.toString(squares.getY()));
-                Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity("zombie_toast", creationArguments));
+                JsonObject zombieDetails = new JsonObject();
+                zombieDetails.addProperty("x", squares.getX());
+                zombieDetails.addProperty("y", squares.getY());
+                zombieDetails.addProperty("type", "zombie_toast");
+                Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity(zombieDetails));
                 return;
             }
         }

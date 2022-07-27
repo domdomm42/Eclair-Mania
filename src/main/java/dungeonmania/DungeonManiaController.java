@@ -38,7 +38,7 @@ public class DungeonManiaController {
     public DungeonResponse newGame(String dungeonName, String configName) {
         try {
             Dungeon.setupConfigFile(configName);
-            Dungeon.instantiateDungeonEntitiesAndGoals(dungeonName);
+            Dungeon.startNewGame(dungeonName);
         } catch (IOException exception) {
             return null;
         }
