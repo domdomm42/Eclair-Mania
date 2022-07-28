@@ -23,6 +23,14 @@ public class Player extends MovingEntity {
     PotionBag potionBag;
     Position lastPosition;
 
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public void setPotionBag(PotionBag potionBag) {
+        this.potionBag = potionBag;
+    }
+
     public Position getLastPosition() {
         return lastPosition;
     }

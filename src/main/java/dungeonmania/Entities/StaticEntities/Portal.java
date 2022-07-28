@@ -2,6 +2,8 @@ package dungeonmania.Entities.StaticEntities;
 
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
@@ -25,7 +27,10 @@ public class Portal extends StaticEntity {
         this.color = color;
     }
 
+    // need to recurse in the case of teleporting into another portal
     public Position getTeleportLocation(Direction direction) {
+
+        // given a portal, get position of other corresponding portal.
         Position correspondingPortalLocation = Dungeon.getEntitiesOfType("portal").stream().filter(entity -> ((Portal) entity).getColor().equals(color)).filter(entity -> !entity.equals(this)).findFirst().map(entity -> {
             return entity.getPosition();
         }).orElse(null);
@@ -35,6 +40,11 @@ public class Portal extends StaticEntity {
 
         
         if (isPositionMovableForPlayer(preferredEndLocation)) {
+
+            // if preferredEndLocation is a portal
+            if (Dungeon.isEntityOnPosition(preferredEndLocation, "portal") == true) {
+                return multipleTeleporter(preferredEndLocation, direction);
+            }
             return preferredEndLocation;
         } else if (adjacentPositions.stream().anyMatch(location -> isPositionMovableForPlayer(location))) {
             return adjacentPositions.stream().filter(location -> isPositionMovableForPlayer(location)).findFirst().get();
@@ -74,6 +84,24 @@ public class Portal extends StaticEntity {
             return false;
         }   
         return true;
-        
     }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject portalJson = super.toJsonObject();
+        portalJson.addProperty("colour", color);
+        return portalJson;
+    }
+
+    public Position multipleTeleporter(Position currpos, Direction direction) {
+
+    Position requestedPosition = currpos;
+
+    // while player is standing on portal after teleporting
+    while (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
+        Portal portal = (Portal) Dungeon.getFirstEntityOfTypeOnPosition(currpos, "portal");
+        requestedPosition = portal.getTeleportLocation(direction);
+    }
+    return requestedPosition;
+}
 }

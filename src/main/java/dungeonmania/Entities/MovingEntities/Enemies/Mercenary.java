@@ -1,5 +1,7 @@
 package dungeonmania.Entities.MovingEntities.Enemies;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.MercenaryMovementStrategy;
@@ -63,5 +65,17 @@ public class Mercenary extends Enemy {
 
     public boolean isAlly() {
         return isAlly;
+    }
+
+    public void setAlly(boolean isAlly) {
+        this.isAlly = isAlly;
+    }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject mercJson = super.toJsonObject();
+        mercJson.addProperty("isAlly", isAlly);
+        mercJson.addProperty("hasReachedPlayer", hasReachedPlayer);
+        return super.toJsonObject();
     }
 }

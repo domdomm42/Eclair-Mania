@@ -108,7 +108,11 @@ public class Inventory {
     
     public JsonArray toJsonArray() {
         JsonArray inventory = new JsonArray();
-        items.forEach(item -> inventory.add(item.toJsonObject()));
+        items.forEach(item -> {
+            JsonObject itemJson = item.toJsonObject();
+            itemJson.addProperty("durability", item.getDurability());
+            inventory.add(itemJson);
+        });
         return inventory;
     }
 }

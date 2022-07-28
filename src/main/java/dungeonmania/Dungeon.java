@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,12 +13,17 @@ import java.util.stream.Collectors;
 
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
+import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
+import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
@@ -65,10 +71,7 @@ public class Dungeon {
 
     private static void createEntities(JsonObject dungeonJson) {
         JsonArray entities = dungeonJson.getAsJsonArray("entities");
-        for (int i = 0; i < entities.size(); i++) {;
-            Entity requestedEntity = EntityFactory.createEntity(entities.get(i).getAsJsonObject());
-            if (requestedEntity != null ) Dungeon.entities.add(requestedEntity);
-        }
+        loadEntities(entities);
     }
 
     private static JsonObject dungeonFileToJson(String dungeonName) throws IOException {
@@ -77,17 +80,70 @@ public class Dungeon {
     }
 
     public static void saveGame(String name) throws IOException {
-        FileWriter savedGame = new FileWriter("src/main/resources/saved_games".concat("/".concat(name)));
+        FileWriter savedGame = new FileWriter("src/main/resources/saved_games".concat("/".concat(name.concat(".json"))));
         savedGame.write(toJsonObject().toString());
         savedGame.close();
     }
 
+    public static void loadGame(String name) throws IOException {
+        resetDungeon();
+        FileReader savedGame = new FileReader("src/main/resources/saved_games".concat("/".concat(name).concat(".json")));
+        JsonObject savedGameJson = JsonParser.parseReader(savedGame).getAsJsonObject();
+        config = savedGameJson.get("configuration").getAsJsonObject();
+        dungeonName = savedGameJson.get("dungeonName").getAsString();
+        numberOfTicks = savedGameJson.get("numberOfTicks").getAsInt();
+        enemiesKilled = savedGameJson.get("enemiesKilled").getAsInt();
+        loadEntities(savedGameJson.get("entities").getAsJsonArray());
+        loadGoals(savedGameJson.get("goal-condition").getAsJsonObject());
+        loadInventory(savedGameJson.get("inventory").getAsJsonArray());
+        loadPotionBag(savedGameJson.get("potionBag").getAsJsonArray());
+    }
+
+    private static void loadGoals(JsonObject goalJson) {
+        originalGoals = goalJson;
+        goals = new Goal(goalJson);
+    }
+
+    private static void loadEntities(JsonArray entitiesJson) {
+        for (int i = 0; i < entitiesJson.size(); i++) {;
+            Entity requestedEntity = EntityFactory.createEntity(entitiesJson.get(i).getAsJsonObject());
+            if (requestedEntity != null ) Dungeon.entities.add(requestedEntity);
+        }
+    }
+
+    private static void loadInventory(JsonArray itemsArray) {
+        Inventory inventory = new Inventory();
+        itemsArray.forEach(itemJson -> {
+            JsonObject itemJsonObject = itemJson.getAsJsonObject();
+            CollectableEntity item = (CollectableEntity) EntityFactory.createEntity(itemJsonObject);
+            item.setDurability(itemJsonObject.get("durability").getAsInt());
+            inventory.addItem(item);
+        });
+        getPlayer().setInventory(inventory);
+    }
+
+    private static void loadPotionBag(JsonArray potionsArray) {
+        PotionBag potionBag = new PotionBag();
+        potionsArray.forEach(potionJson -> {
+            JsonObject potionJsonObject = potionJson.getAsJsonObject();
+            Potion potion = (Potion) EntityFactory.createEntity(potionJsonObject);
+            JsonElement currentTicks = potionJsonObject.get("current_ticks");
+            if (currentTicks != null)potion.setCurrentTicks(currentTicks.getAsInt());
+            potionBag.usePotion(potion);
+        });
+        getPlayer().setPotionBag(potionBag);
+    }
+
     private static JsonObject toJsonObject() {
         JsonObject dungeon = new JsonObject();
+        dungeon.addProperty("dungeonName", dungeonName);
+        dungeon.addProperty("enemiesKilled", enemiesKilled);
+        dungeon.addProperty("numberOfTicks", numberOfTicks);
         dungeon.add("entities", entitiesToJsonArray());
         dungeon.add("goal-condition", originalGoals);
         dungeon.add("inventory", getPlayer().getInventory().toJsonArray());
-        dungeon.add("potionBag", getPlayer().getInventory().toJsonArray());
+        dungeon.add("potionBag", getPlayer().getPotionBag().toJsonArray());
+        dungeon.add("configuration", config);
         return dungeon;
     }
 
@@ -104,8 +160,7 @@ public class Dungeon {
         Dungeon.dungeonName = dungeonName;
         JsonObject dungeonJson = dungeonFileToJson(dungeonName);
         createEntities(dungeonJson);
-        goals = new Goal(dungeonJson.getAsJsonObject("goal-condition"));
-        originalGoals = dungeonJson.getAsJsonObject("goal-condition");
+        loadGoals(dungeonJson.getAsJsonObject("goal-condition"));
     }
 
     public static Player getPlayer() {

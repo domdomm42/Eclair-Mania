@@ -51,5 +51,20 @@ public class PortalTests {
 
 
     }
+
+    @Test
+    @DisplayName("Double teleport")
+    public void PlayerDoubleTeleport() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_PortalTest_doubleTeleport", "c_movementTest_testMovementDown");
+
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+    
+
+        Position pos = getEntities(res, "player").get(0).getPosition();
+        assertEquals(pos, getEntities(res, "portal").get(3).getPosition().translateBy(Direction.RIGHT));
+
+    }
     
 }

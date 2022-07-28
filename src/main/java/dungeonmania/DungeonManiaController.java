@@ -88,21 +88,31 @@ public class DungeonManiaController {
      * /game/save
      */
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
-        return null;
+        try {
+            Dungeon.saveGame(name);
+            System.err.println(name);
+        } catch (IOException exception) {
+            return null;
+        }
+        return Dungeon.getDungeonResponse();
     }
 
     /**
      * /game/load
      */
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
-        return null;
+        try {
+            Dungeon.loadGame(name);
+        } catch (IOException exception) {
+            return null;
+        }
+        return Dungeon.getDungeonResponse();
     }
 
     /**
      * /games/all
      */
     public List<String> allGames() {
-        return new ArrayList<>();
+        return FileLoader.listFileNamesInResourceDirectory(("saved_games"));
     }
-
 }
