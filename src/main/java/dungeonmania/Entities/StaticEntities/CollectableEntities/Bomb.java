@@ -1,6 +1,9 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities;
 
 import java.util.ArrayList;
+
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.util.Direction;
@@ -93,5 +96,12 @@ public class Bomb extends Usable {
 
     public void setHasBeenPickedUp(boolean hasBeenPickedUp) {
         this.hasBeenPickedUp = hasBeenPickedUp;
-    }    
+    }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject bombJson = super.toJsonObject();
+        bombJson.addProperty("hasBeenPickedUp", hasBeenPickedUp);
+        return bombJson;
+    }
 }

@@ -1,6 +1,7 @@
 package dungeonmania;
 
-import java.util.Map;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Player;
@@ -33,83 +34,93 @@ public class EntityFactory {
         totalEntitiesCreated = 0;
     }
 
-    static public Entity createEntity(String type, Map<String, String> args) throws IllegalArgumentException {
-        Position position;
-        if (!type.equals("bow") && !type.equals("shield")) position = new Position(Integer.parseInt(args.get("x")), Integer.parseInt(args.get("y")));
-        else position = Dungeon.getPlayer().getPosition();
+    static public Entity createEntity(JsonObject entityDetails) throws IllegalArgumentException {
+        String type = entityDetails.get("type").getAsString();
         String id = Integer.toString(totalEntitiesCreated);
-        String keyId = args.get("key");
-        String color = args.get("color");
-        Entity entity;
+        JsonElement x = entityDetails.get("x");
+        JsonElement y = entityDetails.get("y");
+        JsonElement keyId = entityDetails.get("key");
+        totalEntitiesCreated += 1;
 
         switch (type) {
             case "player":
-                entity = new Player(id, position);
-                break;
+                return new Player(id, new Position(x.getAsInt(), y.getAsInt()));
             case "spider":
-                entity = new Spider(id, position);
-                break;
+                JsonElement spiderNumberOfTicks = entityDetails.get("numberOfTicks");
+                JsonElement spiderSpawnPositionX = entityDetails.get("spawnPositionX");
+                JsonElement spiderSpawnPositionY = entityDetails.get("spawnPositionY");
+                JsonElement spiderIsClockwise = entityDetails.get("isClockwise");
+                JsonElement spiderPositionIterator = entityDetails.get("positionIterator");
+                Spider spider = new Spider(id, new Position(x.getAsInt(), y.getAsInt()));
+                if (spiderNumberOfTicks != null) {
+                    spider.setNumberOfTicks(spiderNumberOfTicks.getAsInt());
+                }
+                if (spiderSpawnPositionX != null && spiderSpawnPositionY != null) {
+                    spider.setSpawnPosition(new Position(spiderSpawnPositionX.getAsInt(), spiderSpawnPositionY.getAsInt()));
+                }
+                if (spiderIsClockwise != null) {
+                    spider.setClockwise(spiderIsClockwise.getAsBoolean());
+                }
+                if (spiderPositionIterator != null) {
+                    spider.setPositionIterator(spiderPositionIterator.getAsInt());
+                }
+                return spider;
             case "zombie_toast":
-                entity = new ZombieToast(id, position);
-                break;
+                return new ZombieToast(id, new Position(x.getAsInt(), y.getAsInt()));
             case "mercenary":
-                entity = new Mercenary(id, position);
-                break;
+                JsonElement mercenaryIsAlly = entityDetails.get("isAlly");
+                JsonElement mercenaryHasReachedPlayer = entityDetails.get("hasReachedPlayer");
+                Mercenary mercenary = new Mercenary(id, new Position(x.getAsInt(), y.getAsInt()));
+                if (mercenaryIsAlly != null) {
+                    mercenary.setAlly(mercenaryIsAlly.getAsBoolean());
+                }
+                if (mercenaryHasReachedPlayer != null) {
+                    mercenary.setHasReachedPlayer(mercenaryHasReachedPlayer.getAsBoolean());
+                }
+                return mercenary;
             case "wall":
-                entity = new Wall(position, id);
-                break;
+                return new Wall(new Position(x.getAsInt(), y.getAsInt()), id);
             case "exit":
-                entity = new Exit(position, id);
-                break;
+                return new Exit(new Position(x.getAsInt(), y.getAsInt()), id);
             case "boulder":
-                entity = new Boulder(position, id);
-                break;
+                return new Boulder(new Position(x.getAsInt(), y.getAsInt()), id);
             case "switch": 
-                entity = new FloorSwitch(position, id);
-                break;
+                return new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id);
             case "door":
-                entity = new Door(position, "door-".concat(keyId));
-                break;
+                return new Door(new Position(x.getAsInt(), y.getAsInt()), "door-".concat(keyId.getAsString()));
             case "key":
-                entity = new Key(position, "key-".concat(keyId).concat("door-").concat(keyId));
-                break;
+                return new Key(new Position(x.getAsInt(), y.getAsInt()), "key-".concat(keyId.getAsString()).concat("door-").concat(keyId.getAsString()));
             case "portal":
-                entity = new Portal(position, id, color);
-                break;
+                JsonElement color = entityDetails.get("colour");
+                return new Portal(new Position(x.getAsInt(), y.getAsInt()), id, color.getAsString());
             case "zombie_toast_spawner":
-                entity = new ZombieToastSpawner(position, id);
-                break;
+                return new ZombieToastSpawner(new Position(x.getAsInt(), y.getAsInt()), id);
             case "treasure":
-                entity = new Treasure(position, id);
-                break;
+                return new Treasure(new Position(x.getAsInt(), y.getAsInt()), id);
             case "invincibility_potion":
-                entity = new InvincibilityPotion(position, id);
-                break;
+                return new InvincibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
             case "invisibility_potion":
-                entity = new InvisibilityPotion(position, id);
-                break;
+                return new InvisibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
             case "wood":
-                entity = new Wood(position, id);
-                break;
+                return new Wood(new Position(x.getAsInt(), y.getAsInt()), id);
             case "arrow":
-                entity = new Arrow(id, position);
-                break;
+                return new Arrow(id, new Position(x.getAsInt(), y.getAsInt()));
             case "bomb":
-                entity = new Bomb(position, id);
-                break;
+                JsonElement bombHasBeenPickedUp = entityDetails.get("hasBeenPickedUp");
+                Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id);
+                if (bombHasBeenPickedUp != null) {
+                    bomb.setHasBeenPickedUp(bombHasBeenPickedUp.getAsBoolean());
+                }
+                return bomb;
             case "sword":
-                entity = new Sword(position, id);
-                break;
+                return new Sword(new Position(x.getAsInt(), y.getAsInt()), id);
             case "bow":
-                entity = new Bow(id);
-                break;
+                return new Bow(id);
             case "shield":
-                entity = new Shield(id);
-                break;
-            default :
+                return new Shield(id);
+            default:
+                totalEntitiesCreated -= 1;
                 throw new IllegalArgumentException("Entity type does not exist");
         }
-        totalEntitiesCreated += 1;
-        return entity;
     }
 }

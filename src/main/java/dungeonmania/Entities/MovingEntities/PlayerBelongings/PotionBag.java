@@ -3,6 +3,9 @@ package dungeonmania.Entities.MovingEntities.PlayerBelongings;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
 
 public class PotionBag {
@@ -35,5 +38,15 @@ public class PotionBag {
             if (potionQueue.isEmpty()) activePotion = null;
             else activePotion = potionQueue.poll();
         }
+    }
+
+    public JsonArray toJsonArray() {
+        JsonArray potionBag = new JsonArray();
+        if (activePotion == null) return potionBag;
+        JsonObject activePotionJson = activePotion.toJsonObject();
+        activePotionJson.addProperty("current_ticks", activePotion.getCurrentTicks());
+        potionBag.add(activePotionJson);
+        potionQueue.forEach(potion -> potionBag.add(potion.toJsonObject()));
+        return potionBag;
     }
 }
