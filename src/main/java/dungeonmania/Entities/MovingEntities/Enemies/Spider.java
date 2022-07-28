@@ -1,5 +1,7 @@
 package dungeonmania.Entities.MovingEntities.Enemies;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.SpiderMovementStrategy;
 import dungeonmania.util.Direction;
@@ -34,6 +36,10 @@ public class Spider extends Enemy {
         return numberOfTicks;
     }
 
+    public void setNumberOfTicks(int numberOfTicks) {
+        this.numberOfTicks = numberOfTicks;
+    }
+
     public int getPositionIterator() {
         return positionIterator;
     }
@@ -50,15 +56,26 @@ public class Spider extends Enemy {
         this.isClockwise = isClockwise;
     }
 
-    
-
-
     public Position getSpawnPosition() {
         return spawnPosition;
     }
 
-    
+    public void setClockwise(boolean isClockwise) {
+        this.isClockwise = isClockwise;
+    }
 
-    
-    
+    public void setSpawnPosition(Position spawnPosition) {
+        this.spawnPosition = spawnPosition;
+    }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject spiderJson = super.toJsonObject();
+        spiderJson.addProperty("numberOfTicks", numberOfTicks);
+        spiderJson.addProperty("spawnPositionX", spawnPosition.getX());
+        spiderJson.addProperty("spawnPositionY", spawnPosition.getY());
+        spiderJson.addProperty("positionIterator", positionIterator);
+        spiderJson.addProperty("isClockwise", isClockwise);
+        return spiderJson;
+    }
 }
