@@ -2,6 +2,8 @@ package dungeonmania.Entities.StaticEntities;
 
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
@@ -74,6 +76,12 @@ public class Portal extends StaticEntity {
             return false;
         }   
         return true;
-        
+    }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject portalJson = super.toJsonObject();
+        portalJson.addProperty("colour", color);
+        return portalJson;
     }
 }

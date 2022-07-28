@@ -40,18 +40,44 @@ public class EntityFactory {
         JsonElement x = entityDetails.get("x");
         JsonElement y = entityDetails.get("y");
         JsonElement keyId = entityDetails.get("key");
-        JsonElement color = entityDetails.get("colour");
         totalEntitiesCreated += 1;
 
         switch (type) {
             case "player":
                 return new Player(id, new Position(x.getAsInt(), y.getAsInt()));
             case "spider":
-                return new Spider(id, new Position(x.getAsInt(), y.getAsInt()));
+                JsonElement spiderNumberOfTicks = entityDetails.get("numberOfTicks");
+                JsonElement spiderSpawnPositionX = entityDetails.get("spawnPositionX");
+                JsonElement spiderSpawnPositionY = entityDetails.get("spawnPositionY");
+                JsonElement spiderIsClockwise = entityDetails.get("isClockwise");
+                JsonElement spiderPositionIterator = entityDetails.get("positionIterator");
+                Spider spider = new Spider(id, new Position(x.getAsInt(), y.getAsInt()));
+                if (spiderNumberOfTicks != null) {
+                    spider.setNumberOfTicks(spiderNumberOfTicks.getAsInt());
+                }
+                if (spiderSpawnPositionX != null && spiderSpawnPositionY != null) {
+                    spider.setSpawnPosition(new Position(spiderSpawnPositionX.getAsInt(), spiderSpawnPositionY.getAsInt()));
+                }
+                if (spiderIsClockwise != null) {
+                    spider.setClockwise(spiderIsClockwise.getAsBoolean());
+                }
+                if (spiderPositionIterator != null) {
+                    spider.setPositionIterator(spiderPositionIterator.getAsInt());
+                }
+                return spider;
             case "zombie_toast":
                 return new ZombieToast(id, new Position(x.getAsInt(), y.getAsInt()));
             case "mercenary":
-                return new Mercenary(id, new Position(x.getAsInt(), y.getAsInt()));
+                JsonElement mercenaryIsAlly = entityDetails.get("isAlly");
+                JsonElement mercenaryHasReachedPlayer = entityDetails.get("hasReachedPlayer");
+                Mercenary mercenary = new Mercenary(id, new Position(x.getAsInt(), y.getAsInt()));
+                if (mercenaryIsAlly != null) {
+                    mercenary.setAlly(mercenaryIsAlly.getAsBoolean());
+                }
+                if (mercenaryHasReachedPlayer != null) {
+                    mercenary.setHasReachedPlayer(mercenaryHasReachedPlayer.getAsBoolean());
+                }
+                return mercenary;
             case "wall":
                 return new Wall(new Position(x.getAsInt(), y.getAsInt()), id);
             case "exit":
@@ -65,6 +91,7 @@ public class EntityFactory {
             case "key":
                 return new Key(new Position(x.getAsInt(), y.getAsInt()), "key-".concat(keyId.getAsString()).concat("door-").concat(keyId.getAsString()));
             case "portal":
+                JsonElement color = entityDetails.get("colour");
                 return new Portal(new Position(x.getAsInt(), y.getAsInt()), id, color.getAsString());
             case "zombie_toast_spawner":
                 return new ZombieToastSpawner(new Position(x.getAsInt(), y.getAsInt()), id);
@@ -79,7 +106,12 @@ public class EntityFactory {
             case "arrow":
                 return new Arrow(id, new Position(x.getAsInt(), y.getAsInt()));
             case "bomb":
-                return new Bomb(new Position(x.getAsInt(), y.getAsInt()), id);
+                JsonElement bombHasBeenPickedUp = entityDetails.get("hasBeenPickedUp");
+                Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id);
+                if (bombHasBeenPickedUp != null) {
+                    bomb.setHasBeenPickedUp(bombHasBeenPickedUp.getAsBoolean());
+                }
+                return bomb;
             case "sword":
                 return new Sword(new Position(x.getAsInt(), y.getAsInt()), id);
             case "bow":
