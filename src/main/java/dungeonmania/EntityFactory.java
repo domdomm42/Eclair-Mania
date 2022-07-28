@@ -120,6 +120,10 @@ public class EntityFactory {
                 return new Bow(id);
             case "shield":
                 return new Shield(id);
+            case "sun_stone":
+                return new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
+            case "sceptre":
+                return new Sceptre(id);
             default:
                 totalEntitiesCreated -= 1;
                 throw new IllegalArgumentException("Entity type does not exist");

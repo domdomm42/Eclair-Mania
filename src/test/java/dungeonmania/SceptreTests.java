@@ -40,12 +40,12 @@ public class SceptreTests {
         assertEquals(1, getInventory(res, "key").size());
         assertEquals(1, getInventory(res, "sun_stone").size());
 
-        dmc.build("sceptre");
-        
+        res = dmc.build("sceptre");
+        assertEquals(1, getInventory(res, "sceptre").size());
         assertEquals(0, getInventory(res, "wood").size());
         assertEquals(0, getInventory(res, "key").size());
         assertEquals(0, getInventory(res, "sun_stone").size());
-        assertEquals(1, getInventory(res, "sceptre").size());
+        
     }
 
     @Test
@@ -64,7 +64,7 @@ public class SceptreTests {
         assertEquals(1, getInventory(res, "treasure").size());
         assertEquals(1, getInventory(res, "sun_stone").size());
 
-        dmc.build("sceptre");
+        res = dmc.build("sceptre");
         
         assertEquals(0, getInventory(res, "wood").size());
         assertEquals(0, getInventory(res, "treasure").size());
@@ -86,14 +86,12 @@ public class SceptreTests {
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
 
-        assertEquals(1, getInventory(res, "arrow").size());
-        assertEquals(1, getInventory(res, "arrow").size());
+        assertEquals(2, getInventory(res, "arrow").size());
         assertEquals(1, getInventory(res, "treasure").size());
         assertEquals(1, getInventory(res, "sun_stone").size());
 
-        dmc.build("sceptre");
+        res = dmc.build("sceptre");
         
-        assertEquals(0, getInventory(res, "arrow").size());
         assertEquals(0, getInventory(res, "arrow").size());
         assertEquals(0, getInventory(res, "treasure").size());
         assertEquals(0, getInventory(res, "sun_stone").size());
@@ -115,14 +113,12 @@ public class SceptreTests {
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
 
-        assertEquals(1, getInventory(res, "arrow").size());
-        assertEquals(1, getInventory(res, "arrow").size());
+        assertEquals(2, getInventory(res, "arrow").size());
         assertEquals(1, getInventory(res, "key").size());
         assertEquals(1, getInventory(res, "sun_stone").size());
 
-        dmc.build("sceptre");
+        res = dmc.build("sceptre");
         
-        assertEquals(0, getInventory(res, "arrow").size());
         assertEquals(0, getInventory(res, "arrow").size());
         assertEquals(0, getInventory(res, "key").size());
         assertEquals(0, getInventory(res, "sun_stone").size());
