@@ -115,4 +115,18 @@ public class DungeonManiaController {
     public List<String> allGames() {
         return FileLoader.listFileNamesInResourceDirectory(("saved_games"));
     }
+
+    /**
+     * /games/generate
+     */
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
+        try {
+            Dungeon.setupConfigFile(configName);
+            Dungeon.generateNewGame(xStart, yStart, xEnd, yEnd);
+        } catch (IOException exception) {
+            return null;
+        }
+        return Dungeon.getDungeonResponse();
+    }
+
 }
