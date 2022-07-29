@@ -34,7 +34,7 @@ public class ShieldTests {
         assertEquals(2, getInventory(res, "wood").size());
         assertEquals(1, getInventory(res, "treasure").size());
 
-        dmc.build("shield");
+        res = dmc.build("shield");
         res = dmc.tick(Direction.RIGHT);
         assertEquals(0, getInventory(res, "wood").size());
         assertEquals(0, getInventory(res, "treasure").size());

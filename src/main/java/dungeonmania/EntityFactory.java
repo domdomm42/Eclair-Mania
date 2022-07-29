@@ -18,11 +18,14 @@ import dungeonmania.Entities.StaticEntities.ZombieToastSpawner;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Arrow;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.SunStone;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Sword;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.TimeTurner;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Treasure;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Wood;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Bow;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.MidnightArmour;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Sceptre;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Shield;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvincibilityPotion;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvisibilityPotion;
@@ -158,6 +161,15 @@ public class EntityFactory {
                 break;
             case "time_turner":
                 entity = new TimeTurner(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
+            case "sun_stone":
+                entity = new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
+            case "sceptre":
+                entity = new Sceptre(id);
+                break;
+            case "midnight_armour":
+                entity = new MidnightArmour(id);
                 break;
             default:
                 totalEntitiesCreated -= 1;

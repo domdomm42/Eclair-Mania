@@ -14,6 +14,7 @@ import dungeonmania.Entities.StaticEntities.Door;
 import dungeonmania.Entities.StaticEntities.Portal;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -32,8 +33,13 @@ public class PlayerMovementStrategy extends MovementStrategy {
         }
         if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
             Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
+            
+
+            
             if (!door.isUnlocked()) {
-                if (player.getInventory().containsCollectableById(door.getKeyThatUnlock().getId())) {
+                if(player.hasCollectable("sun_stone")) door.setUnlocked(true); // ADDED FOR SUNSTONE 
+                else if (player.getInventory("key").stream().filter(entity -> door.getKeyThatUnlock() != null && door.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) return;
+                else {
                     player.useKey(door.getKeyThatUnlock());
                     door.setUnlocked(true);
                 }
@@ -59,6 +65,10 @@ public class PlayerMovementStrategy extends MovementStrategy {
                 if (((Bomb) collectableEntity).isHasBeenPickedUp()) {
                     return;
                 }
+            }
+            
+            if (collectableEntity instanceof Key) {
+                if (player.getInventory().containsCollectable("key")) return;
             }
             player.pickup((CollectableEntity) entity);
             collectableEntity.setPickedUp(true);

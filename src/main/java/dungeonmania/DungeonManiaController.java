@@ -6,6 +6,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DungeonManiaController {

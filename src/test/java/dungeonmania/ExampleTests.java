@@ -131,6 +131,7 @@ public class ExampleTests {
         assertEquals(1, getEntities(res, "player").size());
     }
 
+    
     @Test
     @DisplayName("Testing a map with 4 conjunction goal")
     public void andAll() {
