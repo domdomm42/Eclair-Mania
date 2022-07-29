@@ -44,7 +44,17 @@ public class EntityFactory {
 
         switch (type) {
             case "player":
-                return new Player(id, new Position(x.getAsInt(), y.getAsInt()));
+                JsonElement playerIsEvil = entityDetails.get("isEvil");
+                JsonElement playerLastPositionX = entityDetails.get("lastPositionX");
+                JsonElement playerLastPositionY = entityDetails.get("lastPositionY");
+                Player player = new Player(id, new Position(x.getAsInt(), y.getAsInt()));
+                if (playerIsEvil != null) {
+                    player.setEvil(playerIsEvil.getAsBoolean());
+                }
+                if (playerLastPositionX != null && playerLastPositionY != null) {
+                    player.setLastPosition(new Position(playerLastPositionX.getAsInt(), playerLastPositionY.getAsInt()));
+                }
+                return player;
             case "spider":
                 JsonElement spiderNumberOfTicks = entityDetails.get("numberOfTicks");
                 JsonElement spiderSpawnPositionX = entityDetails.get("spawnPositionX");

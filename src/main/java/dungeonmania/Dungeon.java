@@ -46,6 +46,7 @@ public class Dungeon {
     private static ArrayList<Entity> entitiesToAddAfterTick;
     private static ArrayList<Entity> entitiesToRemoveAfterTick;
     private static int numberOfTicks;
+    private static JsonArray previousGameStates;
 
     public static int incrementKilledEntities() {
         return enemiesKilled += 1;
@@ -81,22 +82,26 @@ public class Dungeon {
 
     public static void saveGame(String name) throws IOException {
         FileWriter savedGame = new FileWriter("src/main/resources/saved_games".concat("/".concat(name.concat(".json"))));
-        savedGame.write(toJsonObject().toString());
+        savedGame.write(toJsonObject(false).toString());
         savedGame.close();
     }
 
     public static void loadGame(String name) throws IOException {
-        resetDungeon();
         FileReader savedGame = new FileReader("src/main/resources/saved_games".concat("/".concat(name).concat(".json")));
         JsonObject savedGameJson = JsonParser.parseReader(savedGame).getAsJsonObject();
-        config = savedGameJson.get("configuration").getAsJsonObject();
-        dungeonName = savedGameJson.get("dungeonName").getAsString();
-        numberOfTicks = savedGameJson.get("numberOfTicks").getAsInt();
-        enemiesKilled = savedGameJson.get("enemiesKilled").getAsInt();
-        loadEntities(savedGameJson.get("entities").getAsJsonArray());
-        loadGoals(savedGameJson.get("goal-condition").getAsJsonObject());
-        loadInventory(savedGameJson.get("inventory").getAsJsonArray());
-        loadPotionBag(savedGameJson.get("potionBag").getAsJsonArray());
+        loadGame(savedGameJson);
+    }
+
+    public static void loadGame(JsonObject saveState) throws IOException {
+        resetDungeon();
+        config = saveState.get("configuration").getAsJsonObject();
+        dungeonName = saveState.get("dungeonName").getAsString();
+        numberOfTicks = saveState.get("numberOfTicks").getAsInt();
+        enemiesKilled = saveState.get("enemiesKilled").getAsInt();
+        loadEntities(saveState.get("entities").getAsJsonArray());
+        loadGoals(saveState.get("goal-condition").getAsJsonObject());
+        loadInventory(saveState.get("inventory").getAsJsonArray());
+        loadPotionBag(saveState.get("potionBag").getAsJsonArray());
     }
 
     private static void loadGoals(JsonObject goalJson) {
@@ -134,12 +139,12 @@ public class Dungeon {
         getPlayer().setPotionBag(potionBag);
     }
 
-    private static JsonObject toJsonObject() {
+    private static JsonObject toJsonObject(boolean isTimeTravel) {
         JsonObject dungeon = new JsonObject();
         dungeon.addProperty("dungeonName", dungeonName);
         dungeon.addProperty("enemiesKilled", enemiesKilled);
         dungeon.addProperty("numberOfTicks", numberOfTicks);
-        dungeon.add("entities", entitiesToJsonArray());
+        dungeon.add("entities", entitiesToJsonArray(isTimeTravel));
         dungeon.add("goal-condition", originalGoals);
         dungeon.add("inventory", getPlayer().getInventory().toJsonArray());
         dungeon.add("potionBag", getPlayer().getPotionBag().toJsonArray());
@@ -147,10 +152,14 @@ public class Dungeon {
         return dungeon;
     }
 
-    private static JsonArray entitiesToJsonArray() {
+    private static JsonArray entitiesToJsonArray(boolean isTimeTravel) {
         JsonArray entities = new JsonArray();
         Dungeon.entities.forEach(entity -> {
-            entities.add(entity.toJsonObject());
+            if (entity.getType().equals("player") && isTimeTravel) {
+                entities.add(((Player) entity).toTimeTravelJsonObject());
+            } else {
+                entities.add(entity.toJsonObject());
+            }
         });
         return entities;
     }
@@ -185,6 +194,12 @@ public class Dungeon {
         if (config.get(key).isJsonNull()) return 0;
         if (config.get(key) == null) return 0;
         return Integer.parseInt(config.get(key).getAsString());
+    }
+
+    public static void timeTravel(int ticks) throws IOException {
+        Player truePlayer = getPlayer().deepClone();
+        loadGame(previousGameStates.get(previousGameStates.size() - ticks - 1).getAsJsonObject());
+        Dungeon.addEntity(truePlayer);
     }
 
     public static void removeEntity(Entity entity) {
@@ -299,6 +314,7 @@ public class Dungeon {
         entitiesToRemoveAfterTick.forEach(entity -> removeEntity(entity));
         entitiesToRemoveAfterTick = new ArrayList<Entity>();
         updateGoals();
+        previousGameStates.add(toJsonObject(true));
     }
 
     public static void tick(Direction movementDirection) {
@@ -311,7 +327,8 @@ public class Dungeon {
     public static void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         tick();
         getPlayer().tick(itemId);
-        for (Entity entity : entities.stream().filter(entity -> !(entity.getType().equals("player"))).collect(Collectors.toList())) entity.tick(itemId);
+        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> evilPlayer.evilMove());
+        for (Entity entity : entities.stream().filter(entity -> !entity.getType().equals("player")).collect(Collectors.toList())) entity.tick(itemId);
         doAfterTick();
     }
 

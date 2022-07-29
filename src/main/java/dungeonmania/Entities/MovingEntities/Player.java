@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
+import dungeonmania.EntityFactory;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStrategy;
@@ -22,6 +25,8 @@ public class Player extends MovingEntity {
     Inventory inventory;
     PotionBag potionBag;
     Position lastPosition;
+    boolean isEvil;
+    ArrayList<String> tickHistory;
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
@@ -43,8 +48,14 @@ public class Player extends MovingEntity {
         super(id, "player", position, Dungeon.getConfigValue("player_health"), false, new PlayerMovementStrategy(), Dungeon.getConfigValue("player_attack"));
         inventory = new Inventory();
         potionBag = new PotionBag();
+        isEvil = false;
         getMovementStrategy().setEntity(this);
+        tickHistory = new ArrayList<String>();
     };
+
+    public Player deepClone() {
+        return (Player) EntityFactory.createEntity(toJsonObject());
+    }
 
     @Override
     public void tick(Direction direction) {
@@ -112,7 +123,7 @@ public class Player extends MovingEntity {
 
     public double getDefence() {
         double defence = 0;
-        if (inventory.containsCollectable("sword")) defence += Dungeon.getConfigValue("shield_defence");
+        if (inventory.containsCollectable("shield")) defence += Dungeon.getConfigValue("shield_defence");
         if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) defence += Dungeon.getConfigValue("ally_defence");
         return defence;
     }
@@ -154,5 +165,28 @@ public class Player extends MovingEntity {
 
     public void bribeMercenary() {
         IntStream.range(0, Dungeon.getConfigValue("bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
+    }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject playerJson = super.toJsonObject();
+        playerJson.addProperty("lastPositionX", lastPosition.getX());
+        playerJson.addProperty("lastPositionY", lastPosition.getY());
+        playerJson.addProperty("isEvil", isEvil);
+        return playerJson;
+    }
+
+    public JsonObject toTimeTravelJsonObject() {
+        JsonObject playerJson = toJsonObject();
+        playerJson.addProperty("isEvil", true);
+        return playerJson;
+    }
+
+    public boolean isEvil() {
+        return isEvil;
+    }
+
+    public void setEvil(boolean isEvil) {
+        this.isEvil = isEvil;
     }
 }
