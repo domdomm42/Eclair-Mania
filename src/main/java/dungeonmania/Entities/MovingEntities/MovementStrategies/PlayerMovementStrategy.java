@@ -40,6 +40,7 @@ public class PlayerMovementStrategy extends MovementStrategy {
                 if(player.hasCollectable("sun_stone")) door.setUnlocked(true); // ADDED FOR SUNSTONE 
                 else if (player.getInventory("key").stream().filter(entity -> door.getKeyThatUnlock() != null && door.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) return;
                 else {
+                if (player.getInventory().containsCollectableById(door.getKeyThatUnlock().getId())) {
                     player.useKey(door.getKeyThatUnlock());
                     door.setUnlocked(true);
                 }

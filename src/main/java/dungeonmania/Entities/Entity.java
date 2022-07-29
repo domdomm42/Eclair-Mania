@@ -3,6 +3,7 @@ package dungeonmania.Entities;
 import com.google.gson.JsonObject;
 
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -67,6 +68,10 @@ public abstract class Entity {
         throw new InvalidActionException("Not a valid entity to interact with");
     }
 
+    public void interact(boolean isEvil) throws InvalidActionException, IllegalArgumentException  {
+        throw new InvalidActionException("Not a valid entity to interact with");
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -102,9 +107,18 @@ public abstract class Entity {
 
     public JsonObject toJsonObject() {
         JsonObject entityDetails = new JsonObject();
+        entityDetails.addProperty("id", getId());
         entityDetails.addProperty("type", type);
         entityDetails.addProperty("x", position.getX());
         entityDetails.addProperty("y", position.getY());
         return entityDetails;
+    }
+
+    public EntityResponse toEntityResponse() {
+        return new EntityResponse(id, type, position, isInteractable);
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

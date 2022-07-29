@@ -1,10 +1,16 @@
 package dungeonmania.Entities.MovingEntities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
+import dungeonmania.EntityFactory;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.MovementStrategies.PlayerMovementStrategy;
@@ -19,9 +25,11 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Player extends MovingEntity {
-    Inventory inventory;
-    PotionBag potionBag;
-    Position lastPosition;
+    private Inventory inventory;
+    private PotionBag potionBag;
+    private Position lastPosition;
+    private boolean isEvil;
+    private ArrayList<String> actions;
 
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
@@ -39,17 +47,77 @@ public class Player extends MovingEntity {
         this.lastPosition = lastPosition;
     }
 
+    public ArrayList<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(ArrayList<String> actions) {
+        this.actions = actions;
+    }
+
+    public void addAction(String action) {
+        actions.add(action);
+    }
+
     public Player(String id, Position position) {
         super(id, "player", position, Dungeon.getConfigValue("player_health"), false, new PlayerMovementStrategy(), Dungeon.getConfigValue("player_attack"));
         inventory = new Inventory();
         potionBag = new PotionBag();
+        lastPosition = position;
+        isEvil = false;
+        actions = new ArrayList<String>();
         getMovementStrategy().setEntity(this);
     };
+
+    public Player deepClone() {
+        Player clonedplayer = (Player) EntityFactory.createEntity(toJsonObject());
+
+        Inventory inventory = new Inventory();
+        JsonArray itemsArray = this.inventory.toJsonArray();
+        itemsArray.forEach(itemJson -> {
+            JsonObject itemJsonObject = itemJson.getAsJsonObject();
+            CollectableEntity item = (CollectableEntity) EntityFactory.createEntity(itemJsonObject);
+            item.setDurability(itemJsonObject.get("durability").getAsInt());
+            inventory.addItem(item);
+        });
+        clonedplayer.setInventory(inventory);
+
+        PotionBag potionBag = new PotionBag();
+        this.potionBag.toJsonArray().forEach(potionJson -> {
+            JsonObject potionJsonObject = potionJson.getAsJsonObject();
+            Potion potion = (Potion) EntityFactory.createEntity(potionJsonObject);
+            JsonElement currentTicks = potionJsonObject.get("current_ticks");
+            if (currentTicks != null)potion.setCurrentTicks(currentTicks.getAsInt());
+            potionBag.usePotion(potion);
+        });
+        clonedplayer.setPotionBag(potionBag);
+        return clonedplayer;
+    }
 
     @Override
     public void tick(Direction direction) {
         super.tick(direction);
         getMovementStrategy().move(direction);
+        if (direction.getOffset().equals(Direction.DOWN.getOffset())) actions.add("move-".concat("down"));
+        if (direction.getOffset().equals(Direction.UP.getOffset())) actions.add("move-".concat("up"));
+        if (direction.getOffset().equals(Direction.LEFT.getOffset())) actions.add("move-".concat("left"));
+        if (direction.getOffset().equals(Direction.RIGHT.getOffset())) actions.add("move-".concat("right"));
+        
+    }
+
+    public void setActionsToLastNTicks(int ticks) {
+        ArrayList<String> lastNTicksActions = new ArrayList<String>();
+        Collections.reverse(actions);
+        int numTicks = 0;
+        for (String action : actions) {
+            if (action.split("-")[0].equals("move") || action.split("-")[0].equals("item")) {
+                numTicks += 1;
+            }
+            lastNTicksActions.add(action);
+            if (numTicks >= ticks) break;
+        }
+        Collections.reverse(lastNTicksActions);
+        setActions(lastNTicksActions);
     }
 
     @Override
@@ -58,10 +126,54 @@ public class Player extends MovingEntity {
         potionBag.tick();
     }
 
+    public void evilTick() {
+        boolean tickOccurred = false;
+        while (!tickOccurred && actions.size() != 0) {
+            String action = actions.get(0).split("-")[0];
+            String actionEffect = actions.get(0).split("-")[1];
+            if (action.equals("build")) {
+                try {
+                    inventory.buildEntity(actionEffect);
+                } catch (InvalidActionException err) {
+                    return;
+                }
+            }
+            if (action.equals("interact")) {
+                try {
+                    Entity entity = Dungeon.getEntityFromId(actionEffect);
+                    if (entity != null) entity.interact(true);
+                    else throw new IllegalArgumentException("No matching ID");
+                } catch (InvalidActionException err) {
+                    return;
+                }
+            }
+            if (action.equals("move")) {
+                if (actionEffect.equals("down")) getMovementStrategy().move(Direction.DOWN);
+                if (actionEffect.equals("up")) getMovementStrategy().move(Direction.UP);
+                if (actionEffect.equals("left")) getMovementStrategy().move(Direction.LEFT);
+                if (actionEffect.equals("right")) getMovementStrategy().move(Direction.RIGHT);
+                tickOccurred = true;
+            }
+            if (action.equals("item")) {
+                try {
+                    useItem(actionEffect);
+                } catch (InvalidActionException err) {
+                    return;
+                }
+                tickOccurred = true;
+            }
+            actions.remove(0);
+        }
+        if (actions.size() == 0) {
+            Dungeon.removeEntity(this);
+        }
+    }
+
     @Override
     public void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         super.tick(itemId);
         useItem(itemId);
+        actions.add("item-".concat(itemId));
     }
 
     public void useItem(String itemId) throws InvalidActionException, IllegalArgumentException {
@@ -113,7 +225,7 @@ public class Player extends MovingEntity {
 
     public double getDefence() {
         double defence = 0;
-        if (inventory.containsCollectable("sword")) defence += Dungeon.getConfigValue("shield_defence");
+        if (inventory.containsCollectable("shield")) defence += Dungeon.getConfigValue("shield_defence");
         if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) defence += Dungeon.getConfigValue("ally_defence");
         if (inventory.containsCollectable("midnight_armour")) defence += Dungeon.getConfigValue("midnight_armour_defence");
         return defence;
@@ -136,6 +248,7 @@ public class Player extends MovingEntity {
     @Override
     public void build(String type) throws InvalidActionException, IllegalArgumentException {
         inventory.buildEntity(type);
+        actions.add("build-".concat(type));
     }
 
     public boolean hasCollectable(String type) {
@@ -164,5 +277,29 @@ public class Player extends MovingEntity {
 
     public void mindControlMercenary() {
         inventory.removeItem(inventory.getFirstItemsOfType("sceptre"));
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject playerJson = super.toJsonObject();
+        JsonArray actions = new JsonArray();
+        playerJson.addProperty("lastPositionX", lastPosition.getX());
+        playerJson.addProperty("lastPositionY", lastPosition.getY());
+        playerJson.addProperty("isEvil", isEvil);
+        this.actions.forEach(action -> actions.add(action));
+        playerJson.add("actions", actions);
+        return playerJson;
+    }
+
+    public JsonObject toTimeTravelJsonObject() {
+        JsonObject playerJson = toJsonObject();
+        playerJson.addProperty("isEvil", true);
+        return playerJson;
+    }
+
+    public boolean isEvil() {
+        return isEvil;
+    }
+
+    public void setEvil(boolean isEvil) {
+        this.isEvil = isEvil;
     }
 }
