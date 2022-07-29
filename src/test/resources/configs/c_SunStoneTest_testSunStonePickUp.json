@@ -3,7 +3,7 @@
     "ally_defence": 3,
     "bomb_radius": 1,
     "bow_durability": 1,
-    "bribe_amount": 1,
+    "bribe_amount": 3,
     "bribe_radius": 1,
     "enemy_goal": 1,
     "invincibility_potion_duration": 1,
