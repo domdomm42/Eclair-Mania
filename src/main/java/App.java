@@ -161,6 +161,10 @@ public class App implements SparkApplication {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.allGames());
         }, gson::toJson);
 
+        Spark.post("/api/game/rewind/", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.rewind(Integer.parseInt(request.queryParams("ticks"))));
+        }, gson::toJson);
+
         Scintilla.start();
     }
 

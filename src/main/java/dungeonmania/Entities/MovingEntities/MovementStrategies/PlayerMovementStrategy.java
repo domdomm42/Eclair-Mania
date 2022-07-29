@@ -33,8 +33,7 @@ public class PlayerMovementStrategy extends MovementStrategy {
         if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
             Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
             if (!door.isUnlocked()) {
-                if (player.getInventory("key").stream().filter(entity -> door.getKeyThatUnlock() != null && door.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) return;
-                else {
+                if (player.getInventory().containsCollectableById(door.getKeyThatUnlock().getId())) {
                     player.useKey(door.getKeyThatUnlock());
                     door.setUnlocked(true);
                 }

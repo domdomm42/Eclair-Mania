@@ -114,4 +114,16 @@ public class DungeonManiaController {
     public List<String> allGames() {
         return FileLoader.listFileNamesInResourceDirectory(("saved_games"));
     }
+
+    /**
+     * /games/all
+     */
+    public DungeonResponse rewind(int ticks) {
+        try {
+            Dungeon.timeTravel(ticks);
+        } catch (IOException exception) {
+            return null;
+        }
+        return Dungeon.getDungeonResponse();
+    }
 }

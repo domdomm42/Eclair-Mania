@@ -67,6 +67,7 @@ public class Dungeon {
         enemiesKilled = 0;
         numberOfTicks = 0;
         originalGoals = null;
+        previousGameStates = new JsonArray();
         EntityFactory.resetTotalEntitiesCreated();
     }
 
@@ -94,11 +95,23 @@ public class Dungeon {
 
     public static void loadGame(JsonObject saveState) throws IOException {
         resetDungeon();
+        loadAll(saveState);
+    }
+
+    public static void loadGame(JsonObject saveState, Player truePlayer) throws IOException {
+        resetDungeon();
+        Dungeon.addEntity(truePlayer);
+        loadAll(saveState);
+    }
+
+    public static void loadAll(JsonObject saveState) {
         config = saveState.get("configuration").getAsJsonObject();
         dungeonName = saveState.get("dungeonName").getAsString();
         numberOfTicks = saveState.get("numberOfTicks").getAsInt();
         enemiesKilled = saveState.get("enemiesKilled").getAsInt();
+        previousGameStates = saveState.get("previousGameStates").getAsJsonArray();
         loadEntities(saveState.get("entities").getAsJsonArray());
+        System.err.println(entitiesToJsonArray(false));
         loadGoals(saveState.get("goal-condition").getAsJsonObject());
         loadInventory(saveState.get("inventory").getAsJsonArray());
         loadPotionBag(saveState.get("potionBag").getAsJsonArray());
@@ -145,10 +158,12 @@ public class Dungeon {
         dungeon.addProperty("enemiesKilled", enemiesKilled);
         dungeon.addProperty("numberOfTicks", numberOfTicks);
         dungeon.add("entities", entitiesToJsonArray(isTimeTravel));
+        dungeon.add("configuration", config);
         dungeon.add("goal-condition", originalGoals);
+        dungeon.add("previousGameStates", previousGameStates);
+        if (getPlayer() == null) return dungeon;
         dungeon.add("inventory", getPlayer().getInventory().toJsonArray());
         dungeon.add("potionBag", getPlayer().getPotionBag().toJsonArray());
-        dungeon.add("configuration", config);
         return dungeon;
     }
 
@@ -173,7 +188,7 @@ public class Dungeon {
     }
 
     public static Player getPlayer() {
-        return entities.stream().filter(entity -> entity.getType().equals("player")).findFirst().map(playerEntity -> {
+        return entities.stream().filter(entity -> entity.getType().equals("player") && !((Player) entity).isEvil()).findFirst().map(playerEntity -> {
             return (Player) playerEntity;
         }).orElse(null);
     }
@@ -198,8 +213,10 @@ public class Dungeon {
 
     public static void timeTravel(int ticks) throws IOException {
         Player truePlayer = getPlayer().deepClone();
-        loadGame(previousGameStates.get(previousGameStates.size() - ticks - 1).getAsJsonObject());
-        Dungeon.addEntity(truePlayer);
+        truePlayer.setId("truePlayer");
+        System.err.println(truePlayer.toJsonObject());
+        getPlayer().setActionsToLastNTicks(ticks);
+        loadGame(previousGameStates.get(Math.max(previousGameStates.size() - ticks - 1, 0)).getAsJsonObject(), truePlayer);
     }
 
     public static void removeEntity(Entity entity) {
@@ -245,9 +262,9 @@ public class Dungeon {
     }
 
     public static DungeonResponse getDungeonResponse() {
-        List<EntityResponse> entityResponses = entities.stream().map(entity -> new EntityResponse(entity.getId(), entity.getType(), entity.getPosition(), entity.getIsInteractable())).collect(Collectors.toList());
+        List<EntityResponse> entityResponses = entities.stream().map(Entity::toEntityResponse).collect(Collectors.toList());
         List<ItemResponse> itemResponses = getPlayer() != null ? getPlayer().getInventory().toItemResponse() : new ArrayList<ItemResponse>();
-        List<BattleResponse> battleResponses = battles.stream().map(battle -> new BattleResponse(battle.getEnemy().getType(), battle.getRoundResponses(), battle.getInitialPlayerHp(), battle.getInitialEnemyHp())).collect(Collectors.toList());
+        List<BattleResponse> battleResponses = battles.stream().map(Battle::toBattleResponse).collect(Collectors.toList());
 
         List<String> buildables = getPlayer() != null ? getPlayer().getBuildables() : new ArrayList<String>();
         return new DungeonResponse(id, dungeonName, entityResponses, itemResponses, battleResponses, buildables, goals.toString());
@@ -320,6 +337,7 @@ public class Dungeon {
     public static void tick(Direction movementDirection) {
         tick();
         getPlayer().tick(movementDirection);
+        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> ((Player)evilPlayer).evilTick());
         entities.stream().filter(entity -> entity != null && !entity.getType().equals("player")).forEach(entity -> entity.tick(movementDirection));
         doAfterTick();
     }
@@ -327,7 +345,7 @@ public class Dungeon {
     public static void tick(String itemId) throws InvalidActionException, IllegalArgumentException {
         tick();
         getPlayer().tick(itemId);
-        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> evilPlayer.evilMove());
+        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> ((Player)evilPlayer).evilTick());
         for (Entity entity : entities.stream().filter(entity -> !entity.getType().equals("player")).collect(Collectors.toList())) entity.tick(itemId);
         doAfterTick();
     }
@@ -340,6 +358,7 @@ public class Dungeon {
         Entity entity = getEntityFromId(entityId);
         if (entity == null) throw new IllegalArgumentException("No matching ID");
         entity.interact();
+        getPlayer().addAction("interact-".concat(entityId));
     }
 
     public static ArrayList<Entity> getEntities() {
