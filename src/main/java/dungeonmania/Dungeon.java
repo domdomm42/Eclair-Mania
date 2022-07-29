@@ -341,13 +341,13 @@ public class Dungeon {
         int height = Math.abs(yEnd - yStart);
         int width = Math.abs(xEnd - xStart);
 
-        boolean[][] maze = generateRandomMaze(height, width);
+        boolean[][] maze = generateRandomMaze(height + 1, width + 1);
 
         JsonArray entities = new JsonArray();
         
         // Add player at START
         JsonObject player = new JsonObject();
-        player.addProperty("type", "exit");
+        player.addProperty("type", "player");
         player.addProperty("x", xStart);
         player.addProperty("y", yStart);
         entities.add(player);
@@ -360,9 +360,9 @@ public class Dungeon {
         entities.add(exit);
 
         // Create border of walls around maze
-        for (int x = xStart - 1; x <= xEnd; x++) {
-            for (int y = yStart - 1; y <= yEnd; y++) {
-                if (x == xStart - 1 || y == yStart - 1 || x == xEnd || y == yEnd) {
+        for (int x = xStart - 1; x <= xEnd + 1; x++) {
+            for (int y = yStart - 1; y <= yEnd + 1; y++) {
+                if (x == xStart - 1 || y == yStart - 1 || x == xEnd + 1 || y == yEnd + 1) {
                     JsonObject wall = new JsonObject();
                     wall.addProperty("type", "wall");
                     wall.addProperty("x", x);
@@ -373,9 +373,9 @@ public class Dungeon {
         }
         
         // Create maze
-        for (int x = xStart, i = 0; x < xEnd; x++, i++) {
-            for (int y = yStart, j = 0; y < yEnd; y++, j++) {
-                if (maze[i][j]) {
+        for (int x = xStart, i = 0; x <= xEnd; x++, i++) {
+            for (int y = yStart, j = 0; y <= yEnd; y++, j++) {
+                if (!maze[i][j]) {
                     JsonObject wall = new JsonObject();
                     wall.addProperty("type", "wall");
                     wall.addProperty("x", x);
