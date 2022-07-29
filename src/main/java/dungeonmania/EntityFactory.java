@@ -27,6 +27,9 @@ import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntitie
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Shield;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvincibilityPotion;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvisibilityPotion;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.LightBulbOff;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.SwitchDoor;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.Wire;
 import dungeonmania.util.Position;
 
 public class EntityFactory {
@@ -42,6 +45,7 @@ public class EntityFactory {
         JsonElement x = entityDetails.get("x");
         JsonElement y = entityDetails.get("y");
         JsonElement keyId = entityDetails.get("key");
+        String LogicType = entityDetails.get("logic").getAsString();
         totalEntitiesCreated += 1;
 
         switch (type) {
@@ -124,6 +128,13 @@ public class EntityFactory {
                 return new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
             case "sceptre":
                 return new Sceptre(id);
+            case "light_bulb_off":
+                return new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType);
+            case "switch_door":
+                return new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType);
+            case "wire":
+                return new Wire(new Position(x.getAsInt(), y.getAsInt()), id);
+
             default:
                 totalEntitiesCreated -= 1;
                 throw new IllegalArgumentException("Entity type does not exist");

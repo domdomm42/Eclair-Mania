@@ -9,10 +9,12 @@ import dungeonmania.util.Position;
 
 public class SwitchDoor extends StaticEntity{
     private boolean IsOpen;
+    private String LogicalType;
 
-    public SwitchDoor(Position position, String id) {
+    public SwitchDoor(Position position, String id, String LogicalType) {
         super(position, id, "switch_door", false);
         this.IsOpen = false;
+        this.LogicalType = LogicalType;
     }
 
     public boolean isIsOpen() {
@@ -22,6 +24,15 @@ public class SwitchDoor extends StaticEntity{
     public void setIsOpen(boolean isOpen) {
         IsOpen = isOpen;
     }
+
+    public String getLogicalType() {
+        return LogicalType;
+    }
+
+    public void setLogicalType(String logicalType) {
+        LogicalType = logicalType;
+    }
+
 
     public void OpenSwitchDoor() {  
 

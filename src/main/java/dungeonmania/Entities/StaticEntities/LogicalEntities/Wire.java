@@ -11,7 +11,7 @@ public class Wire extends StaticEntity{
 
     public boolean isActivated;
 
-    public Wire(Position position, String id, boolean isActivated) {
+    public Wire(Position position, String id) {
         super(position, id, "wire", false);
         this.isActivated = false;
     }
