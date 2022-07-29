@@ -26,7 +26,7 @@ public class DungeonGenerationTests {
     }
 
     @Test
-    @DisplayName("Create a dungeon")
+    @DisplayName("Create a dungeon of size 30 and 30")
     public void testCreateDungeon() throws IllegalArgumentException, InvalidActionException {
         
         DungeonManiaController dmc = new DungeonManiaController();
@@ -46,7 +46,26 @@ public class DungeonGenerationTests {
         assertEquals(actualPlayerPos, expectedPlayerPos);
     }
 
-    
+    @Test
+    @DisplayName("Create a dungeon of size 10 and 12")
+    public void testCreateDungeon2() throws IllegalArgumentException, InvalidActionException {
+        
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initRes = dmc.generateDungeon(0, 0, 10, 12, "c_dungeonGeneratorTest");
+
+        Position actualPlayerPos = getEntities(initRes, "player").get(0).getPosition();
+        Position expectedPlayerPos = new Position(0, 0);
+        assertEquals(actualPlayerPos, expectedPlayerPos);
+
+        Position actualExitPos = getEntities(initRes, "exit").get(0).getPosition();
+        Position expectedExitPos = new Position(10, 12);
+        assertEquals(actualExitPos, expectedExitPos);
+
+        DungeonResponse res = dmc.tick(Direction.UP);
+        actualPlayerPos = getEntities(res, "player").get(0).getPosition();
+        expectedPlayerPos = new Position(0, 0);
+        assertEquals(actualPlayerPos, expectedPlayerPos);
+    }
 
 
 }
