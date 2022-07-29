@@ -332,6 +332,15 @@ public class Dungeon {
     public static void setEntities(ArrayList<Entity> entities) {
         Dungeon.entities = entities;
     }
-    //
+    
+    // DUNGEON GENERATION
+    // public static void startNewGame(String dungeonName) throws FileNotFoundException, IOException {
+    //     resetDungeon();
+    //     Dungeon.dungeonName = dungeonName;
+    //     JsonObject dungeonJson = dungeonFileToJson(dungeonName);
+    //     createEntities(dungeonJson);
+    //     loadGoals(dungeonJson.getAsJsonObject("goal-condition"));
+    // }
+
     
 }
