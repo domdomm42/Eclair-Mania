@@ -111,7 +111,6 @@ public class Dungeon {
         enemiesKilled = saveState.get("enemiesKilled").getAsInt();
         previousGameStates = saveState.get("previousGameStates").getAsJsonArray();
         loadEntities(saveState.get("entities").getAsJsonArray());
-        System.err.println(entitiesToJsonArray(false));
         loadGoals(saveState.get("goal-condition").getAsJsonObject());
         loadInventory(saveState.get("inventory").getAsJsonArray());
         loadPotionBag(saveState.get("potionBag").getAsJsonArray());
@@ -188,7 +187,7 @@ public class Dungeon {
     }
 
     public static Player getPlayer() {
-        return entities.stream().filter(entity -> entity.getType().equals("player") && !((Player) entity).isEvil()).findFirst().map(playerEntity -> {
+        return entities.stream().filter(entity -> entity.getType().equals("player") && ((Player) entity).isEvil() == false).findFirst().map(playerEntity -> {
             return (Player) playerEntity;
         }).orElse(null);
     }
@@ -214,7 +213,6 @@ public class Dungeon {
     public static void timeTravel(int ticks) throws IOException {
         Player truePlayer = getPlayer().deepClone();
         truePlayer.setId("truePlayer");
-        System.err.println(truePlayer.toJsonObject());
         getPlayer().setActionsToLastNTicks(ticks);
         loadGame(previousGameStates.get(Math.max(previousGameStates.size() - ticks - 1, 0)).getAsJsonObject(), truePlayer);
     }
@@ -271,6 +269,9 @@ public class Dungeon {
     }
 
     public static void tick() {
+
+        System.err.println(getPlayer().toJsonObject());
+        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> System.err.println(evilPlayer.toJsonObject()));
         int spiderSpawnRate = Dungeon.getConfigValue("spider_spawn_rate");
         if (!(spiderSpawnRate == 0)) {
             if (numberOfTicks % spiderSpawnRate == 0) {
