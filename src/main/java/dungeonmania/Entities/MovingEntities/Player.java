@@ -107,6 +107,7 @@ public class Player extends MovingEntity {
         if (inventory.containsCollectable("sword")) attack += Dungeon.getConfigValue("sword_attack");
         if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) attack += Dungeon.getConfigValue("ally_attack");
         if (inventory.containsCollectable("bow")) attack *= 2;
+        if (inventory.containsCollectable("midnight_armour")) attack += Dungeon.getConfigValue("midnight_armour_attack");
         return attack;
     }
 
@@ -114,6 +115,7 @@ public class Player extends MovingEntity {
         double defence = 0;
         if (inventory.containsCollectable("sword")) defence += Dungeon.getConfigValue("shield_defence");
         if (Dungeon.getEntitiesOfType("mercenary").stream().anyMatch(merc -> ((Mercenary) merc).isAlly())) defence += Dungeon.getConfigValue("ally_defence");
+        if (inventory.containsCollectable("midnight_armour")) defence += Dungeon.getConfigValue("midnight_armour_defence");
         return defence;
     }
 

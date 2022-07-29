@@ -23,6 +23,7 @@ import dungeonmania.Entities.StaticEntities.CollectableEntities.Sword;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Treasure;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Wood;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Bow;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.MidnightArmour;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Sceptre;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Shield;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvincibilityPotion;
@@ -124,6 +125,8 @@ public class EntityFactory {
                 return new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
             case "sceptre":
                 return new Sceptre(id);
+            case "midnight_armour":
+                return new MidnightArmour(id);
             default:
                 totalEntitiesCreated -= 1;
                 throw new IllegalArgumentException("Entity type does not exist");

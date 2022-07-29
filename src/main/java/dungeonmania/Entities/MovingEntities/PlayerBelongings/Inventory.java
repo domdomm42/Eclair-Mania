@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import dungeonmania.Dungeon;
 import dungeonmania.EntityFactory;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.exceptions.InvalidActionException;
@@ -58,6 +59,7 @@ public class Inventory {
         if (canBuildBow()) craftableItems.add("bow");
         if (canBuildShield()) craftableItems.add("shield");
         if (canBuildSceptre()) craftableItems.add("sceptre"); // SCEPTRE BUILDING
+        if (canBuildMidnightArmour()) craftableItems.add("midnight_armour"); // MIDNIGHT ARMOUR
         return craftableItems;
     }
 
@@ -73,6 +75,11 @@ public class Inventory {
         return (getItemsOfType("wood").size() >= 1 || getItemsOfType("arrow").size() >= 2) &&
                (getItemsOfType("key").size() >= 1 || getItemsOfType("treasure").size() >= 1) &&
                (getItemsOfType("sun_stone").size() >= 1); 
+    }
+
+    public boolean canBuildMidnightArmour() { // TEST CAN MIDNIGHT ARMOUR BE BUILT
+        return getItemsOfType("sword").size() >= 1 && getItemsOfType("sun_stone").size() >= 1 &&
+               Dungeon.getEntitiesOfType("zombie_toast").size() == 0; // no zombies in the area;
     }
 
     public void removeCraftingMaterials(Map<String, Integer> craftingMaterials) {
@@ -98,6 +105,10 @@ public class Inventory {
             else craftingMaterials.put("treasure", 1);
             craftingMaterials.put("sun_stone", 1);
         }
+        if (type.equals("midnight_armour")) {
+            craftingMaterials.put("sword", 1);
+            craftingMaterials.put("sun_stone", 1);
+        }
         removeCraftingMaterials(craftingMaterials);
         JsonObject entityDetails = new JsonObject();
         entityDetails.addProperty("type", type);
@@ -108,6 +119,7 @@ public class Inventory {
         if (type.equals("bow")) return canBuildBow();
         if (type.equals("shield")) return canBuildShield();
         if (type.equals("sceptre")) return canBuildSceptre();
+        if (type.equals("midnight_armour")) return canBuildMidnightArmour();
         throw new IllegalArgumentException(type.concat(" cannot be built"));
     }
 
