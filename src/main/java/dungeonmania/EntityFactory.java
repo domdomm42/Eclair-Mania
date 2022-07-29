@@ -101,14 +101,11 @@ public class EntityFactory {
                 if (mercenaryHasReachedPlayer != null) {
                     mercenary.setHasReachedPlayer(mercenaryHasReachedPlayer.getAsBoolean());
                 }
-<<<<<<< HEAD
-                return mercenary;
-            case "assassin":
-                return new Assassin(id, new Position(x.getAsInt(), y.getAsInt()), Dungeon.getConfigValue("assassin_health"), Dungeon.getConfigValue("assassin_attack"));
-=======
                 entity = mercenary;
                 break;
->>>>>>> origin/feature/time_travel
+            case "assassin":
+                entity = new Assassin(id, new Position(x.getAsInt(), y.getAsInt()));
+                break;
             case "wall":
                 entity = new Wall(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
@@ -164,21 +161,20 @@ public class EntityFactory {
                 entity = new Bow(id);
                 break;
             case "shield":
-<<<<<<< HEAD
-                return new Shield(id);
-            case "sun_stone":
-                return new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
-            case "sceptre":
-                return new Sceptre(id);
-            case "midnight_armour":
-                return new MidnightArmour(id);
-=======
                 entity = new Shield(id);
                 break;
             case "time_turner":
                 entity = new TimeTurner(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
->>>>>>> origin/feature/time_travel
+            case "sun_stone":
+                entity = new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
+            case "sceptre":
+                entity = new Sceptre(id);
+                break;
+            case "midnight_armour":
+                entity = new MidnightArmour(id);
+                break;
             default:
                 totalEntitiesCreated -= 1;
                 throw new IllegalArgumentException("Entity type does not exist");

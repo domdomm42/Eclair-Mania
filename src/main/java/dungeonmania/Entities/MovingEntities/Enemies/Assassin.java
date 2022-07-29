@@ -12,10 +12,9 @@ import dungeonmania.util.Position;
 public class Assassin extends Mercenary {
     private int assassin_bribe_amount = Dungeon.getConfigValue("assassin_bribe_amount");
 
-    public Assassin(String id, Position position, double health, double attack) {
+    public Assassin(String id, Position position) {
         //super(id, "assassin", position, Dungeon.getConfigValue("assassin_health"), true, new MercenaryMovementStrategy(), Dungeon.getConfigValue("assasin_attack"));
         super(id, position, "assassin", Dungeon.getConfigValue("assassin_health"), Dungeon.getConfigValue("assassin_attack"));
-
         
     }
 

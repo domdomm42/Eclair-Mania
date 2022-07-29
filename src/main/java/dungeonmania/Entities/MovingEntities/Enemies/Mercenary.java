@@ -47,10 +47,7 @@ public class Mercenary extends Enemy {
     }
 
     // when mercenary turns into ally switch isinteractable to false
-    @Override
-    public void interact() throws InvalidActionException, IllegalArgumentException {
-        Player player = Dungeon.getPlayer();
-
+    public void interactionWithAPlayer(Player player) throws InvalidActionException, IllegalArgumentException {
         if (player == null) return;
         
         if (!isAlly) {
@@ -69,7 +66,7 @@ public class Mercenary extends Enemy {
                     player.bribeMercenary();
                     setInteractable(false);
                 } else {
-                    throw new InvalidActionException("Not enough treasure to bribe Mercenary with");
+                    throw new InvalidActionException("Mercenary is not in range to be interacted with");
                 }
 
             } else {
@@ -79,35 +76,23 @@ public class Mercenary extends Enemy {
 
         } else {
             super.interact();
-        interactionWithAPlayer(player);
+        }
     }
 
+    @Override
     public void interact(boolean isEvil) throws InvalidActionException, IllegalArgumentException {
         if (!isEvil) interact();
         else {
             Player player = (Player) Dungeon.getEntitiesOfType("player").stream().filter(evilPlayer -> ((Player) evilPlayer).isEvil()).findFirst().get();
             interactionWithAPlayer(player);
         }
+        
     }
 
-    private void interactionWithAPlayer(Player player) throws InvalidActionException, IllegalArgumentException  {
-        if (player == null) return;
-            if (!isAlly) {
-                if (Math.abs(getPosition().getX() - player.getPosition().getX()) <= bribeRadius 
-                && Math.abs(getPosition().getY() - player.getPosition().getY()) <= bribeRadius) {
-                    if (player.getInventory("treasure").size() >= bribePrice) {
-                        isAlly = true;
-                        player.bribeMercenary();
-                        setInteractable(false);
-                    } else {
-                        throw new InvalidActionException("Not enough treasure to bribe Mercenary with");
-                    }
-                } else {
-                    throw new InvalidActionException("Mercenary is not in range to be interacted with");
-                }
-            } else {
-                super.interact();
-            }
+    @Override
+    public void interact() throws InvalidActionException, IllegalArgumentException {
+        Player player = (Player) Dungeon.getPlayer();
+        interactionWithAPlayer(player);
     }
 
 

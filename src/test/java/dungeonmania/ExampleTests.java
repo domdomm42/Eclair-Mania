@@ -130,11 +130,8 @@ public class ExampleTests {
         assertEquals(0, getEntities(res, "treasure").size());
         assertEquals(1, getEntities(res, "player").size());
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> origin/feature/time_travel
+    
     @Test
     @DisplayName("Testing a map with 4 conjunction goal")
     public void andAll() {
