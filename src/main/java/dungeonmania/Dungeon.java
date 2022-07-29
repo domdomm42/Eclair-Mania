@@ -334,13 +334,27 @@ public class Dungeon {
     }
     
     // DUNGEON GENERATION
-    // public static void startNewGame(String dungeonName) throws FileNotFoundException, IOException {
-    //     resetDungeon();
-    //     Dungeon.dungeonName = dungeonName;
-    //     JsonObject dungeonJson = dungeonFileToJson(dungeonName);
-    //     createEntities(dungeonJson);
-    //     loadGoals(dungeonJson.getAsJsonObject("goal-condition"));
-    // }
+    public static void generateDungeon(int xStart, int yStart, int xEnd, int yEnd) {
+        resetDungeon();
 
+        boolean[][] mazeMap = generateRandomMaze(xStart, yStart, xEnd, yEnd);
+
+        // Dungeon.dungeonName = dungeonName;
+        // JsonObject dungeonJson = dungeonFileToJson(dungeonName);
+        // createEntities(dungeonJson);
+        // loadGoals(dungeonJson.getAsJsonObject("goal-condition"));
+    }
+
+    private static boolean[][] generateRandomMaze(int xStart, int yStart, int xEnd, int yEnd) {
+        boolean[][] arr = new boolean[xEnd - xStart][yEnd - xStart];
+        return arr;
+    }
+
+    public static void main(String[] args) {
+        boolean[][] arr = generateRandomMaze(0, 0, 5, 5);
+        arr[0][0] = true;
+
+        System.out.println(arr[0][0]);
+    }
     
 }

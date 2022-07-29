@@ -122,7 +122,7 @@ public class DungeonManiaController {
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) {
         try {
             Dungeon.setupConfigFile(configName); // THIS should raise IllegalArgumentException if the config file does not exist
-            Dungeon.generateNewGame(xStart, yStart, xEnd, yEnd);
+            Dungeon.generateDungeon(xStart, yStart, xEnd, yEnd);
         } catch (IOException exception) {
             return null;
         }
