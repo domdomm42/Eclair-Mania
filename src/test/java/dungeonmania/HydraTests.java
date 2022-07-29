@@ -12,7 +12,6 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -37,8 +36,7 @@ public class HydraTests {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("d_HydraTest_testHydraMovement", "c_SunStoneTest_testSunStonePickUp");
     
-        
-
+    
         // Get Hydra position
         Position HydraPos = getEntities(res, "hydra").get(0).getPosition();
         List<Position> cardinallyAdjacentPositions = HydraPos.getCardinallyAdjacentPositions();
@@ -63,5 +61,6 @@ public class HydraTests {
         assertEquals(HydraPos, expectedPosition);
     }
 
+    
 
 }

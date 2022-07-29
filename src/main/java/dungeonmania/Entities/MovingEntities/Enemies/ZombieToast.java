@@ -20,4 +20,5 @@ public class ZombieToast extends Enemy {
     public void tick(String playerAction) {
         getMovementStrategy().move();
     }
+
 }
