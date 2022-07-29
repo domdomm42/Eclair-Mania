@@ -213,8 +213,11 @@ public class Dungeon {
     public static void timeTravel(int ticks) throws IOException {
         Player truePlayer = getPlayer().deepClone();
         truePlayer.setId("truePlayer");
-        getPlayer().setActionsToLastNTicks(ticks);
         loadGame(previousGameStates.get(Math.max(previousGameStates.size() - ticks - 1, 0)).getAsJsonObject(), truePlayer);
+        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> {
+            Player player = (Player) evilPlayer;
+            player.setActions(truePlayer.getActionsToLastNTicks(ticks));
+        });
     }
 
     public static void removeEntity(Entity entity) {
@@ -269,9 +272,6 @@ public class Dungeon {
     }
 
     public static void tick() {
-
-        System.err.println(getPlayer().toJsonObject());
-        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> System.err.println(evilPlayer.toJsonObject()));
         int spiderSpawnRate = Dungeon.getConfigValue("spider_spawn_rate");
         if (!(spiderSpawnRate == 0)) {
             if (numberOfTicks % spiderSpawnRate == 0) {
