@@ -1,3 +1,4 @@
+
 {
     "ally_attack": 3,
     "ally_defence": 3,
@@ -25,7 +26,7 @@
     "zombie_spawn_rate": 0,
     "assassin_attack": 1,
     "assassin_bribe_amount": 3,
-    "assassin_bribe_fail_rate": 0,
+    "assassin_bribe_fail_rate": 1,
     "assassin_health": 5,
     "assassin_recon_radius": 2,
     "hydra_attack": 5,
