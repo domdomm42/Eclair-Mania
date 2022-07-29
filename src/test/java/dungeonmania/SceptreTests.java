@@ -7,8 +7,10 @@ import java.io.FileNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.util.Direction;
+import static dungeonmania.TestUtils.getEntities;
 
 public class SceptreTests {
     
@@ -125,5 +127,39 @@ public class SceptreTests {
         assertEquals(1, getInventory(res, "sceptre").size()); 
     }
 
+    @Test
+    @DisplayName("Player mind controls mercenary for 5 ticks")
+    public void testMindControlMercenary() throws IllegalArgumentException, InvalidActionException {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse initDungonRes = dmc.newGame("d_sceptreTest_mercenary", "c_sceptreTest");
+        EntityResponse initMercenary = getEntities(initDungonRes, "mercenary").get(0);
 
+        // pick up items
+        DungeonResponse res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+
+        assertEquals(2, getInventory(res, "arrow").size());
+        assertEquals(1, getInventory(res, "key").size());
+        assertEquals(1, getInventory(res, "sun_stone").size());
+
+        res = dmc.build("sceptre");
+        
+        assertEquals(0, getInventory(res, "arrow").size());
+        assertEquals(0, getInventory(res, "key").size());
+        assertEquals(0, getInventory(res, "sun_stone").size());
+        assertEquals(1, getInventory(res, "sceptre").size()); 
+
+        res = dmc.interact(initMercenary.getId());
+
+        res = dmc.tick(Direction.UP);
+        assertEquals(1, getEntities(res, "mercenary").size());
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(1, getEntities(res, "mercenary").size());
+        res = dmc.tick(Direction.UP);
+        assertEquals(0, getEntities(res, "mercenary").size());
+        res = dmc.tick(Direction.DOWN);
+        
+    }
 }

@@ -159,4 +159,8 @@ public class Player extends MovingEntity {
     public void bribeMercenary() {
         IntStream.range(0, Dungeon.getConfigValue("bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
     }
+
+    public void mindControlMercenary() {
+        inventory.removeItem(inventory.getFirstItemsOfType("sceptre"));
+    }
 }

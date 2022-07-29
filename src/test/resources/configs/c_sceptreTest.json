@@ -32,7 +32,7 @@
   "hydra_health": 4,
   "hydra_health_increase_rate": 0.4,
   "hydra_health_increase_amount": 3,
-  "mind_control_duration": 4,
+  "mind_control_duration": 3,
   "midnight_armour_attack": 2,
   "midnight_armour_defence": 2
 }
