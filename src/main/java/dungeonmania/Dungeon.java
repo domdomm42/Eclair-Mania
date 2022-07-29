@@ -278,7 +278,7 @@ public class Dungeon {
         if (getPlayer() == null) return;
         if (Dungeon.getEntitiesOfType("zombie_toast_spawner").size() == 0 && enemiesKilled >= getConfigValue("enemy_goal")) completedGoals.add(":enemies");
     
-        if (getPlayer().getNumberOfTreasures() >= getConfigValue("treasure_goal")) completedGoals.add(":treasure");
+        if ((getPlayer().getNumberOfTreasures() + getPlayer().getNumberOfSunStones()) >= getConfigValue("treasure_goal")) completedGoals.add(":treasure");
         else if (completedGoals.contains(":treasure")) completedGoals.remove(":treasure");
     
         if (getEntitiesOfType("switch").stream().allMatch(floorSwitch -> getFirstEntityOfTypeOnPosition(floorSwitch.getPosition(), "boulder") != null)) completedGoals.add(":boulders");
