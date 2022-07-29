@@ -275,6 +275,10 @@ public class Player extends MovingEntity {
         IntStream.range(0, Dungeon.getConfigValue("bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
     }
 
+    public void bribeAssassin() {
+        IntStream.range(0, Dungeon.getConfigValue("assassin_bribe_amount")).forEach(i -> inventory.removeItem(inventory.getFirstItemsOfType("treasure")));
+    }
+
     @Override
     public JsonObject toJsonObject() {
         JsonObject playerJson = super.toJsonObject();

@@ -140,5 +140,9 @@ public class Mercenary extends Enemy {
         this.mindControlTicks = mindControlTicks;
     }
 
+    public int getBribeRadius() {
+        return bribeRadius;
+    }
+    
     
 }
