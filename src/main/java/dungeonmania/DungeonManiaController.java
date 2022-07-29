@@ -128,4 +128,16 @@ public class DungeonManiaController {
         Dungeon.generateDungeon(xStart, yStart, xEnd, yEnd);
         return Dungeon.getDungeonResponse();
     }
+    
+    /**
+     * /games/all
+     */
+    public DungeonResponse rewind(int ticks) {
+        try {
+            Dungeon.timeTravel(ticks);
+        } catch (IOException exception) {
+            return null;
+        }
+        return Dungeon.getDungeonResponse();
+    }
 }

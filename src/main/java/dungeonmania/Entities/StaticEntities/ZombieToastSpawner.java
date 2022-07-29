@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import dungeonmania.Dungeon;
 import dungeonmania.EntityFactory;
 import dungeonmania.Entities.Entity;
+import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.exceptions.InvalidActionException;
 
 public class ZombieToastSpawner extends StaticEntity {
@@ -47,15 +48,27 @@ public class ZombieToastSpawner extends StaticEntity {
 
     @Override
     public void interact() throws IllegalArgumentException, InvalidActionException {
-        // if player does not have sword then player cant destroy zombietoastspawner
-        if (!Dungeon.getPlayer().hasCollectable("sword")) {
+        Player player = (Player) Dungeon.getPlayer();
+        interactionWithAPlayer(player);
+    }
+
+    public void interact(boolean isEvil) throws IllegalArgumentException, InvalidActionException {
+        if (!isEvil) interact();
+        else {
+            Player player = (Player) Dungeon.getEntitiesOfType("player").stream().filter(evilPlayer -> ((Player) evilPlayer).isEvil()).findFirst().get();
+            interactionWithAPlayer(player);
+        }
+    }
+
+    private void interactionWithAPlayer(Player player) {
+        if (!player.hasCollectable("sword")) {
             return;
         }
 
         // if player has sword then destroy zombietoastspawner 
         else {
-            if (Position.isAdjacent(Dungeon.getPlayer().getPosition(), this.getPosition())) {
-                Dungeon.getPlayer().useSwordToBreakZombieToastSpawner();
+            if (Position.isAdjacent(player.getPosition(), this.getPosition())) {
+                player.useSwordToBreakZombieToastSpawner();
                 Dungeon.removeEntity(this);
             }
         }
