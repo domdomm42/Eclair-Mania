@@ -60,6 +60,7 @@ public class Mercenary extends Enemy {
             // Sceptre mind control is prioritised over bribery
             if (player.getInventory("sceptre").size() >= 1) {
                 isAlly = true;
+                isMindControlled = true;
                 player.mindControlMercenary();
                 setInteractable(false);
             } else if ((Math.abs(getPosition().getX() - player.getPosition().getX()) <= bribeRadius 
@@ -92,7 +93,7 @@ public class Mercenary extends Enemy {
     }
 
     public void checkMindControlOver() {
-        if (mindControlTicks >= Dungeon.getConfigValue("mind_control_duration")) {
+        if (isMindControlled && mindControlTicks >= Dungeon.getConfigValue("mind_control_duration")) {
             isMindControlled = false;
             isAlly = false;
             setInteractable(true);
@@ -107,4 +108,22 @@ public class Mercenary extends Enemy {
         mercJson.addProperty("hasReachedPlayer", hasReachedPlayer);
         return super.toJsonObject();
     }
+
+    public boolean isMindControlled() {
+        return isMindControlled;
+    }
+
+    public void setMindControlled(boolean isMindControlled) {
+        this.isMindControlled = isMindControlled;
+    }
+
+    public int getMindControlTicks() {
+        return mindControlTicks;
+    }
+
+    public void setMindControlTicks(int mindControlTicks) {
+        this.mindControlTicks = mindControlTicks;
+    }
+
+    
 }
