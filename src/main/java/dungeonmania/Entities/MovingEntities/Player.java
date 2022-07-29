@@ -105,7 +105,7 @@ public class Player extends MovingEntity {
         
     }
 
-    public void setActionsToLastNTicks(int ticks) {
+    public ArrayList<String> getActionsToLastNTicks(int ticks) {
         ArrayList<String> lastNTicksActions = new ArrayList<String>();
         Collections.reverse(actions);
         int numTicks = 0;
@@ -117,7 +117,7 @@ public class Player extends MovingEntity {
             if (numTicks >= ticks) break;
         }
         Collections.reverse(lastNTicksActions);
-        setActions(lastNTicksActions);
+        return lastNTicksActions;
     }
 
     @Override
@@ -300,7 +300,7 @@ public class Player extends MovingEntity {
     public void setEvil(boolean isEvil) {
         this.isEvil = isEvil;
     }
-    
+
     public void mindControlMercenary() {
         inventory.removeItem(inventory.getFirstItemsOfType("sceptre"));
     }
