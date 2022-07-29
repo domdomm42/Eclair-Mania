@@ -46,6 +46,7 @@ public class ExampleTests {
         assertEquals(expectedPlayer, actualPlayer);
     }
     
+    @Test
     @DisplayName("Test player can use a key to open and walk through a door")
     public void useKeyWalkThroughOpenDoor() {
         DungeonManiaController dmc;
@@ -129,6 +130,7 @@ public class ExampleTests {
         assertEquals(1, getEntities(res, "player").size());
     }
     
+    @Test
     @DisplayName("Testing a map with 4 conjunction goal")
     public void andAll() {
         DungeonManiaController dmc;
@@ -201,6 +203,7 @@ public class ExampleTests {
         }
     }
 
+    @Test
     @DisplayName("Test basic battle calculations - mercenary - player loses")
     public void testHealthBelowZeroMercenary() {
        DungeonManiaController controller = new DungeonManiaController();
@@ -209,6 +212,7 @@ public class ExampleTests {
        assertBattleCalculations("mercenary", battle, false, "c_battleTests_basicMercenaryPlayerDies");
     }
 
+    @Test
     @DisplayName("Test basic battle calculations - mercenary - player wins")
     public void testRoundCalculationsMercenary() {
        DungeonManiaController controller = new DungeonManiaController();
