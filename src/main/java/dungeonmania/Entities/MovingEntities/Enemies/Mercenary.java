@@ -37,15 +37,13 @@ public class Mercenary extends Enemy {
     @Override
     public void tick(Direction playerMovementDirection) {
         getMovementStrategy().move();
-        mindControlTicks++;
-        checkMindControlOver();
+        mindControl();
     }
 
     @Override
     public void tick(String playerAction) {
         getMovementStrategy().move();
-        mindControlTicks++;
-        checkMindControlOver();
+        mindControl();
     }
 
     // when mercenary turns into ally switch isinteractable to false
@@ -92,14 +90,17 @@ public class Mercenary extends Enemy {
         this.isAlly = isAlly;
     }
 
-    public void checkMindControlOver() {
-        if (isMindControlled && mindControlTicks >= Dungeon.getConfigValue("mind_control_duration")) {
-            isMindControlled = false;
-            isAlly = false;
-            setInteractable(true);
-            mindControlTicks = 0;
+    public void mindControl() {
+        if (isMindControlled) {
+            mindControlTicks++;
+            if (isMindControlled && mindControlTicks >= Dungeon.getConfigValue("mind_control_duration")) {
+                isMindControlled = false;
+                isAlly = false;
+                setInteractable(true);
+                mindControlTicks = 0;
+            }
         }
-    } 
+    }
 
     @Override
     public JsonObject toJsonObject() {

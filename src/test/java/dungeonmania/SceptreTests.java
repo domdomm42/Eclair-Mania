@@ -155,13 +155,19 @@ public class SceptreTests {
 
         res = dmc.tick(Direction.UP);
         assertEquals(1, getEntities(res, "mercenary").size());
+
         res = dmc.tick(Direction.DOWN);
         assertEquals(1, getEntities(res, "mercenary").size());
+
         res = dmc.tick(Direction.UP);
+        assertEquals(1, getEntities(res, "mercenary").size());
 
         // mercenary is no longer mind controlled
-        assertEquals(0, getEntities(res, "mercenary").size());
         res = dmc.tick(Direction.DOWN);
+        assertEquals(0, getEntities(res, "mercenary").size());
+
+        
+        
         
     }
 }
