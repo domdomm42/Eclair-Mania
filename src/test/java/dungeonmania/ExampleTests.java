@@ -60,6 +60,7 @@ public class ExampleTests {
 
         // walk through door and check key is gone
         res = dmc.tick(Direction.RIGHT);
+        System.err.print(getInventory(res, "key").size());
         assertEquals(0, getInventory(res, "key").size());
         assertNotEquals(pos, getEntities(res, "player").get(0).getPosition());
     }
@@ -129,6 +130,7 @@ public class ExampleTests {
         assertEquals(0, getEntities(res, "treasure").size());
         assertEquals(1, getEntities(res, "player").size());
     }
+
     
     @Test
     @DisplayName("Testing a map with 4 conjunction goal")

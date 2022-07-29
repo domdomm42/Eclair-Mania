@@ -27,7 +27,8 @@ public class Door extends StaticEntity {
 
 
     public Key getKeyThatUnlock() {
-        return (Key) Dungeon.getPlayer().getInventory().getItemFromId("key-".concat(getId().replace("door-", "")).concat(getId()));
+        String keyNum = getId().replace("door-", "");
+        return (Key) Dungeon.getPlayer().getInventory().getItemFromId("key-".concat(keyNum).concat(getId()));
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
+import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.RoundResponse;
 
 public class Battle {
@@ -61,5 +62,9 @@ public class Battle {
 
     public List<RoundResponse> getRoundResponses() {
         return rounds.stream().map(round -> round.toRoundResponse()).collect(Collectors.toList());
+    }
+
+    public BattleResponse toBattleResponse() {
+        return new BattleResponse(enemy.getType(), getRoundResponses(), initialPlayerHp, initialEnemyHp);
     }
 }
