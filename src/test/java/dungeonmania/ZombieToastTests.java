@@ -35,6 +35,18 @@ public class ZombieToastTests {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("d_zombieTest_zombieDontPortal", "c_movementTest_testMovementDown");
 
+        // for each tick, spawn zombie
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(0, getEntities(res, "zombie_toast").size());
+        res = dmc.tick(Direction.DOWN);
+        assertEquals(0, getEntities(res, "zombie_toast").size());
+    }
+
+    @Test
+    @DisplayName("Zombie toast spawner cannot spawn zombies as its blocked by walls")
+    public void spawnerBlockedByWalls() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieTest_zombieDontWall", "c_movementTest_testMovementDown");
 
         // for each tick, spawn zombie
         res = dmc.tick(Direction.DOWN);

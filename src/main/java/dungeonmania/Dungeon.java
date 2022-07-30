@@ -322,7 +322,7 @@ public class Dungeon {
 
         for (Entity s : zombieSpawners) {
 
-            List<Position> adjacentPosition = s.getPosition().getAdjacentPositions();
+            List<Position> adjacentPosition = s.getPosition().getCardinallyAdjacentPositions();
             for (Position squares: adjacentPosition) {
                 List<Entity> entity = Dungeon.getEntitiesAtPosition(squares);
                 if (entity.isEmpty()) {

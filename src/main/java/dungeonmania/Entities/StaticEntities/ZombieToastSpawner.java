@@ -39,6 +39,7 @@ public class ZombieToastSpawner extends StaticEntity {
 
         // if player has sword then destroy zombietoastspawner 
         else {
+            
             if (Position.isAdjacent(player.getPosition(), this.getPosition())) {
                 player.useSwordToBreakZombieToastSpawner();
                 Dungeon.removeEntity(this);
