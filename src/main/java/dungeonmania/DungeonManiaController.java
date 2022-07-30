@@ -115,4 +115,29 @@ public class DungeonManiaController {
     public List<String> allGames() {
         return FileLoader.listFileNamesInResourceDirectory(("saved_games"));
     }
+
+    /**
+     * /game/new/generate
+     */
+    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String configName) throws IllegalArgumentException {
+        try {
+            Dungeon.setupConfigFile(configName);
+        } catch (Exception exception) {
+            throw new IllegalArgumentException("config file does not exist");
+        }
+        Dungeon.generateDungeon(xStart, yStart, xEnd, yEnd);
+        return Dungeon.getDungeonResponse();
+    }
+    
+    /**
+     * /games/all
+     */
+    public DungeonResponse rewind(int ticks) {
+        try {
+            Dungeon.timeTravel(ticks);
+        } catch (IOException exception) {
+            return null;
+        }
+        return Dungeon.getDungeonResponse();
+    }
 }

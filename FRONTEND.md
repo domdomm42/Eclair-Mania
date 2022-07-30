@@ -27,7 +27,7 @@ We just need to find a file called `src/main/resources/languages/en_US.json` (cu
         "font": "alagard.ttf",
         "title": "Dungeon Mania",
         "subtitle_1": "Frontend created by:\n Braedon Wooding, George Litsas, Nick Patrikeos, Noa Challis",
-        "subtitle_2": "Backend created by: <your names here>",
+        "subtitle_2": "Backend created by:\n David Peng, Oudom Lim, Ridho Yusuf, Rupin Bhattal",
         ...
     },
     "game": {

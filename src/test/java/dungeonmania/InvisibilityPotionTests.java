@@ -20,6 +20,7 @@ import dungeonmania.util.Position;
 
 public class InvisibilityPotionTests {
     
+    @Test
     private static DungeonResponse potionPickupAndUseMercenarySequence(DungeonManiaController controller, String configFile) throws InvalidActionException, IllegalArgumentException {
         /*
          *  exit   wall  wall  wall wall

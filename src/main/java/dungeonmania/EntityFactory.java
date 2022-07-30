@@ -20,9 +20,11 @@ import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.SunStone;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Sword;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.TimeTurner;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Treasure;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Wood;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Bow;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.MidnightArmour;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Sceptre;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Shield;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvincibilityPotion;
@@ -42,15 +44,32 @@ public class EntityFactory {
     static public Entity createEntity(JsonObject entityDetails) throws IllegalArgumentException {
         String type = entityDetails.get("type").getAsString();
         String id = Integer.toString(totalEntitiesCreated);
+        JsonElement loadedId = entityDetails.get("id");
         JsonElement x = entityDetails.get("x");
         JsonElement y = entityDetails.get("y");
         JsonElement keyId = entityDetails.get("key");
         JsonElement LogicType = entityDetails.get("logic");
         totalEntitiesCreated += 1;
+        Entity entity;
 
         switch (type) {
             case "player":
-                return new Player(id, new Position(x.getAsInt(), y.getAsInt()));
+                JsonElement playerIsEvil = entityDetails.get("isEvil");
+                JsonElement playerLastPositionX = entityDetails.get("lastPositionX");
+                JsonElement playerLastPositionY = entityDetails.get("lastPositionY");
+                JsonElement playerActions = entityDetails.get("actions");
+                Player player = new Player(id, new Position(x.getAsInt(), y.getAsInt()));
+                if (playerIsEvil != null) {
+                    player.setEvil(playerIsEvil.getAsBoolean());
+                }
+                if (playerLastPositionX != null && playerLastPositionY != null) {
+                    player.setLastPosition(new Position(playerLastPositionX.getAsInt(), playerLastPositionY.getAsInt()));
+                }
+                if (playerActions != null) {
+                    playerActions.getAsJsonArray().forEach(action -> player.addAction(action.getAsString()));
+                }
+                entity = player;
+                break;
             case "spider":
                 JsonElement spiderNumberOfTicks = entityDetails.get("numberOfTicks");
                 JsonElement spiderSpawnPositionX = entityDetails.get("spawnPositionX");
@@ -70,9 +89,11 @@ public class EntityFactory {
                 if (spiderPositionIterator != null) {
                     spider.setPositionIterator(spiderPositionIterator.getAsInt());
                 }
-                return spider;
+                entity = spider;
+                break;
             case "zombie_toast":
-                return new ZombieToast(id, new Position(x.getAsInt(), y.getAsInt()));
+                entity = new ZombieToast(id, new Position(x.getAsInt(), y.getAsInt()));
+                break;
             case "mercenary":
                 JsonElement mercenaryIsAlly = entityDetails.get("isAlly");
                 JsonElement mercenaryHasReachedPlayer = entityDetails.get("hasReachedPlayer");
@@ -83,61 +104,94 @@ public class EntityFactory {
                 if (mercenaryHasReachedPlayer != null) {
                     mercenary.setHasReachedPlayer(mercenaryHasReachedPlayer.getAsBoolean());
                 }
-                return mercenary;
+                entity = mercenary;
+                break;
             case "wall":
-                return new Wall(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new Wall(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "exit":
-                return new Exit(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new Exit(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "boulder":
-                return new Boulder(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new Boulder(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "switch": 
-                return new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "door":
-                return new Door(new Position(x.getAsInt(), y.getAsInt()), "door-".concat(keyId.getAsString()));
+                entity = new Door(new Position(x.getAsInt(), y.getAsInt()), "door-".concat(keyId.getAsString()));
+                break;
             case "key":
-                return new Key(new Position(x.getAsInt(), y.getAsInt()), "key-".concat(keyId.getAsString()).concat("door-").concat(keyId.getAsString()));
+                entity = new Key(new Position(x.getAsInt(), y.getAsInt()), "key-".concat(keyId.getAsString()).concat("door-").concat(keyId.getAsString()));
+                break;
             case "portal":
                 JsonElement color = entityDetails.get("colour");
-                return new Portal(new Position(x.getAsInt(), y.getAsInt()), id, color.getAsString());
+                entity = new Portal(new Position(x.getAsInt(), y.getAsInt()), id, color.getAsString());
+                break;
             case "zombie_toast_spawner":
-                return new ZombieToastSpawner(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new ZombieToastSpawner(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "treasure":
-                return new Treasure(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new Treasure(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "invincibility_potion":
-                return new InvincibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new InvincibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "invisibility_potion":
-                return new InvisibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new InvisibilityPotion(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "wood":
-                return new Wood(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new Wood(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "arrow":
-                return new Arrow(id, new Position(x.getAsInt(), y.getAsInt()));
+                entity = new Arrow(id, new Position(x.getAsInt(), y.getAsInt()));
+                break;
             case "bomb":
                 JsonElement bombHasBeenPickedUp = entityDetails.get("hasBeenPickedUp");
                 Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id);
                 if (bombHasBeenPickedUp != null) {
                     bomb.setHasBeenPickedUp(bombHasBeenPickedUp.getAsBoolean());
                 }
-                return bomb;
+                entity = bomb;
+                break;
             case "sword":
-                return new Sword(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new Sword(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "bow":
-                return new Bow(id);
+                entity = new Bow(id);
+                break;
             case "shield":
-                return new Shield(id);
+                entity = new Shield(id);
+                break;
+            case "time_turner":
+                entity = new TimeTurner(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "sun_stone":
-                return new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new SunStone(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
             case "sceptre":
-                return new Sceptre(id);
+                entity = new Sceptre(id);
+                break;
             case "light_bulb_off":
-                return new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
+                entity = new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
+                break;
             case "switch_door":
-                return new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
+                entity = new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
+                break;
             case "wire":
-                return new Wire(new Position(x.getAsInt(), y.getAsInt()), id);
+                entity = new Wire(new Position(x.getAsInt(), y.getAsInt()), id);
+                break;
 
+            case "midnight_armour":
+                entity = new MidnightArmour(id);
+                break;
             default:
                 totalEntitiesCreated -= 1;
                 throw new IllegalArgumentException("Entity type does not exist");
+            }
+        if (loadedId != null) {
+            entity.setId(loadedId.toString());
         }
+        return entity;
     }
 }

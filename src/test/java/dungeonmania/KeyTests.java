@@ -71,4 +71,28 @@ public class KeyTests {
 
 
     }
+
+    @Test
+    @DisplayName("Test player can't have to keys in their inventory at one time")
+    public void twoKeysInInventory() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_DoorsKeysTest_twoKeysInInventory", "c_movementTest_testMovementDown");
+        EntityResponse initPlayer = getPlayer(res).get();
+
+        assertEquals(0, getInventory(res, "key").size());
+
+        res = dmc.tick(Direction.RIGHT);
+
+        assertEquals(1, getInventory(res, "key").size());
+
+        res = dmc.tick(Direction.RIGHT);
+
+        assertEquals(1, getInventory(res, "key").size());
+
+        res = dmc.tick(Direction.RIGHT);
+
+        assertEquals(0, getInventory(res, "key").size());
+
+    }
+
 }
