@@ -22,6 +22,7 @@ import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
+import dungeonmania.Entities.StaticEntities.ZombieToastSpawner;
 import dungeonmania.Entities.StaticEntities.TimeTravellingPortal;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
@@ -287,6 +288,14 @@ public class Dungeon {
                 spawnSpider();
             }
         }
+
+        int zombieSpawnRate = Dungeon.getConfigValue("zombie_spawn_rate");
+        if (!(zombieSpawnRate == 0)) {
+            if (numberOfTicks % zombieSpawnRate == 0) {
+                spawnZombie();
+            }
+        }
+
         numberOfTicks++;
 
         getEntitiesOfType("mercenary").forEach(merc -> {
@@ -314,6 +323,27 @@ public class Dungeon {
         spiderDetails.addProperty("type", "spider");
 
         Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity(spiderDetails));
+    }
+
+    public static void spawnZombie() {
+
+        List<Entity> zombieSpawners = getEntitiesOfType("zombie_toast_spawner");
+
+        for (Entity s : zombieSpawners) {
+
+            List<Position> adjacentPosition = s.getPosition().getCardinallyAdjacentPositions();
+            for (Position squares: adjacentPosition) {
+                List<Entity> entity = Dungeon.getEntitiesAtPosition(squares);
+                if (entity.isEmpty()) {
+                    JsonObject zombieDetails = new JsonObject();
+                    zombieDetails.addProperty("x", squares.getX());
+                    zombieDetails.addProperty("y", squares.getY());
+                    zombieDetails.addProperty("type", "zombie_toast");
+                    Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity(zombieDetails));
+                    break;
+                }
+            }           
+        }
     }
 
     private static void updateGoals() {
