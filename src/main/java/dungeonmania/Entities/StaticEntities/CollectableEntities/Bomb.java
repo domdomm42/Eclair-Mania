@@ -1,21 +1,34 @@
 package dungeonmania.Entities.StaticEntities.CollectableEntities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.JsonObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.Entity;
+import dungeonmania.Entities.StaticEntities.FloorSwitch;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.Wire;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Bomb extends Usable {
 
     private boolean hasBeenPickedUp;
+    private String LogicType;
 
-    public Bomb(Position position, String id) {
+    public Bomb(Position position, String id, String LogicType) {
         super(false, 1, position, id, "bomb");
         this.hasBeenPickedUp = false;
+        this.LogicType = LogicType;
+    }
+
+    public String getLogicType() {
+        return LogicType;
+    }
+
+    public void setLogicType(String logicType) {
+        LogicType = logicType;
     }
 
     @Override
@@ -32,7 +45,40 @@ public class Bomb extends Usable {
     
     @Override
     public void tick() {
-        this.detonate();
+        if (LogicType.equals("and")) {
+            if (AndActivateBomb()) {
+                ArrayList<Entity> entities = Dungeon.getEntities();
+                    for (Entity e : entities) {
+                        destroyEntityByBomb(e);
+                    }
+                    Dungeon.addEntityToRemoveAfterTick(this);
+            }
+        }
+
+        else if (LogicType.equals("or")) {
+            if (OrIsActivated()) {
+                ArrayList<Entity> entities = Dungeon.getEntities();
+                    for (Entity e : entities) {
+                        destroyEntityByBomb(e);
+                    }
+                    Dungeon.addEntityToRemoveAfterTick(this);
+            }
+        }
+
+        else if (LogicType.equals("xor")) {
+            if (XORIsActivated()) {
+                ArrayList<Entity> entities = Dungeon.getEntities();
+                    for (Entity e : entities) {
+                        destroyEntityByBomb(e);
+                    }
+                    Dungeon.addEntityToRemoveAfterTick(this);
+            }
+        }
+
+        else if (LogicType.equals(null)) {
+            this.detonate();
+        }
+
     }
     
     // Denotes a bomb if next to an active switch
@@ -104,4 +150,174 @@ public class Bomb extends Usable {
         bombJson.addProperty("hasBeenPickedUp", hasBeenPickedUp);
         return bombJson;
     }
+
+
+    public boolean AndActivateBomb() {
+        int NumSurroundingSwitches = 0;
+        int NumActiveSwitches = 0;
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
+
+        // for the surronding areas of lightbulb
+        for (Position pos: adjacentPositions) {
+            // if nearby wire OR floor_switch exists
+            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null || Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch") != null) {
+
+                // if surrounding is wire
+            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
+                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
+                if (SurroundingWire.isActivated() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            else if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch") != null) {
+                FloorSwitch SurroundingFloorSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch");
+                if (SurroundingFloorSwitch.isTriggered() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            NumSurroundingSwitches++;
+
+        }
+
+        }
+
+        if (NumActiveSwitches == NumSurroundingSwitches && NumSurroundingSwitches >= 2) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+       // 1 or more is activated
+       public boolean OrIsActivated() {
+        int NumActiveSwitches = 0;
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
+
+        // for the surronding areas of entity
+        for (Position pos: adjacentPositions) {
+
+            // if nearby wire OR floor_switch exists
+            if (Dungeon.isEntityOnPosition(pos, "wire") || Dungeon.isEntityOnPosition(pos, "switch")) {
+
+            // if surrounding is wire
+            if (Dungeon.isEntityOnPosition(pos, "wire")) {
+                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
+                if (SurroundingWire.isActivated() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            // if surrounding is a switch
+            else if (Dungeon.isEntityOnPosition(pos, "switch")) {
+                FloorSwitch SurroundingFloorSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch");
+
+                // if switch is triggered then active switch increases
+                if (SurroundingFloorSwitch.isTriggered() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            }
+
+        }
+
+        // if number of active switches around it is greater than or equal 1 then return true
+        if (NumActiveSwitches >= 1) {
+            return true;
+        }
+
+        return false;
+
+
+
+
+    }
+
+    public boolean XORIsActivated() {
+        int NumActiveSwitches = 0;
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
+
+        // for the surronding areas of lightbulb
+        for (Position pos: adjacentPositions) {
+        // if nearby wire OR floor_switch exists
+            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null || Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch") != null) {
+
+            // if surrounding is wire
+            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
+                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
+                if (SurroundingWire.isActivated() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            else if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch") != null) {
+                FloorSwitch SurroundingFloorSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch");
+                if (SurroundingFloorSwitch.isTriggered() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            }
+
+        }
+
+        if (NumActiveSwitches == 1) {
+            return true;
+        }
+
+        return false;
+
+
+
+
+    }
+
+    public boolean CheckIfNotTriggeredCoAnd() {
+        int NumActiveSwitches = 0;
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
+
+        // for the surronding areas of lightbulb
+        for (Position pos: adjacentPositions) {
+        // if nearby wire OR floor_switch exists
+            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null || Dungeon.getFirstEntityOfTypeOnPosition(pos, "floor_switch") != null) {
+
+            // if surrounding is wire
+            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
+                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
+                if (SurroundingWire.isActivated() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "floor_switch") != null) {
+                FloorSwitch SurroundingFloorSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "floor_switch");
+                if (SurroundingFloorSwitch.isTriggered() == true) {
+                    NumActiveSwitches++;
+                }
+
+            }
+
+            }
+
+        }
+
+        if (NumActiveSwitches > 0) {
+            return false;
+        }
+
+        return true;
+
+    }
+
+
 }

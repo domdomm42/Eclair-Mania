@@ -148,7 +148,12 @@ public class EntityFactory {
                 break;
             case "bomb":
                 JsonElement bombHasBeenPickedUp = entityDetails.get("hasBeenPickedUp");
-                Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id);
+                Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id, null);
+
+                if (!LogicType.getAsString().equals(null)) {
+                    bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
+                }
+                
                 if (bombHasBeenPickedUp != null) {
                     bomb.setHasBeenPickedUp(bombHasBeenPickedUp.getAsBoolean());
                 }
