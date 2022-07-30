@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dungeonmania.Entities.MovingEntities.MovingEntity;
 import dungeonmania.Entities.MovingEntities.Player;
-import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.RoundResponse;
 
 public class Battle {
     private Player player;
-    private Enemy enemy;
+    private MovingEntity enemy;
     private double initialPlayerHp;
     private double initialEnemyHp;
     private ArrayList<Round> rounds;
 
-    public Battle(Player player, Enemy enemy) {
+    public Battle(Player player, MovingEntity enemy) {
         this.player = player;
         this.enemy = enemy;
         initialPlayerHp = player.getHealth();
@@ -39,7 +39,7 @@ public class Battle {
             rounds.add(new Round(0, initialEnemyHp, player.getWeaponryUsed()));
             enemy.setHealth(0);
         } else while (player.getHealth() > 0 && enemy.getHealth() > 0) {
-            rounds.add(new Round(-(enemy.getAttack() / 10), -(player.getAttack() / 5), player.getWeaponryUsed()));
+            rounds.add(new Round(-((enemy.getAttack() - player.getDefence()) / 10), -(player.getAttack() / 5), player.getWeaponryUsed()));
             player.setHealth(player.getHealth() - ((enemy.getAttack() - player.getDefence()) / 10));
             enemy.setHealth(enemy.getHealth() - (player.getAttack() / 10));
         }
@@ -56,7 +56,7 @@ public class Battle {
         return player;
     }
 
-    public Enemy getEnemy() {
+    public MovingEntity getEnemy() {
         return enemy;
     }
 

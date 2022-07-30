@@ -21,6 +21,7 @@ import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Usable;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -164,6 +165,7 @@ public class Player extends MovingEntity {
             }
             actions.remove(0);
         }
+        potionBag.tick();
         if (actions.size() == 0) {
             Dungeon.removeEntity(this);
         }
@@ -303,5 +305,14 @@ public class Player extends MovingEntity {
 
     public void mindControlMercenary() {
         inventory.removeItem(inventory.getFirstItemsOfType("sceptre"));
+    }
+
+    @Override
+    public EntityResponse toEntityResponse() {
+        if (!isEvil) {
+            return super.toEntityResponse();
+        }
+        return new EntityResponse(getId(), "older_player", getPosition(), getIsInteractable());
+        
     }
 }
