@@ -8,12 +8,10 @@ import dungeonmania.util.Position;
 
 public class SwitchDoor extends LogicalEntity{
     private boolean IsOpen;
-    private String LogicalType;
 
     public SwitchDoor(Position position, String id, String LogicalType) {
         super(position, id, "switch_door", false, LogicalType);
         this.IsOpen = false;
-        this.LogicalType = LogicalType;
     }
 
     public boolean isIsOpen() {
@@ -24,17 +22,10 @@ public class SwitchDoor extends LogicalEntity{
         this.IsOpen = isOpen;
     }
 
-    public String getLogicalType() {
-        return LogicalType;
-    }
-
-    public void setLogicalType(String logicalType) {
-        this.LogicalType = logicalType;
-    }
 
 
     public void OpenSwitchDoorIfPossible() {
-        if (LogicalType == "and") {
+        if (LogicType == "and") {
             if (AndIsActivated()) {
                 setIsOpen(true);
             }
@@ -44,7 +35,7 @@ public class SwitchDoor extends LogicalEntity{
             }
         }
 
-        else if (LogicalType == "or") {
+        else if (LogicType == "or") {
             if (OrIsActivated()) {
                 setIsOpen(true);
             }
@@ -54,7 +45,7 @@ public class SwitchDoor extends LogicalEntity{
             }
         }
 
-        else if (LogicalType == "xor") {
+        else if (LogicType == "xor") {
             if (XORIsActivated()) {
                 setIsOpen(true);
             }

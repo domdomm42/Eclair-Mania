@@ -173,15 +173,14 @@ public class EntityFactory {
                 entity = new Sceptre(id);
                 break;
             case "light_bulb_off":
-                entity = new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
+                entity = new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
                 break;
             case "switch_door":
-                entity = new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
+                entity = new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
                 break;
             case "wire":
                 entity = new Wire(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
-
             case "midnight_armour":
                 entity = new MidnightArmour(id);
                 break;

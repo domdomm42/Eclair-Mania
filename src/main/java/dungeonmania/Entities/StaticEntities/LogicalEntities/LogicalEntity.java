@@ -7,9 +7,9 @@ import dungeonmania.Entities.StaticEntities.FloorSwitch;
 import dungeonmania.Entities.StaticEntities.StaticEntity;
 import dungeonmania.util.Position;
 
-public class LogicalEntity extends StaticEntity {
+public abstract class LogicalEntity extends StaticEntity {
 
-    private String LogicType;
+    public String LogicType;
 
     public LogicalEntity(Position position, String id, String type, boolean Isinteractable, String LogicType) {
         super(position, id, type, Isinteractable);
@@ -30,7 +30,7 @@ public class LogicalEntity extends StaticEntity {
     public boolean AndIsActivated() {
         int NumSurroundingSwitches = 0;
         int NumActiveSwitches = 0;
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
 
         // for the surronding areas of lightbulb
         for (Position pos: adjacentPositions) {
@@ -75,7 +75,7 @@ public class LogicalEntity extends StaticEntity {
     // 1 or more is activated
     public boolean OrIsActivated() {
         int NumActiveSwitches = 0;
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
 
         // for the surronding areas of entity
         for (Position pos: adjacentPositions) {
@@ -121,7 +121,7 @@ public class LogicalEntity extends StaticEntity {
 
     public boolean XORIsActivated() {
         int NumActiveSwitches = 0;
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
 
         // for the surronding areas of lightbulb
         for (Position pos: adjacentPositions) {

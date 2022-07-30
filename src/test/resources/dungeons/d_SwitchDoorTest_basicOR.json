@@ -25,7 +25,7 @@
             "type": "switch_door",
             "x": 4,
             "y": 3,
-            "logic": "or"
+            "logic": "or" 
         }
     ],
     "goal-condition": {

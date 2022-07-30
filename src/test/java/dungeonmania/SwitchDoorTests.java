@@ -38,9 +38,8 @@ public class SwitchDoorTests {
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.RIGHT);
-
-
-        // push boulder to the right
+        
+        // go to door without pushing boulder
         res = dmc.tick(Direction.UP);
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
