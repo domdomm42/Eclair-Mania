@@ -57,7 +57,7 @@ public class Dungeon {
         battles.add(battle);
     }
 
-    private static void resetDungeon() {
+    public static void resetDungeon() {
         id = "dungeon";
         dungeonName = null;
         entities = new ArrayList<Entity>();
@@ -125,12 +125,12 @@ public class Dungeon {
         updateGoals();
     }
 
-    private static void loadGoals(JsonObject goalJson) {
+    public static void loadGoals(JsonObject goalJson) {
         originalGoals = goalJson;
         goals = new Goal(goalJson);
     }
 
-    private static void loadEntities(JsonArray entitiesJson) {
+    public static void loadEntities(JsonArray entitiesJson) {
         for (int i = 0; i < entitiesJson.size(); i++) {;
             Entity requestedEntity = EntityFactory.createEntity(entitiesJson.get(i).getAsJsonObject());
             if (requestedEntity != null ) Dungeon.entities.add(requestedEntity);
@@ -386,6 +386,13 @@ public class Dungeon {
     public static void setEntities(ArrayList<Entity> entities) {
         Dungeon.entities = entities;
     }
-    //
     
+    public static void setDungeonName(String s) {
+        dungeonName = s;
+    }
+
+    public static void generateDungeon(int xStart, int yStart, int xEnd, int yEnd) {
+        DungeonBuilder.generateDungeon(xStart, yStart, xEnd, yEnd);
+    }
+
 }
