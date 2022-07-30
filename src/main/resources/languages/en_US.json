@@ -1,9 +1,9 @@
 {
     "main_menu": {
         "font": "alagard.ttf",
-        "title": "Dungeon Mania",
+        "title": "Eclair Mania",
         "subtitle_1": "Frontend created by:\n Braedon Wooding, George Litsas, Nick Patrikeos, Noa Challis",
-        "subtitle_2": "ackend created by:\n David Peng, Oudom Lim, Ridho Yusuf, Rupin Bhattal",
+        "subtitle_2": "Backend created by:\n David Peng, Oudom Lim, Ridho Yusuf, Rupin Bhattal",
         "buttons": {
             "new_game": "Start New Game",
             "load_game": "Load Game",
