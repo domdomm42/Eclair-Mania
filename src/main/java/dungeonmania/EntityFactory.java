@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Assassin;
+import dungeonmania.Entities.MovingEntities.Enemies.Hydra;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.Enemies.Spider;
 import dungeonmania.Entities.MovingEntities.Enemies.ZombieToast;
@@ -105,6 +106,9 @@ public class EntityFactory {
                 break;
             case "assassin":
                 entity = new Assassin(id, new Position(x.getAsInt(), y.getAsInt()));
+                break;
+            case "hydra":
+                entity = new Hydra(id, new Position(x.getAsInt(), y.getAsInt()));
                 break;
             case "wall":
                 entity = new Wall(new Position(x.getAsInt(), y.getAsInt()), id);

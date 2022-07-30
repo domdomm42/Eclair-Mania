@@ -74,7 +74,9 @@ public class ZombieMovementStrategy extends MovementStrategy {
             if (door.isUnlocked()) {
                 return true;
             }
-        } 
+        } else if (Dungeon.isEntityOnPosition(position, "player")) {
+            return true;
+        }
         return false;
     }
     
