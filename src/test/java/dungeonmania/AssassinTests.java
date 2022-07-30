@@ -137,7 +137,53 @@ public class AssassinTests {
         
     }
 
-    
+    @Test
+    @DisplayName("Test a assassin don't runaway with invisbility potion and in certain radius") 
+    public void testAssasinInvisibilityPotion() throws IllegalArgumentException, InvalidActionException {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_assassinTest_InvisibilityAssassin", "c_AssassinTest_testAssasinBribeFail");
+
+        EntityResponse initPlayer = getPlayer(res).get();
+        EntityResponse initAssassin = getEntities(res, "assassin").get(0);
+
+        // create the expected result
+        EntityResponse expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 2), false);
+        EntityResponse expectedAssassin = new EntityResponse(initAssassin.getId(), initAssassin.getType(), new Position(9, 2), true);
+
+        res = dmc.tick(Direction.RIGHT);
+        EntityResponse actualPlayer = getPlayer(res).get();
+        EntityResponse actualAssassin = getEntities(res, "assassin").get(0);
+
+        assertEquals(1, getInventory(res, "invisibility_potion").size());
+        
+        assertEquals(expectedPlayer, actualPlayer);
+        assertEquals(expectedAssassin, actualAssassin);
+
+        String potionId = getInventory(res, "invisibility_potion").get(0).getId();
+        res = dmc.tick(potionId);
+        assertEquals(0, getInventory(res, "invisibility_potion").size());
+        res = dmc.tick(Direction.RIGHT);
+
+        actualPlayer = getPlayer(res).get();
+        actualAssassin = getEntities(res, "assassin").get(0);
+        expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 2), false);
+        expectedAssassin = new EntityResponse(initAssassin.getId(), initAssassin.getType(), new Position(7, 2), true);
+        assertEquals(expectedPlayer, actualPlayer);
+        assertEquals(expectedAssassin, actualAssassin);
+
+        res = dmc.tick(Direction.RIGHT);
+        actualPlayer = getPlayer(res).get();
+        actualAssassin = getEntities(res, "assassin").get(0);
+        expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(4, 2), false);
+        expectedAssassin = new EntityResponse(initAssassin.getId(), initAssassin.getType(), new Position(6, 2), true);
+        assertEquals(expectedPlayer, actualPlayer);
+        assertEquals(expectedAssassin, actualAssassin);
+
+        //expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(2, 2), false);
+        //EntityResponse expectedAssassin = new EntityResponse(initAssassin.getId(), initAssassin.getType(), new Position(7, 2), true);
+
+    }
+
     @Test
     @DisplayName("Test a assassin bribe fail") 
     public void testAssasinBribeFail() {

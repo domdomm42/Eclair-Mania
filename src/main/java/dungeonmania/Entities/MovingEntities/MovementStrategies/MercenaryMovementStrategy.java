@@ -8,6 +8,7 @@ import dungeonmania.Entities.Entity;
 import dungeonmania.Entities.MovingEntities.MovementStrategy;
 import dungeonmania.Entities.MovingEntities.MovingEntity;
 import dungeonmania.Entities.MovingEntities.Player;
+import dungeonmania.Entities.MovingEntities.Enemies.Assassin;
 import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.StaticEntities.Door;
@@ -21,8 +22,22 @@ public class MercenaryMovementStrategy extends MovementStrategy {
         Mercenary mercenary = (Mercenary) getEntity();
         Player player = Dungeon.getPlayer();
         if (Dungeon.getPlayer().activePotionEffect().equals("invisibility_potion") && !mercenary.isAlly()) {
-            moveAsZombie();
-            return;
+            if (getEntity() instanceof Assassin) {
+                PathFinder pathfinder = new PathFinder(getEntity().getPosition(), Dungeon.getPlayer().getPosition(), (MovingEntity) getEntity());
+                if (pathfinder.getMoveDirection() == null) {
+                    return;
+                } else {
+                    Position requestedPosition = mercenary.getPosition().translateBy(pathfinder.getMoveDirection());
+                    getEntity().setPosition(requestedPosition);
+                    if (!mercenary.isAlly() && Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "player") != null) {
+                        Dungeon.addBattle(new Battle(Dungeon.getPlayer(), (Enemy) getEntity()));
+                    }
+                }
+                return;
+            } else {
+                moveAsZombie();
+                return;
+            }
         }
         if (Dungeon.getPlayer().activePotionEffect().equals("invincibility_potion") && !mercenary.isAlly()) {
             runAway();
