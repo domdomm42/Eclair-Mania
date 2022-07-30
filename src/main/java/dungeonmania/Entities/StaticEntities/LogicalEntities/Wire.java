@@ -37,6 +37,10 @@ public class Wire extends StaticEntity {
                 if (SurroundingWire.isActivated() == true) {
                     setActivated(true);
                 }
+
+                else {
+                    setActivated(false);
+                }
             }
             
             // if there is a surrounding floorswitch
@@ -44,6 +48,10 @@ public class Wire extends StaticEntity {
                 FloorSwitch SurroundingSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch");
                 if (SurroundingSwitch.isTriggered() == true) {
                     setActivated(true);
+                }
+
+                else {
+                    setActivated(false);
                 }
 
             }

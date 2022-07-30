@@ -8,7 +8,7 @@
         {
             "type": "boulder",
             "x": 2,
-            "y": 3
+            "y": 4
         },
         {
             "type": "player",
@@ -18,14 +18,23 @@
         {
             "type": "switch",
             "x": 3,
+            "y": 4
+
+        },{
+            "type": "switch",
+            "x": 4,
             "y": 3
 
+        },{
+            "type": "boulder",
+            "x": 4,
+            "y": 2
         },
         {
             "type": "switch_door",
             "x": 4,
-            "y": 3,
-            "logic": "or"
+            "y": 4,
+            "logic": "and" 
         }
     ],
     "goal-condition": {

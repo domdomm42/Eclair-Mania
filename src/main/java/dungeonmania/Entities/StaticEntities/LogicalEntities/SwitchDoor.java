@@ -6,7 +6,7 @@ import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.FloorSwitch;
 import dungeonmania.util.Position;
 
-public class SwitchDoor extends LogicalEntity{
+public class SwitchDoor extends LogicalEntity {
     private boolean IsOpen;
 
     public SwitchDoor(Position position, String id, String LogicalType) {
@@ -55,14 +55,45 @@ public class SwitchDoor extends LogicalEntity{
             }
         }
 
+        else if (LogicType.equals("co_and")) {
+            if (AndIsActivated()) {
+                setIsOpen(true);
+            }
+
+            else {
+                setIsOpen(false);
+            }
+        }
+
 
     }
 
     @Override
     public void tick() {
-        super.tick();
-        OpenSwitchDoorIfPossible();
+        // co_and case
+        if (LogicType.equals("co_and")) {
+            if (CheckIfNotTriggeredCoAnd() == true) {
+                System.out.print("hello");
+                super.tick();
+                if (AndIsActivated()) {
+                    setIsOpen(true);
+                    System.out.print("true");
+                }
+
+                else {
+                    setIsOpen(false);
+                    System.out.print("false");
+                }
+            }
+        }
+        
+        // AND OR XOR case
+        else {
+            super.tick();
+            OpenSwitchDoorIfPossible();
+        }
     }
     
 }
+
 

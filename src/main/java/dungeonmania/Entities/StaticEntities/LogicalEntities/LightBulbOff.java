@@ -41,6 +41,13 @@ public class LightBulbOff extends LogicalEntity {
 
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        TurnOnLightIfPossible();
+    }
+
+
 
     
     
