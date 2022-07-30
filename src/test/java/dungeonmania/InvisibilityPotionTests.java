@@ -21,6 +21,27 @@ import dungeonmania.util.Position;
 public class InvisibilityPotionTests {
     
     @Test
+    @DisplayName("Can move through enemies")
+    private void testCanPlayerMoveThroughWithInvisibility() throws InvalidActionException, IllegalArgumentException {
+        DungeonManiaController controller = new DungeonManiaController();
+        potionPickupAndUseMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
+        DungeonResponse current = controller.tick(Direction.RIGHT);
+
+        EntityResponse actualPlayer = getPlayer(current).get();
+        EntityResponse expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(3, 1), false);
+
+        assertEquals(expectedPlayer, actualPlayer);
+
+        current = controller.tick(Direction.RIGHT);
+        
+        actualPlayer = getPlayer(current).get();
+        expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(4, 1), false);
+
+        assertEquals(expectedPlayer, actualPlayer);
+
+        assertEquals("", getGoals(current));  
+    }
+
     private static DungeonResponse potionPickupAndUseMercenarySequence(DungeonManiaController controller, String configFile) throws InvalidActionException, IllegalArgumentException {
         /*
          *  exit   wall  wall  wall wall
@@ -62,24 +83,5 @@ public class InvisibilityPotionTests {
         return current;
     }
 
-    @DisplayName("Can move through enemies")
-    private void testCanPlayerMoveThroughWithInvisibility() throws InvalidActionException, IllegalArgumentException {
-        DungeonManiaController controller = new DungeonManiaController();
-       potionPickupAndUseMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
-       DungeonResponse current = controller.tick(Direction.RIGHT);
 
-       EntityResponse actualPlayer = getPlayer(current).get();
-       EntityResponse expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(3, 1), false);
-
-       assertEquals(expectedPlayer, actualPlayer);
-
-       current = controller.tick(Direction.RIGHT);
-       
-       actualPlayer = getPlayer(current).get();
-       expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(4, 1), false);
-
-       assertEquals(expectedPlayer, actualPlayer);
-
-       assertEquals("", getGoals(current));  
-    }
 }
