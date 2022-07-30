@@ -117,13 +117,7 @@ public class EntityFactory {
                 entity = new Boulder(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
             case "switch": 
-                FloorSwitch floorswitch = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id, null);
-
-                if (!LogicType.getAsString().equals(null)) {
-                    floorswitch = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
-                }
-
-                entity = floorswitch;
+                entity = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
             case "door":
                 entity = new Door(new Position(x.getAsInt(), y.getAsInt()), "door-".concat(keyId.getAsString()));
