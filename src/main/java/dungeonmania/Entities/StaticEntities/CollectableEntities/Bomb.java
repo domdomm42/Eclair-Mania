@@ -45,7 +45,11 @@ public class Bomb extends Usable {
     
     @Override
     public void tick() {
-        if (LogicType.equals("and")) {
+        if (LogicType == null) {
+            this.detonate();
+        }
+
+        else if (LogicType.equals("and")) {
             if (AndActivateBomb()) {
                 ArrayList<Entity> entities = Dungeon.getEntities();
                     for (Entity e : entities) {
@@ -75,9 +79,6 @@ public class Bomb extends Usable {
             }
         }
 
-        else if (LogicType.equals(null)) {
-            this.detonate();
-        }
 
     }
     

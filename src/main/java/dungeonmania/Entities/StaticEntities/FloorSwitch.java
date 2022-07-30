@@ -9,25 +9,25 @@ import dungeonmania.util.Position;
 public class FloorSwitch extends StaticEntity {
 
     private boolean isTriggered;
-    // private String LogicType;
+    private String LogicType;
 
-    public FloorSwitch(Position position, String id) {
+    public FloorSwitch(Position position, String id, String LogicType) {
         super(position, id, "switch", false);
         this.isTriggered = false;
-        // this.LogicType = LogicType;
+        this.LogicType = LogicType;
     }
 
     public boolean isTriggered() {
         return isTriggered;
     }
 
-    // public String getLogicType() {
-    //     return LogicType;
-    // }
+    public String getLogicType() {
+        return LogicType;
+    }
 
-    // public void setLogicType(String logicType) {
-    //     LogicType = logicType;
-    // }
+    public void setLogicType(String logicType) {
+        LogicType = logicType;
+    }
 
     public void setTriggered(boolean isTriggered) {
         this.isTriggered = isTriggered;
@@ -37,43 +37,45 @@ public class FloorSwitch extends StaticEntity {
     public void tick() {
         super.tick();
 
-        // if (!LogicType.equals(null)) {
-        //     if (LogicType.equals("and")) {
-        //         if (AndActivateSwitch()) {
-        //             setTriggered(true);
-        //         }
-
-        //         else {
-        //             setTriggered(false);
-        //         }
-        //     }
-
-        //     else if (LogicType.equals("or")) {
-        //         if (OrActivateSwitch()) {
-        //             setTriggered(true);
-        //         }
-
-        //         else {
-        //             setTriggered(false);
-        //         }
-        //     }
-
-        //     else if (LogicType.equals("xor")) {
-        //         if (XORActivateSwitch()) {
-        //             setTriggered(true);
-        //         }
-        //         else {
-        //         setTriggered(false);
-        //         }
-        //     }
-        // }
-
-        // else {
+        if (LogicType == null) {
             if (Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "boulder") == null) setTriggered(false);
-                else {
+            else {
+                setTriggered(true);
+            }
+        }
+
+        else if (!LogicType.equals(null)) {
+            if (LogicType.equals("and")) {
+                if (AndActivateSwitch()) {
                     setTriggered(true);
                 }
-        // }
+
+                else {
+                    setTriggered(false);
+                }
+            }
+
+            else if (LogicType.equals("or")) {
+                if (OrActivateSwitch()) {
+                    setTriggered(true);
+                }
+
+                else {
+                    setTriggered(false);
+                }
+            }
+
+            else if (LogicType.equals("xor")) {
+                if (XORActivateSwitch()) {
+                    setTriggered(true);
+                }
+                else {
+                setTriggered(false);
+                }
+            }
+        }
+
+
     }
 
     public boolean AndActivateSwitch() {

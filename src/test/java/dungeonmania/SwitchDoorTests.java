@@ -175,7 +175,7 @@ public class SwitchDoorTests {
     }
 
     @Test
-    @DisplayName("Test AND switch door opens then closes user cant enter")
+    @DisplayName("Test basic wire test")
     public void BasicWireTest() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
@@ -198,6 +198,34 @@ public class SwitchDoorTests {
         Position pos = getEntities(res, "switch_door").get(0).getPosition();
         
         assertEquals(pos, actualPlayer);
+
+    }
+
+    
+    @Test
+    @DisplayName("Test AND switch door opens then closes user cant enter")
+    public void OpenAndDoorAndClose() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_WireTest_basicWireTest", "c_bombTest_placeBombRadius2");
+
+        // Activate Switch
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+
+        // go to door without pushing boulder
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+
+        Position actualPlayer = getPlayer(res).get().getPosition();
+        Position pos = getEntities(res, "switch_door").get(0).getPosition();
+        
+        assertNotEquals(pos, actualPlayer);
 
     }
 

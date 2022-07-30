@@ -117,8 +117,13 @@ public class EntityFactory {
                 entity = new Boulder(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
             case "switch": 
-                entity = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id);
+                FloorSwitch floorSwitch = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id, null);
+                if (LogicType != null) {
+                    floorSwitch = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
+                }
+                entity = floorSwitch;
                 break;
+                
             case "door":
                 entity = new Door(new Position(x.getAsInt(), y.getAsInt()), "door-".concat(keyId.getAsString()));
                 break;
@@ -151,7 +156,7 @@ public class EntityFactory {
                 JsonElement bombHasBeenPickedUp = entityDetails.get("hasBeenPickedUp");
                 Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id, null);
 
-                if (!LogicType.getAsString().equals(null)) {
+                if (LogicType != null) {
                     bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
                 }
                 
