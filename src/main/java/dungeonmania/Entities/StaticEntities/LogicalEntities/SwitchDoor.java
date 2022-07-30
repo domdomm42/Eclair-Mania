@@ -25,7 +25,7 @@ public class SwitchDoor extends LogicalEntity{
 
 
     public void OpenSwitchDoorIfPossible() {
-        if (LogicType == "and") {
+        if (LogicType.equals("and")) {
             if (AndIsActivated()) {
                 setIsOpen(true);
             }
@@ -35,7 +35,7 @@ public class SwitchDoor extends LogicalEntity{
             }
         }
 
-        else if (LogicType == "or") {
+        else if (LogicType.equals("or")) {
             if (OrIsActivated()) {
                 setIsOpen(true);
             }
@@ -45,7 +45,7 @@ public class SwitchDoor extends LogicalEntity{
             }
         }
 
-        else if (LogicType == "xor") {
+        else if (LogicType.equals("xor")) {
             if (XORIsActivated()) {
                 setIsOpen(true);
             }
@@ -64,5 +64,5 @@ public class SwitchDoor extends LogicalEntity{
         OpenSwitchDoorIfPossible();
     }
     
-    }
+}
 

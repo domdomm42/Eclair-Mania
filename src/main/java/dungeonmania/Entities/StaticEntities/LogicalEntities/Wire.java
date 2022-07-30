@@ -7,7 +7,7 @@ import dungeonmania.Entities.StaticEntities.FloorSwitch;
 import dungeonmania.Entities.StaticEntities.StaticEntity;
 import dungeonmania.util.Position;
 
-public class Wire extends StaticEntity{
+public class Wire extends StaticEntity {
 
     public boolean isActivated;
 
@@ -27,12 +27,12 @@ public class Wire extends StaticEntity{
     public void ActivateWire() {
 
         // list of the areas surronding the wire
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
+        List<Position> adjacentPositions = getPosition().getCardinallyAdjacentPositions();
 
         for (Position pos: adjacentPositions) {
 
             // if there are wires sorrounding it
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
+            if (Dungeon.isEntityOnPosition(pos, "wire")) {
                 Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
                 if (SurroundingWire.isActivated() == true) {
                     setActivated(true);
@@ -40,8 +40,8 @@ public class Wire extends StaticEntity{
             }
             
             // if there is a surrounding floorswitch
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch") != null) {
-                FloorSwitch SurroundingSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch");
+            else if (Dungeon.isEntityOnPosition(pos, "switch")) {
+                FloorSwitch SurroundingSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "switch");
                 if (SurroundingSwitch.isTriggered() == true) {
                     setActivated(true);
                 }
@@ -51,6 +51,12 @@ public class Wire extends StaticEntity{
 
 
 
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        ActivateWire();
     }
 
     
