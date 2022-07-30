@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.reflections.vfs.Vfs.Dir;
 
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -49,4 +50,23 @@ public class SpiderTests {
         res = dmc.tick(Direction.UP);
         assertEquals(movementTrajectory.get(nextPositionElement), getEntities(res, "spider").get(0).getPosition());
     }
+
+    @Test
+    @DisplayName("Test spider spawn rate")
+    public void spiderSpawnRate () {
+        DungeonManiaController dmc; 
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_spiderTest_spawnRate", "c_spiderTest_spawnRate");
+        assertEquals(0, getEntities(res, "spider").size());
+
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, getEntities(res, "spider").size());
+
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(2, getEntities(res, "spider").size());
+
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(3, getEntities(res, "spider").size());
+    }
+
 }
