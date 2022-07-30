@@ -28,11 +28,11 @@ public class FloorSwitch extends StaticEntity {
         else {
             setTriggered(true);
 
-            //activate surrounding wires
-            if (Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "wire") != null) {
-                Wire wire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "wire");
-                wire.ActivateWire();
-            } 
+            // //activate surrounding wires
+            // if (Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "wire") != null) {
+            //     Wire wire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(getPosition(), "wire");
+            //     wire.ActivateWire();
+            // } 
         }
     }
 }

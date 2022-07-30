@@ -4,15 +4,14 @@ import java.util.List;
 
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.FloorSwitch;
-import dungeonmania.Entities.StaticEntities.StaticEntity;
 import dungeonmania.util.Position;
 
-public class SwitchDoor extends StaticEntity{
+public class SwitchDoor extends LogicalEntity{
     private boolean IsOpen;
     private String LogicalType;
 
     public SwitchDoor(Position position, String id, String LogicalType) {
-        super(position, id, "switch_door", false);
+        super(position, id, "switch_door", false, LogicalType);
         this.IsOpen = false;
         this.LogicalType = LogicalType;
     }
@@ -22,7 +21,7 @@ public class SwitchDoor extends StaticEntity{
     }
 
     public void setIsOpen(boolean isOpen) {
-        IsOpen = isOpen;
+        this.IsOpen = isOpen;
     }
 
     public String getLogicalType() {
@@ -30,66 +29,49 @@ public class SwitchDoor extends StaticEntity{
     }
 
     public void setLogicalType(String logicalType) {
-        LogicalType = logicalType;
+        this.LogicalType = logicalType;
     }
 
 
-    public void OpenSwitchDoor() {  
-
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
-
-        // for the surronding areas of lightbulb
-        for (Position pos: adjacentPositions) {
-
-            // if nearby wire is triggered.
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
-                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
-                if (SurroundingWire.isActivated() == true) {
-                    setIsOpen(true);
-                }
+    public void OpenSwitchDoorIfPossible() {
+        if (LogicalType == "and") {
+            if (AndIsActivated()) {
+                setIsOpen(true);
             }
 
-            // if nearby floorswitch is triggered
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch") != null) {
-                FloorSwitch SurroundingSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch");
-                if (SurroundingSwitch.isTriggered() == true) {
-                    setIsOpen(true);
-                }
+            else {
+                setIsOpen(false);
             }
-
-    }
-    }
-
-    public void CloseSwitchDoor() {  
-
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
-        int NearbySwitch = 0;
-
-        // for the surronding areas of lightbulb
-        for (Position pos: adjacentPositions) {
-
-            // if nearby wire is triggered.
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
-                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
-                if (SurroundingWire.isActivated() == true) {
-                    setIsOpen(true);
-                    NearbySwitch++;
-                }
-            }
-
-            // if nearby floorswitch is triggered
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch") != null) {
-                FloorSwitch SurroundingSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch");
-                if (SurroundingSwitch.isTriggered() == true) {
-                    setIsOpen(true);
-                    NearbySwitch++;
-                }
-            }
-
-
         }
-        if (NearbySwitch == 0) {
-            setIsOpen(false);
+
+        else if (LogicalType == "or") {
+            if (OrIsActivated()) {
+                setIsOpen(true);
+            }
+
+            else {
+                setIsOpen(false);
+            }
         }
+
+        else if (LogicalType == "xor") {
+            if (XORIsActivated()) {
+                setIsOpen(true);
+            }
+
+            else {
+                setIsOpen(false);
+            }
+        }
+
+
     }
-}
+
+    @Override
+    public void tick() {
+        super.tick();
+        OpenSwitchDoorIfPossible();
+    }
+    
+    }
+

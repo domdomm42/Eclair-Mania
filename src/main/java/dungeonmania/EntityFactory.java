@@ -45,7 +45,7 @@ public class EntityFactory {
         JsonElement x = entityDetails.get("x");
         JsonElement y = entityDetails.get("y");
         JsonElement keyId = entityDetails.get("key");
-        String LogicType = entityDetails.get("logic").getAsString();
+        JsonElement LogicType = entityDetails.get("logic");
         totalEntitiesCreated += 1;
 
         switch (type) {
@@ -129,9 +129,9 @@ public class EntityFactory {
             case "sceptre":
                 return new Sceptre(id);
             case "light_bulb_off":
-                return new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType);
+                return new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
             case "switch_door":
-                return new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType);
+                return new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.toString());
             case "wire":
                 return new Wire(new Position(x.getAsInt(), y.getAsInt()), id);
 
