@@ -13,6 +13,7 @@ import dungeonmania.util.Direction;
 
 public class ZombieToastTests {
 
+    @Test
     @DisplayName("Spawnable at zombie spawners")
     public void ZombieToastSpawn() {
         DungeonManiaController dmc = new DungeonManiaController();
@@ -21,12 +22,11 @@ public class ZombieToastTests {
         // for each tick, spawn zombie
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.DOWN);
-        res = dmc.tick(Direction.LEFT);
-        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
 
         // check that there is 4 zombies
         assertEquals(4, getEntities(res, "zombie_toast").size());
-
     }
 
     @Test
@@ -42,7 +42,4 @@ public class ZombieToastTests {
         res = dmc.tick(Direction.DOWN);
         assertEquals(0, getEntities(res, "zombie_toast").size());
     }
-
-
-    
 }
