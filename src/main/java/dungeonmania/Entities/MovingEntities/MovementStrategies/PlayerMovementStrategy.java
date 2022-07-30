@@ -51,11 +51,14 @@ public class PlayerMovementStrategy extends MovementStrategy {
 
             // if door is not open
             if (!SwitchDoor.isIsOpen()) {
-                if (player.getInventory("key").stream().filter(entity -> SwitchDoor.getKeyThatUnlock() != null && SwitchDoor.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) return;
-                else {
-                    player.useKey(SwitchDoor.getKeyThatUnlock());
-                    SwitchDoor.setIsOpen(true);
-                }
+                // System.out.print("went through");
+                // if (player.getInventory("key").stream().filter(entity -> SwitchDoor.getKeyThatUnlock() != null && SwitchDoor.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) return;
+                // else {
+                //     player.useKey(SwitchDoor.getKeyThatUnlock());
+                //     SwitchDoor.setIsOpen(true);
+                // }
+
+                return;
             }
     }
 
