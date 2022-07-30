@@ -22,6 +22,8 @@ import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
+import dungeonmania.Entities.StaticEntities.ZombieToastSpawner;
+import dungeonmania.Entities.StaticEntities.TimeTravellingPortal;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
 import dungeonmania.exceptions.InvalidActionException;
@@ -95,16 +97,6 @@ public class Dungeon {
 
     public static void loadGame(JsonObject saveState) throws IOException {
         resetDungeon();
-        loadAll(saveState);
-    }
-
-    public static void loadGame(JsonObject saveState, Player truePlayer) throws IOException {
-        resetDungeon();
-        Dungeon.addEntity(truePlayer);
-        loadAll(saveState);
-    }
-
-    public static void loadAll(JsonObject saveState) {
         config = saveState.get("configuration").getAsJsonObject();
         dungeonName = saveState.get("dungeonName").getAsString();
         numberOfTicks = saveState.get("numberOfTicks").getAsInt();
@@ -112,8 +104,26 @@ public class Dungeon {
         previousGameStates = saveState.get("previousGameStates").getAsJsonArray();
         loadEntities(saveState.get("entities").getAsJsonArray());
         loadGoals(saveState.get("goal-condition").getAsJsonObject());
-        loadInventory(saveState.get("inventory").getAsJsonArray());
-        loadPotionBag(saveState.get("potionBag").getAsJsonArray());
+        loadInventory(saveState.get("inventory").getAsJsonArray(), getPlayer());
+        loadPotionBag(saveState.get("potionBag").getAsJsonArray(), getPlayer());
+        updateGoals();
+    }
+
+    public static void loadPreviousGameState(JsonObject saveState, Player truePlayer) throws IOException {
+        resetDungeon();
+        Dungeon.addEntity(truePlayer);
+        config = saveState.get("configuration").getAsJsonObject();
+        dungeonName = saveState.get("dungeonName").getAsString();
+        numberOfTicks = saveState.get("numberOfTicks").getAsInt();
+        enemiesKilled = saveState.get("enemiesKilled").getAsInt();
+        previousGameStates = saveState.get("previousGameStates").getAsJsonArray();
+        loadEntities(saveState.get("entities").getAsJsonArray());
+        loadGoals(saveState.get("goal-condition").getAsJsonObject());
+        getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> {
+            loadInventory(saveState.get("inventory").getAsJsonArray(), ((Player)evilPlayer));
+            loadPotionBag(saveState.get("potionBag").getAsJsonArray(), ((Player)evilPlayer));
+        });
+        updateGoals();
     }
 
     public static void loadGoals(JsonObject goalJson) {
@@ -128,7 +138,7 @@ public class Dungeon {
         }
     }
 
-    private static void loadInventory(JsonArray itemsArray) {
+    private static void loadInventory(JsonArray itemsArray, Player player) {
         Inventory inventory = new Inventory();
         itemsArray.forEach(itemJson -> {
             JsonObject itemJsonObject = itemJson.getAsJsonObject();
@@ -136,10 +146,10 @@ public class Dungeon {
             item.setDurability(itemJsonObject.get("durability").getAsInt());
             inventory.addItem(item);
         });
-        getPlayer().setInventory(inventory);
+        player.setInventory(inventory);
     }
 
-    private static void loadPotionBag(JsonArray potionsArray) {
+    private static void loadPotionBag(JsonArray potionsArray, Player player) {
         PotionBag potionBag = new PotionBag();
         potionsArray.forEach(potionJson -> {
             JsonObject potionJsonObject = potionJson.getAsJsonObject();
@@ -148,7 +158,7 @@ public class Dungeon {
             if (currentTicks != null)potion.setCurrentTicks(currentTicks.getAsInt());
             potionBag.usePotion(potion);
         });
-        getPlayer().setPotionBag(potionBag);
+        player.setPotionBag(potionBag);
     }
 
     private static JsonObject toJsonObject(boolean isTimeTravel) {
@@ -213,7 +223,7 @@ public class Dungeon {
     public static void timeTravel(int ticks) throws IOException {
         Player truePlayer = getPlayer().deepClone();
         truePlayer.setId("truePlayer");
-        loadGame(previousGameStates.get(Math.max(previousGameStates.size() - ticks - 1, 0)).getAsJsonObject(), truePlayer);
+        loadPreviousGameState(previousGameStates.get(Math.max(previousGameStates.size() - ticks - 1, 0)).getAsJsonObject(), truePlayer);
         getEntitiesOfType("player").stream().filter(player -> ((Player) player).isEvil()).forEach(evilPlayer -> {
             Player player = (Player) evilPlayer;
             player.setActions(truePlayer.getActionsToLastNTicks(ticks));
@@ -278,6 +288,14 @@ public class Dungeon {
                 spawnSpider();
             }
         }
+
+        int zombieSpawnRate = Dungeon.getConfigValue("zombie_spawn_rate");
+        if (!(zombieSpawnRate == 0)) {
+            if (numberOfTicks % zombieSpawnRate == 0) {
+                spawnZombie();
+            }
+        }
+
         numberOfTicks++;
 
         getEntitiesOfType("mercenary").forEach(merc -> {
@@ -307,6 +325,27 @@ public class Dungeon {
         Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity(spiderDetails));
     }
 
+    public static void spawnZombie() {
+
+        List<Entity> zombieSpawners = getEntitiesOfType("zombie_toast_spawner");
+
+        for (Entity s : zombieSpawners) {
+
+            List<Position> adjacentPosition = s.getPosition().getCardinallyAdjacentPositions();
+            for (Position squares: adjacentPosition) {
+                List<Entity> entity = Dungeon.getEntitiesAtPosition(squares);
+                if (entity.isEmpty()) {
+                    JsonObject zombieDetails = new JsonObject();
+                    zombieDetails.addProperty("x", squares.getX());
+                    zombieDetails.addProperty("y", squares.getY());
+                    zombieDetails.addProperty("type", "zombie_toast");
+                    Dungeon.addEntityToAddAfterTick(EntityFactory.createEntity(zombieDetails));
+                    break;
+                }
+            }           
+        }
+    }
+
     private static void updateGoals() {
         if (getPlayer() == null) return;
         if (Dungeon.getEntitiesOfType("zombie_toast_spawner").size() == 0 && enemiesKilled >= getConfigValue("enemy_goal")) completedGoals.add(":enemies");
@@ -333,6 +372,14 @@ public class Dungeon {
         entitiesToRemoveAfterTick = new ArrayList<Entity>();
         updateGoals();
         previousGameStates.add(toJsonObject(true));
+        if (Dungeon.isEntityOnPosition(getPlayer().getPosition(), "time_travelling_portal") && !getPlayer().isEvil()) {
+            TimeTravellingPortal portal = (TimeTravellingPortal) Dungeon.getFirstEntityOfTypeOnPosition(getPlayer().getPosition(), "time_travelling_portal");
+            try {
+                portal.teleport();
+            } catch (IOException exc) {
+                return;
+            }
+        }
     }
 
     public static void tick(Direction movementDirection) {
