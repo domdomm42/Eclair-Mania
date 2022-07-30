@@ -13,6 +13,7 @@ import dungeonmania.Entities.StaticEntities.Door;
 import dungeonmania.Entities.StaticEntities.Exit;
 import dungeonmania.Entities.StaticEntities.FloorSwitch;
 import dungeonmania.Entities.StaticEntities.Portal;
+import dungeonmania.Entities.StaticEntities.TimeTravellingPortal;
 import dungeonmania.Entities.StaticEntities.Wall;
 import dungeonmania.Entities.StaticEntities.ZombieToastSpawner;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Arrow;
@@ -170,6 +171,9 @@ public class EntityFactory {
                 break;
             case "midnight_armour":
                 entity = new MidnightArmour(id);
+                break;
+            case "time_travelling_portal":
+                entity = new TimeTravellingPortal(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
             default:
                 totalEntitiesCreated -= 1;
