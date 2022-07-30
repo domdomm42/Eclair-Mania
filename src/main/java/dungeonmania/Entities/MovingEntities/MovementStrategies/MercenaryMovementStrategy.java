@@ -22,7 +22,8 @@ public class MercenaryMovementStrategy extends MovementStrategy {
         Mercenary mercenary = (Mercenary) getEntity();
         Player player = Dungeon.getPlayer();
         if (Dungeon.getPlayer().activePotionEffect().equals("invisibility_potion") && !mercenary.isAlly()) {
-            if (getEntity() instanceof Assassin) {
+            if (getEntity() instanceof Assassin && (Math.abs(mercenary.getPosition().getX() - player.getPosition().getX()) <=  mercenary.getBribeRadius()
+            && Math.abs(mercenary.getPosition().getY() - player.getPosition().getY()) <= mercenary.getBribeRadius())) {
                 PathFinder pathfinder = new PathFinder(getEntity().getPosition(), Dungeon.getPlayer().getPosition(), (MovingEntity) getEntity());
                 if (pathfinder.getMoveDirection() == null) {
                     return;
