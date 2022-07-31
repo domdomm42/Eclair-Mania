@@ -25,5 +25,13 @@
             "y": 8
         }
     ],
-    "goal-condition": {"goal": "exit"}
+    "goal-condition": {"goal": "OR",
+        "subgoals": [
+            {
+                "goal": "exit"
+            },
+            {
+                "goal": "treasure"
+            }
+        ]}
 }

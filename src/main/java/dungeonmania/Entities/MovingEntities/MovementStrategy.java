@@ -18,6 +18,8 @@ abstract public class MovementStrategy {
         this.entity = entity;
     }
     
-    public abstract boolean isValidMove(Position position);
+    public boolean isValidMove(Position position) {
+        return true;
+    };
 
 }

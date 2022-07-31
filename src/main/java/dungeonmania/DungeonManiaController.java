@@ -138,8 +138,4 @@ public class DungeonManiaController {
         }
         return Dungeon.getDungeonResponse();
     }
-
-    public void logDungeon(String key) {
-        Dungeon.log(key);   
-    }
 }

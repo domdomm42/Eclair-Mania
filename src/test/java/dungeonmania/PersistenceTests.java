@@ -12,6 +12,7 @@ import dungeonmania.util.Position;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static dungeonmania.TestUtils.getPlayer;
 import static dungeonmania.TestUtils.getEntities;
@@ -148,11 +149,20 @@ public class PersistenceTests {
         Position expectedPlayer = new EntityResponse(initPlayer.getId(), initPlayer.getType(), new Position(3, 3), false).getPosition();
         Position actualPlayer = getPlayer(res).get().getPosition();
         assertEquals(expectedPlayer, actualPlayer);
-        dmc.logDungeon("entities");
         assertEquals(12, getEntities(res, "wall").size());
     }
 
-     @Test
+    @Test
+    @DisplayName("Test saves name correctly")
+    public void testSavesNameCorrectly() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("d_integrationTest_3", "c_movementTest_testMovementDown");
+        controller.tick(Direction.RIGHT);
+        controller.saveGame("SAVE NAME TEST");
+        assertTrue(controller.allGames().contains("SAVE NAME TEST"));
+    }
+
+    @Test
     @DisplayName("Can move through enemies")
     public void testCanPlayerMoveThroughWithInvisibility() throws InvalidActionException, IllegalArgumentException {
         DungeonManiaController controller = new DungeonManiaController();

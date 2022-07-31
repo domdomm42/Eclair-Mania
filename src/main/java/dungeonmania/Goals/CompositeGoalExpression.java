@@ -6,12 +6,6 @@ public class CompositeGoalExpression extends GoalExpression {
     private GoalExpression left;
     private GoalExpression right;
 
-    public CompositeGoalExpression(String goal, GoalExpression left, GoalExpression right) {
-        super(goal);
-        this.left = left;
-        this.right = right;
-    }
-
     public CompositeGoalExpression(JsonObject goalJson) {
         super(goalJson.get("goal").getAsString());
         if (goalJson.getAsJsonArray("subgoals").get(0).getAsJsonObject().get("goal").getAsString().equals("AND") 
