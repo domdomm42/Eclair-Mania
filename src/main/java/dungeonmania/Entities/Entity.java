@@ -69,7 +69,7 @@ public abstract class Entity {
     }
 
     public void interact(boolean isEvil) throws InvalidActionException, IllegalArgumentException  {
-        throw new InvalidActionException("Not a valid entity to interact with");
+        interact();
     }
 
     @Override

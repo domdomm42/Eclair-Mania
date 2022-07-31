@@ -1,6 +1,5 @@
 package dungeonmania;
 
-import static dungeonmania.TestUtils.countEntityOfType;
 import static dungeonmania.TestUtils.getInventory;
 import static dungeonmania.TestUtils.getPlayer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -51,7 +50,6 @@ public class IntegrationTests {
     public void integrationTest2() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("d_integrationTest_2", "c_movementTest_testMovementDown");
-        EntityResponse initPlayer = getPlayer(res).get();
 
         // Pick up key 2
         res = dmc.tick(Direction.RIGHT);
@@ -133,7 +131,7 @@ public class IntegrationTests {
     @DisplayName("Integration test 4")
     public void integrationTest4() throws IllegalArgumentException, InvalidActionException {
         DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse initDungonRes = dmc.newGame("d_integrationTest_4", "c_movementTest_testMovementDown");
+        dmc.newGame("d_integrationTest_4", "c_movementTest_testMovementDown");
 
         DungeonResponse res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);

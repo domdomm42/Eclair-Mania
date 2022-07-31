@@ -14,6 +14,7 @@ import dungeonmania.Entities.StaticEntities.Door;
 import dungeonmania.Entities.StaticEntities.Portal;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.SwitchDoor;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -43,6 +44,25 @@ public class PlayerMovementStrategy extends MovementStrategy {
                 }
             }
         }
+
+        // NEW SwitchDoor
+        if (Dungeon.isEntityOnPosition(requestedPosition, "switch_door")) {
+            SwitchDoor SwitchDoor = (SwitchDoor) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "switch_door");
+            // Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
+
+            // Key key = (Key) player.getInventory("key");
+            // if door is not open
+            if (!SwitchDoor.isIsOpen()) {
+                if (!player.getInventory("key").isEmpty()) {
+                    SwitchDoor.setIsOpen(true);
+                }
+
+                else {
+                    return;
+                }
+            }
+    }
+
         if (Dungeon.isEntityOnPosition(requestedPosition, "wall")) return;
         if (Dungeon.isEntityOnPosition(requestedPosition, "boulder")) {
             ((Boulder) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "boulder")).getMovementStrategy().move(direction);
@@ -74,33 +94,5 @@ public class PlayerMovementStrategy extends MovementStrategy {
             player.pickup((CollectableEntity) entity);
             collectableEntity.setPickedUp(true);
         });
-    }
-
-    @Override
-    public boolean isValidMove(Position requestedPosition) {
-        List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
-        
-        if (Dungeon.isEntityOnPosition(requestedPosition, "wall")) {
-            return false;
-        } else if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
-            Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
-            if (!door.isUnlocked()) {
-                return false;
-            } 
-        } else if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
-            Portal portal = (Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal");
-            if (portal.isTeleporterValid()) {
-                return true;
-            } else {
-                return false;
-            }
-            
-        } else if (Dungeon.isEntityOnPosition(requestedPosition, "bomb")) {
-            Bomb bomb = (Bomb) entitiesOnPosition.stream().filter(entity -> entity instanceof Bomb).findFirst().get();
-            if (bomb.isHasBeenPickedUp()) {
-                return false;
-            }
-        } 
-        return true;
     }
 }

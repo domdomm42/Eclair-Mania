@@ -22,7 +22,6 @@ import dungeonmania.Entities.MovingEntities.Player;
 import dungeonmania.Entities.MovingEntities.Enemies.Mercenary;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.Inventory;
 import dungeonmania.Entities.MovingEntities.PlayerBelongings.PotionBag;
-import dungeonmania.Entities.StaticEntities.ZombieToastSpawner;
 import dungeonmania.Entities.StaticEntities.TimeTravellingPortal;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.Potion;
@@ -169,7 +168,8 @@ public class Dungeon {
         dungeon.add("entities", entitiesToJsonArray(isTimeTravel));
         dungeon.add("configuration", config);
         dungeon.add("goal-condition", originalGoals);
-        dungeon.add("previousGameStates", previousGameStates);
+        if (!isTimeTravel) dungeon.add("previousGameStates", previousGameStates);
+        else dungeon.add("previousGameStates", new JsonArray());
         if (getPlayer() == null) return dungeon;
         dungeon.add("inventory", getPlayer().getInventory().toJsonArray());
         dungeon.add("potionBag", getPlayer().getPotionBag().toJsonArray());
@@ -194,6 +194,7 @@ public class Dungeon {
         JsonObject dungeonJson = dungeonFileToJson(dungeonName);
         createEntities(dungeonJson);
         loadGoals(dungeonJson.getAsJsonObject("goal-condition"));
+        previousGameStates.add(Dungeon.toJsonObject(true));
     }
 
     public static Player getPlayer() {
@@ -215,8 +216,8 @@ public class Dungeon {
     }
 
     public static int getConfigValue(String key) {
-        if (config.get(key).isJsonNull()) return 0;
         if (config.get(key) == null) return 0;
+        if (config.get(key).isJsonNull()) return 0;
         return Integer.parseInt(config.get(key).getAsString());
     }
 
@@ -424,5 +425,4 @@ public class Dungeon {
     public static void generateDungeon(int xStart, int yStart, int xEnd, int yEnd) {
         DungeonBuilder.generateDungeon(xStart, yStart, xEnd, yEnd);
     }
-
 }
