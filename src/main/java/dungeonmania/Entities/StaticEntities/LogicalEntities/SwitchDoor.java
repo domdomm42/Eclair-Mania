@@ -2,16 +2,18 @@ package dungeonmania.Entities.StaticEntities.LogicalEntities;
 
 import java.util.List;
 
+import com.google.gson.JsonObject;
+
 import dungeonmania.Dungeon;
 import dungeonmania.Entities.StaticEntities.FloorSwitch;
-import dungeonmania.Entities.StaticEntities.StaticEntity;
+import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.util.Position;
 
-public class SwitchDoor extends StaticEntity{
+public class SwitchDoor extends LogicalEntity {
     private boolean IsOpen;
 
-    public SwitchDoor(Position position, String id) {
-        super(position, id, "switch_door", false);
+    public SwitchDoor(Position position, String id, String LogicalType) {
+        super(position, id, "switch_door", false, LogicalType);
         this.IsOpen = false;
     }
 
@@ -20,65 +22,80 @@ public class SwitchDoor extends StaticEntity{
     }
 
     public void setIsOpen(boolean isOpen) {
-        IsOpen = isOpen;
+        this.IsOpen = isOpen;
     }
 
-    public void OpenSwitchDoor() {  
-
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
-
-        // for the surronding areas of lightbulb
-        for (Position pos: adjacentPositions) {
-
-            // if nearby wire is triggered.
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
-                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
-                if (SurroundingWire.isActivated() == true) {
-                    setIsOpen(true);
-                }
+    public void OpenSwitchDoorIfPossible() {
+        if (LogicType.equals("and")) {
+            if (AndIsActivated()) {
+                setIsOpen(true);
             }
 
-            // if nearby floorswitch is triggered
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch") != null) {
-                FloorSwitch SurroundingSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch");
-                if (SurroundingSwitch.isTriggered() == true) {
-                    setIsOpen(true);
-                }
+            else {
+                setIsOpen(false);
             }
-
-    }
-    }
-
-    public void CloseSwitchDoor() {  
-
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
-        int NearbySwitch = 0;
-
-        // for the surronding areas of lightbulb
-        for (Position pos: adjacentPositions) {
-
-            // if nearby wire is triggered.
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
-                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
-                if (SurroundingWire.isActivated() == true) {
-                    setIsOpen(true);
-                    NearbySwitch++;
-                }
-            }
-
-            // if nearby floorswitch is triggered
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch") != null) {
-                FloorSwitch SurroundingSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "FloorSwitch");
-                if (SurroundingSwitch.isTriggered() == true) {
-                    setIsOpen(true);
-                    NearbySwitch++;
-                }
-            }
-
-
         }
-        if (NearbySwitch == 0) {
-            setIsOpen(false);
+
+        else if (LogicType.equals("or")) {
+            if (OrIsActivated()) {
+                setIsOpen(true);
+            }
+
+            else {
+                setIsOpen(false);
+            }
+        }
+
+        else if (LogicType.equals("xor")) {
+            if (XORIsActivated()) {
+                setIsOpen(true);
+            }
+
+            else {
+                setIsOpen(false);
+            }
+        }
+
+        else if (LogicType.equals("co_and")) {
+            if (AndIsActivated()) {
+                setIsOpen(true);
+            }
+
+            else {
+                setIsOpen(false);
+            }
+        }
+
+
+    }
+
+    @Override
+    public void tick() {
+        // co_and case
+        if (LogicType.equals("co_and")) {
+            if (CheckIfNotTriggeredCoAnd() == true) {
+                // System.out.println("in");
+                super.tick();
+                // System.out.println("ticked");
+                if (AndIsActivated()) {
+                    setIsOpen(true);
+                    // System.out.println("true");
+                }
+
+                else {
+                    setIsOpen(false);
+                    // System.out.println("false");
+                }
+            }
+        }
+        
+        // AND OR XOR case
+        else {
+            super.tick();
+            OpenSwitchDoorIfPossible();
         }
     }
+    
 }
+
+

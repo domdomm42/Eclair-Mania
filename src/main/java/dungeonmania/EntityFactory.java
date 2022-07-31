@@ -30,6 +30,9 @@ import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntitie
 import dungeonmania.Entities.StaticEntities.CollectableEntities.BuildableEntities.Shield;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvincibilityPotion;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Potions.InvisibilityPotion;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.LightBulbOff;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.SwitchDoor;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.Wire;
 import dungeonmania.util.Position;
 
 public class EntityFactory {
@@ -46,6 +49,7 @@ public class EntityFactory {
         JsonElement x = entityDetails.get("x");
         JsonElement y = entityDetails.get("y");
         JsonElement keyId = entityDetails.get("key");
+        JsonElement LogicType = entityDetails.get("logic");
         totalEntitiesCreated += 1;
         Entity entity;
 
@@ -117,8 +121,13 @@ public class EntityFactory {
                 entity = new Boulder(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
             case "switch": 
-                entity = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id);
+                FloorSwitch floorSwitch = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id, null);
+                if (LogicType != null) {
+                    floorSwitch = new FloorSwitch(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
+                }
+                entity = floorSwitch;
                 break;
+                
             case "door":
                 entity = new Door(new Position(x.getAsInt(), y.getAsInt()), "door-".concat(keyId.getAsString()));
                 break;
@@ -149,7 +158,12 @@ public class EntityFactory {
                 break;
             case "bomb":
                 JsonElement bombHasBeenPickedUp = entityDetails.get("hasBeenPickedUp");
-                Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id);
+                Bomb bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id, null);
+
+                if (LogicType != null) {
+                    bomb = new Bomb(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
+                }
+                
                 if (bombHasBeenPickedUp != null) {
                     bomb.setHasBeenPickedUp(bombHasBeenPickedUp.getAsBoolean());
                 }
@@ -172,6 +186,28 @@ public class EntityFactory {
                 break;
             case "sceptre":
                 entity = new Sceptre(id);
+                break;
+            case "light_bulb_off":
+                LightBulbOff light_bulb_off = new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, null);
+
+                if (LogicType != null) {
+                    light_bulb_off = new LightBulbOff(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
+                }
+
+                entity = light_bulb_off;
+                break;
+                
+            case "switch_door":
+                SwitchDoor switchdoor = new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, null);
+
+                if (LogicType != null) {
+                    switchdoor = new SwitchDoor(new Position(x.getAsInt(), y.getAsInt()), id, LogicType.getAsString());
+                }
+                entity = switchdoor;
+                break;
+
+            case "wire":
+                entity = new Wire(new Position(x.getAsInt(), y.getAsInt()), id);
                 break;
             case "midnight_armour":
                 entity = new MidnightArmour(id);

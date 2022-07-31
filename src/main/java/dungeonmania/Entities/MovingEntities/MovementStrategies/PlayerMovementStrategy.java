@@ -14,6 +14,7 @@ import dungeonmania.Entities.StaticEntities.Door;
 import dungeonmania.Entities.StaticEntities.Portal;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Bomb;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.CollectableEntity;
+import dungeonmania.Entities.StaticEntities.LogicalEntities.SwitchDoor;
 import dungeonmania.Entities.StaticEntities.CollectableEntities.Key;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -43,6 +44,25 @@ public class PlayerMovementStrategy extends MovementStrategy {
                 }
             }
         }
+
+        // NEW SwitchDoor
+        if (Dungeon.isEntityOnPosition(requestedPosition, "switch_door")) {
+            SwitchDoor SwitchDoor = (SwitchDoor) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "switch_door");
+            // Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
+
+            // Key key = (Key) player.getInventory("key");
+            // if door is not open
+            if (!SwitchDoor.isIsOpen()) {
+                if (!player.getInventory("key").isEmpty()) {
+                    SwitchDoor.setIsOpen(true);
+                }
+
+                else {
+                    return;
+                }
+            }
+    }
+
         if (Dungeon.isEntityOnPosition(requestedPosition, "wall")) return;
         if (Dungeon.isEntityOnPosition(requestedPosition, "boulder")) {
             ((Boulder) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "boulder")).getMovementStrategy().move(direction);
