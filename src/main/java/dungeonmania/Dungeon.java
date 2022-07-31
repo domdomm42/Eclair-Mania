@@ -194,6 +194,7 @@ public class Dungeon {
         JsonObject dungeonJson = dungeonFileToJson(dungeonName);
         createEntities(dungeonJson);
         loadGoals(dungeonJson.getAsJsonObject("goal-condition"));
+        previousGameStates.add(Dungeon.toJsonObject(true));
     }
 
     public static Player getPlayer() {

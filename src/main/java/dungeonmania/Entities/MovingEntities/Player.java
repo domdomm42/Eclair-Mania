@@ -118,7 +118,6 @@ public class Player extends MovingEntity {
             if (numTicks >= ticks) break;
         }
         Collections.reverse(lastNTicksActions);
-        lastNTicksActions.remove(0);
         return lastNTicksActions;
     }
 
