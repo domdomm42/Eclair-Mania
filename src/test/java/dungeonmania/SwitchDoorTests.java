@@ -252,30 +252,30 @@ public class SwitchDoorTests {
     }
 
 
-    // @Test
-    // @DisplayName("Test CoAnd switch door opens then closes user cant enter")
-    // public void BasicCoAndTest() {
-    //     DungeonManiaController dmc;
-    //     dmc = new DungeonManiaController();
-    //     DungeonResponse res = dmc.newGame("d_switchdoortest_coand", "c_bombTest_placeBombRadius2");
+    @Test
+    @DisplayName("Test CoAnd switch door opens then closes user cant enter")
+    public void BasicCoAndTest() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_switchdoortest_co_and", "c_bombTest_placeBombRadius2");
 
-    //     // Activate Switch
-    //     res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.RIGHT);
+        // Activate Switch
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
 
-    //     // go to door without pushing boulder
-    //     res = dmc.tick(Direction.UP);
-    //     res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.DOWN);
+        // go to door without pushing boulder
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
         
 
-    //     Position actualPlayer = getPlayer(res).get().getPosition();
-    //     Position pos = getEntities(res, "switch_door").get(0).getPosition();
+        Position actualPlayer = getPlayer(res).get().getPosition();
+        Position pos = getEntities(res, "switch_door").get(0).getPosition();
         
-    //     assertEquals(pos, actualPlayer);
+        assertNotEquals(pos, actualPlayer);
 
-    // }
+    }
 
 
 

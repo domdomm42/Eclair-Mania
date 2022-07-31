@@ -66,5 +66,26 @@ public class PortalTests {
         assertEquals(pos, getEntities(res, "portal").get(3).getPosition().translateBy(Direction.RIGHT));
 
     }
+
+    @Test
+    @DisplayName("AdvancedTeleport")
+        public void AdvancedTeleport() {
+            DungeonManiaController dmc = new DungeonManiaController();
+            DungeonResponse res = dmc.newGame("d_portalsTest_advanced", "c_movementTest_testMovementDown");
+
+            
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+
+
+        }
+    }
     
-}
+

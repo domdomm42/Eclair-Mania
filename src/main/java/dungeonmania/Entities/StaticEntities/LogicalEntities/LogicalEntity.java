@@ -198,48 +198,5 @@ public abstract class LogicalEntity extends StaticEntity {
 
     }
 
-    /* 
-    public boolean COANDIsActivated() {
-        int NumActiveSwitches = 0;
-        List<Position> adjacentPositions = getPosition().getAdjacentPositions();
-
-        // for the surronding areas of lightbulb
-        for (Position pos: adjacentPositions) {
-        // if nearby wire OR floor_switch exists
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null || Dungeon.getFirstEntityOfTypeOnPosition(pos, "floor_switch") != null) {
-
-            // if surrounding is wire
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire") != null) {
-                Wire SurroundingWire = (Wire) Dungeon.getFirstEntityOfTypeOnPosition(pos, "wire");
-                if (SurroundingWire.isActivated() == true) {
-                    NumActiveSwitches++;
-                }
-
-            }
-
-            if (Dungeon.getFirstEntityOfTypeOnPosition(pos, "floor_switch") != null) {
-                FloorSwitch SurroundingFloorSwitch = (FloorSwitch) Dungeon.getFirstEntityOfTypeOnPosition(pos, "floor_switch");
-                if (SurroundingFloorSwitch.isTriggered() == true) {
-                    NumActiveSwitches++;
-                }
-
-            }
-
-            }
-
-        }
-
-        if (NumActiveSwitches >= 1) {
-            return true;
-        }
-
-        return false;
-
-
-
-
-    }
-
-    */
 
 }
