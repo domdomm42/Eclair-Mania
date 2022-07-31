@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static dungeonmania.TestUtils.getPlayer;
 import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.getGoals;
+import static dungeonmania.TestUtils.getInventory;
 
 
 import org.junit.jupiter.api.DisplayName;
@@ -75,5 +76,59 @@ public class FloorSwitchTests {
         assertTrue(getGoals(actualDungonRes).contains(":boulder"));
         
     }
+
+    @Test
+    @DisplayName("OR FloorSwitch explodes bomb")
+    public void testORFloorSwitch() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_FloorSwitch_ORFloorSwitch", "c_bombTest_placeBombRadius2");
+
+        // Activate Switch
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        
+        // go to door without pushing boulder
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "bomb").size());
+ 
+    }
+
+    @Test
+    @DisplayName("AND FloorSwitch explodes bomb")
+    public void testANDFloorSwitch() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_FloorSwitch_ANDFloorSwitch", "c_bombTest_placeBombRadius2");
+
+        // Activate Switch
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        
+        // go to door without pushing boulder
+        res = dmc.tick(Direction.RIGHT);
+
+    }
+
+    @Test
+    @DisplayName("XOR FloorSwitch explodes bomb")
+    public void testXORFloorSwitch() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_FloorSwitch_XORFloorSwitch", "c_bombTest_placeBombRadius2");
+
+        // Activate Switch
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        
+        // go to door without pushing boulder
+        res = dmc.tick(Direction.RIGHT);
+
+    }
+
+
 
 }

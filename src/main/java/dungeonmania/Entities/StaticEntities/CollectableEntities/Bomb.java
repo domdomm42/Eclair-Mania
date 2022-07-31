@@ -49,6 +49,20 @@ public class Bomb extends Usable {
             this.detonate();
         }
 
+        else if (LogicType.equals("co_and")) {
+            if (CheckIfNotTriggeredCoAnd()) {
+                super.tick();
+                if (AndActivateBomb()) {
+                    ArrayList<Entity> entities = Dungeon.getEntities();
+                    for (Entity e : entities) {
+                        destroyEntityByBomb(e);
+                    }
+                    Dungeon.addEntityToRemoveAfterTick(this);
+                }
+
+            }
+        }
+
         else if (LogicType.equals("and")) {
             if (AndActivateBomb()) {
                 ArrayList<Entity> entities = Dungeon.getEntities();
@@ -186,7 +200,7 @@ public class Bomb extends Usable {
 
         }
 
-        if (NumActiveSwitches == NumSurroundingSwitches && NumSurroundingSwitches >= 2) {
+        if ((NumActiveSwitches == NumSurroundingSwitches) && NumSurroundingSwitches >= 2) {
             return true;
         }
 
