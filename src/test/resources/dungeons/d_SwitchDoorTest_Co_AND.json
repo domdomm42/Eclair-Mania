@@ -48,7 +48,7 @@
             "type": "switch_door",
             "x": 5,
             "y": 3,
-            "logic": "and" 
+            "logic": "co_and" 
         }
     ],
     "goal-condition": {

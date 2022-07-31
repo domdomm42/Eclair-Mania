@@ -257,7 +257,7 @@ public class SwitchDoorTests {
     public void BasicCoAndTest() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_switchdoortest_coand", "c_bombTest_placeBombRadius2");
+        DungeonResponse res = dmc.newGame("d_switchdoortest_co_and", "c_bombTest_placeBombRadius2");
 
         // Activate Switch
         res = dmc.tick(Direction.RIGHT);
