@@ -6,7 +6,6 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DungeonManiaController {
@@ -90,7 +89,6 @@ public class DungeonManiaController {
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
         try {
             Dungeon.saveGame(name);
-            System.err.println(name);
         } catch (IOException exception) {
             return null;
         }

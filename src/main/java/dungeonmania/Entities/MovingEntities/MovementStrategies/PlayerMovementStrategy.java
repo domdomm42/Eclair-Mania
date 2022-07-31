@@ -95,32 +95,4 @@ public class PlayerMovementStrategy extends MovementStrategy {
             collectableEntity.setPickedUp(true);
         });
     }
-
-    @Override
-    public boolean isValidMove(Position requestedPosition) {
-        List<Entity> entitiesOnPosition = Dungeon.getEntitiesAtPosition(requestedPosition);
-        
-        if (Dungeon.isEntityOnPosition(requestedPosition, "wall")) {
-            return false;
-        } else if (Dungeon.isEntityOnPosition(requestedPosition, "door")) {
-            Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
-            if (!door.isUnlocked()) {
-                return false;
-            } 
-        } else if (Dungeon.isEntityOnPosition(requestedPosition, "portal")) {
-            Portal portal = (Portal) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "portal");
-            if (portal.isTeleporterValid()) {
-                return true;
-            } else {
-                return false;
-            }
-            
-        } else if (Dungeon.isEntityOnPosition(requestedPosition, "bomb")) {
-            Bomb bomb = (Bomb) entitiesOnPosition.stream().filter(entity -> entity instanceof Bomb).findFirst().get();
-            if (bomb.isHasBeenPickedUp()) {
-                return false;
-            }
-        } 
-        return true;
-    }
 }

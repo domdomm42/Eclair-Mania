@@ -76,7 +76,6 @@ public class BattleTests {
         
         assertEquals(1, countEntityOfType(initialResponse, "player"));
         assertEquals(1, zombieCount);
-        controller.tick(Direction.RIGHT);
         return controller.tick(Direction.RIGHT);
     }
     

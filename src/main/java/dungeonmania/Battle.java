@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import dungeonmania.Entities.MovingEntities.MovingEntity;
 import dungeonmania.Entities.MovingEntities.Player;
+import dungeonmania.Entities.MovingEntities.Enemies.Enemy;
+import dungeonmania.Entities.MovingEntities.Enemies.Hydra;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.RoundResponse;
 
@@ -36,12 +38,25 @@ public class Battle {
     private void generateRounds() {
         if (rounds.size() > 0) return;
         if (player.activePotionEffect().equals("invincibility_potion")) {
-            rounds.add(new Round(0, initialEnemyHp, player.getWeaponryUsed()));
-            enemy.setHealth(0);
+            if (enemy instanceof Hydra) {
+                if (((Hydra) enemy).isHydraHealthIncreasingBattle()) {
+                    rounds.add(new Round(0, 0, player.getWeaponryUsed()));
+                    player.setHealth(player.getHealth() - ((enemy.getAttack() - player.getDefence()) / 10));
+                    enemy.setHealth(enemy.getHealth() + ((Hydra) enemy).getHydraHealthIncreaseAmount());
+                }
+            } else { 
+                rounds.add(new Round(0, initialEnemyHp, player.getWeaponryUsed()));
+                enemy.setHealth(0);
+            }
         } else while (player.getHealth() > 0 && enemy.getHealth() > 0) {
             rounds.add(new Round(-((enemy.getAttack() - player.getDefence()) / 10), -(player.getAttack() / 5), player.getWeaponryUsed()));
             player.setHealth(player.getHealth() - ((enemy.getAttack() - player.getDefence()) / 10));
             enemy.setHealth(enemy.getHealth() - (player.getAttack() / 10));
+            if (enemy instanceof Hydra) {
+                if (((Hydra) enemy).isHydraHealthIncreasingBattle()) {
+                    enemy.setHealth(enemy.getHealth() + ((Hydra) enemy).getHydraHealthIncreaseAmount());
+                }
+            } 
         }
         
         if (player.getHealth() <= 0) Dungeon.addEntityToRemoveAfterTick(player);
