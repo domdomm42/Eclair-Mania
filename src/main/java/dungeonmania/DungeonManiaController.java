@@ -35,12 +35,12 @@ public class DungeonManiaController {
     /**
      * /game/new
      */
-    public DungeonResponse newGame(String dungeonName, String configName) {
+    public DungeonResponse newGame(String dungeonName, String configName) throws IllegalArgumentException {
         try {
             Dungeon.setupConfigFile(configName);
             Dungeon.startNewGame(dungeonName);
-        } catch (IOException exception) {
-            return null;
+        } catch (Exception exception) {
+            throw new IllegalArgumentException();
         }
         return Dungeon.getDungeonResponse();
     }

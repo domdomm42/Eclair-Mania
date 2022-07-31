@@ -30,6 +30,38 @@ public class ZombieToastTests {
     }
 
     @Test
+    @DisplayName("Spawnable at zombie spawners every 2 ticks")
+    public void ZombieToastSpawn2() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawn", "c_zombieToastTests_spawn2");
+
+        // for each tick, spawn zombie
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+
+        // check that there is 2 zombies
+        assertEquals(2, getEntities(res, "zombie_toast").size());
+    }
+
+    @Test
+    @DisplayName("Spawnable at 2 zombie spawners every 2 ticks")
+    public void ZombieToastSpawners2() {
+        DungeonManiaController dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_zombieToastTests_spawners2", "c_zombieToastTests_spawn2");
+
+        // for each tick, spawn zombie
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+
+        // check that there is 2 zombies
+        assertEquals(4, getEntities(res, "zombie_toast").size());
+    }
+
+    @Test
     @DisplayName("Portal has no effect on zombie hence zombie dont spawn as they are blocked")
     public void PortalNoEffectOnZombieToast() {
         DungeonManiaController dmc = new DungeonManiaController();

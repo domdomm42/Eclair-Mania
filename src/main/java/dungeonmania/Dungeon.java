@@ -372,7 +372,7 @@ public class Dungeon {
         entitiesToRemoveAfterTick = new ArrayList<Entity>();
         updateGoals();
         previousGameStates.add(toJsonObject(true));
-        if (Dungeon.isEntityOnPosition(getPlayer().getPosition(), "time_travelling_portal") && !getPlayer().isEvil()) {
+        if (getPlayer() != null && Dungeon.isEntityOnPosition(getPlayer().getPosition(), "time_travelling_portal") && !getPlayer().isEvil()) {
             TimeTravellingPortal portal = (TimeTravellingPortal) Dungeon.getFirstEntityOfTypeOnPosition(getPlayer().getPosition(), "time_travelling_portal");
             try {
                 portal.teleport();
