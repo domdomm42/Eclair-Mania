@@ -75,4 +75,5 @@ public class FloorSwitchTests {
         assertTrue(getGoals(actualDungonRes).contains(":boulder"));
         
     }
+
 }

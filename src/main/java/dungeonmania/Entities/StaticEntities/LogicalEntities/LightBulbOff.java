@@ -20,21 +20,35 @@ public class LightBulbOff extends LogicalEntity {
     }
 
     public void TurnOnLightIfPossible() {
-        if (LogicType == "and") {
+        if (LogicType.equals("and")) {
             if (AndIsActivated()) {
                 this.setType("light_bulb_on");
             }
-        }
 
-        else if (LogicType == "or") {
-            if (OrIsActivated()) {
-                this.setType("light_bulb_on");
+            else {
+                this.setType("light_bulb_off");
             }
         }
 
-        else if (LogicType == "xor") {
+        else if (LogicType.equals("or")) {
+            if (OrIsActivated()) {
+                this.setType("light_bulb_on");
+            }
+
+            
+            else {
+                this.setType("light_bulb_off");
+            }
+        }
+
+        else if (LogicType.equals("xor")) {
             if (XORIsActivated()) {
                 this.setType("light_bulb_on");
+            }
+
+            
+            else {
+                this.setType("light_bulb_off");
             }
         }
 
