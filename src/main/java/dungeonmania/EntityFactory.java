@@ -106,7 +106,6 @@ public class EntityFactory {
                 JsonElement mercenaryHasReachedPlayer = entityDetails.get("hasReachedPlayer");
                 JsonElement mercenaryIsMindControlled = entityDetails.get("isMindControlled");
                 JsonElement mercenaryMindControlledTicks = entityDetails.get("mindControlledTicks");
-                Mercenary mercenary = new Mercenary(id, new Position(x.getAsInt(), y.getAsInt()));
                 Mercenary mercenary = new Mercenary(id, new Position(x.getAsInt(), y.getAsInt()), "mercenary", Dungeon.getConfigValue("mercenary_health"), Dungeon.getConfigValue("mercenary_attack"));
                 if (mercenaryIsAlly != null) {
                     mercenary.setAlly(mercenaryIsAlly.getAsBoolean());
