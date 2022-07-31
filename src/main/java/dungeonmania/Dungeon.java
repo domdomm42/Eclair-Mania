@@ -369,6 +369,7 @@ public class Dungeon {
     public static void setEntities(ArrayList<Entity> entities) {
         Dungeon.entities = entities;
     }
-    //
+    
+    
     
 }
