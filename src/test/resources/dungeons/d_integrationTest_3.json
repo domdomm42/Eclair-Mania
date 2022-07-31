@@ -111,6 +111,16 @@
             "type": "wall",
             "x": 8,
             "y": 5
+        },
+        {
+            "type": "time_turner",
+            "x": 13,
+            "y": 5
+        },
+        {
+            "type": "time_travelling_portal",
+            "x": 12,
+            "y": 5
         }
     ],
     "goal-condition": {
