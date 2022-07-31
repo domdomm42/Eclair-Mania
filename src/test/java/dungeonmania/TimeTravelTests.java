@@ -66,7 +66,7 @@ public class TimeTravelTests {
     public void olderPlayerTimeTravel() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_spiderTest_basicMovement", "c_spiderTest_basicMovement");
+        DungeonResponse res = dmc.newGame("d_integrationTest_3", "c_spiderTest_basicMovement");
         res = dmc.tick(Direction.UP);
         res = dmc.tick(Direction.UP);
         res = dmc.tick(Direction.UP);
@@ -75,5 +75,9 @@ public class TimeTravelTests {
         res = dmc.tick(Direction.UP);
         res = dmc.rewind(5);
         assertEquals(1, getEntities(res, "older_player").size());
+
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
     }
 }
