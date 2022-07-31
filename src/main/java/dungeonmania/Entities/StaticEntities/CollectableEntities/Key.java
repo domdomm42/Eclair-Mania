@@ -16,4 +16,6 @@ public class Key extends CollectableEntity {
         keyJson.addProperty("key", Integer.parseInt(getId().split("door-")[1]));
         return keyJson;
     }
+
+    
 }

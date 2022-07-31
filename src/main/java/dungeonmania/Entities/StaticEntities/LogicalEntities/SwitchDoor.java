@@ -38,7 +38,6 @@ public class SwitchDoor extends LogicalEntity {
     // }
 
 
-
     public void OpenSwitchDoorIfPossible() {
         if (LogicType.equals("and")) {
             if (AndIsActivated()) {

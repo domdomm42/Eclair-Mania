@@ -48,17 +48,20 @@ public class PlayerMovementStrategy extends MovementStrategy {
         // NEW SwitchDoor
         if (Dungeon.isEntityOnPosition(requestedPosition, "switch_door")) {
             SwitchDoor SwitchDoor = (SwitchDoor) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "switch_door");
+            // Door door = (Door) Dungeon.getFirstEntityOfTypeOnPosition(requestedPosition, "door");
 
+            // Key key = (Key) player.getInventory("key");
             // if door is not open
             if (!SwitchDoor.isIsOpen()) {
-                // System.out.print("went through");
-                // if (player.getInventory("key").stream().filter(entity -> SwitchDoor.getKeyThatUnlock() != null && SwitchDoor.getKeyThatUnlock().equals(entity)).findFirst().isEmpty()) return;
-                // else {
-                //     player.useKey(SwitchDoor.getKeyThatUnlock());
-                //     SwitchDoor.setIsOpen(true);
-                // }
+                System.out.println("out");
+                if (!player.getInventory("key").isEmpty()) {
+                    System.out.println("in");
+                    SwitchDoor.setIsOpen(true);
+                }
 
-                return;
+                else {
+                    return;
+                }
             }
     }
 
