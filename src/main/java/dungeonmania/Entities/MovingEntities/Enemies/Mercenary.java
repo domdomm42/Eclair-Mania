@@ -25,8 +25,8 @@ public class Mercenary extends Enemy {
         this.hasReachedPlayer = hasReachedPlayer;
     }
 
-    public Mercenary(String id, Position position) {
-        super(id, "mercenary", position, Dungeon.getConfigValue("mercenary_health"), true, new MercenaryMovementStrategy(), Dungeon.getConfigValue("mercenary_attack"));
+    public Mercenary(String id, Position position, String type, double health, double attack) {
+        super(id, type, position, health, true, new MercenaryMovementStrategy(), attack);
         getMovementStrategy().setEntity(this);
         isAlly = false;
         hasReachedPlayer = (Dungeon.getPlayer() != null && Position.isAdjacent(getPosition(), Dungeon.getPlayer().getPosition()));
@@ -71,6 +71,8 @@ public class Mercenary extends Enemy {
             } else {
                 throw new InvalidActionException("Mercenary is not in range to be bribed or don't have sceptre to mind control");
             }
+            
+
         } else {
             super.interact();
         }
@@ -137,5 +139,9 @@ public class Mercenary extends Enemy {
         this.mindControlTicks = mindControlTicks;
     }
 
+    public int getBribeRadius() {
+        return bribeRadius;
+    }
+    
     
 }
