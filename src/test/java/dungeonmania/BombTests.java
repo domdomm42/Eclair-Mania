@@ -122,7 +122,7 @@ public class BombTests {
 
     @Test
     @DisplayName("Use wire to activate bomb")
-    public void useWireToActivateBomb(){
+    public void testuseWireToActivateBomb(){
 
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
@@ -134,4 +134,99 @@ public class BombTests {
         assertEquals(0, getInventory(res, "bomb").size());
 
     }
+    
+
+    @Test
+    @DisplayName("OR bomb")
+    public void testuseWireToActivateORBomb(){
+
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_WireTest_TestOrBomb", "c_bombTest_placeBombRadius2");
+
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "bomb").size());
+
+    }
+
+    @Test
+    @DisplayName("AND bomb")
+    public void testuseWireToActivateAndBomb() {
+
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_bombtest_andbomb", "c_bombTest_placeBombRadius2");
+
+        // Activate Switch
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+
+        // go to door without pushing boulder
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.LEFT);
+
+        assertEquals(0, getInventory(res, "bomb").size());
+
+    }
+
+    @Test
+    @DisplayName("XOR bomb")
+    public void testuseWireToActivateXORBomb() {
+
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_bombtest_xorbomb", "c_bombTest_placeBombRadius2");
+
+        // Activate Switch
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+
+        assertEquals(0, getInventory(res, "bomb").size());
+
+
+    }
+
+    @Test
+    @DisplayName("use wire to activate co_and") 
+    public void testWireCoAnd() {
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_bombTest_coand", "c_bombTest_placeBombRadius2");
+
+        // Activate Switch
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        
+        // go to door without pushing boulder
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.UP);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.LEFT);
+    }
+    
+
+
+
 }
