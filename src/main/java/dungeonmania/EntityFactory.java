@@ -94,12 +94,20 @@ public class EntityFactory {
             case "mercenary":
                 JsonElement mercenaryIsAlly = entityDetails.get("isAlly");
                 JsonElement mercenaryHasReachedPlayer = entityDetails.get("hasReachedPlayer");
+                JsonElement mercenaryIsMindControlled = entityDetails.get("isMindControlled");
+                JsonElement mercenaryMindControlledTicks = entityDetails.get("mindControlledTicks");
                 Mercenary mercenary = new Mercenary(id, new Position(x.getAsInt(), y.getAsInt()));
                 if (mercenaryIsAlly != null) {
                     mercenary.setAlly(mercenaryIsAlly.getAsBoolean());
                 }
                 if (mercenaryHasReachedPlayer != null) {
                     mercenary.setHasReachedPlayer(mercenaryHasReachedPlayer.getAsBoolean());
+                }
+                if (mercenaryIsMindControlled != null) {
+                    mercenary.setMindControlled(mercenaryIsMindControlled.getAsBoolean());
+                }
+                if (mercenaryMindControlledTicks != null) {
+                    mercenary.setMindControlTicks(mercenaryMindControlledTicks.getAsInt());
                 }
                 entity = mercenary;
                 break;

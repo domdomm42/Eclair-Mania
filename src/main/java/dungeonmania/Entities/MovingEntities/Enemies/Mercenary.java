@@ -121,6 +121,8 @@ public class Mercenary extends Enemy {
         JsonObject mercJson = super.toJsonObject();
         mercJson.addProperty("isAlly", isAlly);
         mercJson.addProperty("hasReachedPlayer", hasReachedPlayer);
+        mercJson.addProperty("isMindControlled", isMindControlled);
+        mercJson.addProperty("mindControlledTicks", mindControlTicks);
         return super.toJsonObject();
     }
 
