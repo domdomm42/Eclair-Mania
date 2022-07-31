@@ -43,7 +43,7 @@ public class InvincibilityPotionTests {
         assertEquals(expectedPlayer, actualPlayer);
 
         EntityResponse actualMercenary = getEntities(potionPickupResponse, "mercenary").get(0);
-        EntityResponse expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(2, 1), false);
+        EntityResponse expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(2, 1), true);
 
         assertEquals(expectedMercenary, actualMercenary);
 
@@ -56,7 +56,7 @@ public class InvincibilityPotionTests {
         assertEquals(expectedPlayer, actualPlayer);
 
         actualMercenary = getEntities(current, "mercenary").get(0);
-        expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(3, 1), false);
+        expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(3, 1), true);
 
         assertEquals(expectedMercenary, actualMercenary);
 
@@ -68,36 +68,21 @@ public class InvincibilityPotionTests {
         assertEquals(expectedPlayer, actualPlayer);
 
         actualMercenary = getEntities(current, "mercenary").get(0);
-        expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(4, 1), false);
+        expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(4, 1), true);
 
         assertEquals(expectedMercenary, actualMercenary);
         
         return current;
     }
 
-    private void assertBattleCalculations(String enemyType, BattleResponse battle, boolean enemyDies, String configFilePath) {
-        List<RoundResponse> rounds = battle.getRounds();
-        double playerHealth = Double.parseDouble(getValueFromConfigFile("player_health", configFilePath));
-        double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
-
-        for (RoundResponse round : rounds) {
-            enemyHealth -= round.getDeltaEnemyHealth();
-            playerHealth -= round.getDeltaCharacterHealth();
-        }
-
-        if (enemyDies) {
-            assertTrue(enemyHealth <= 0);
-        } else {
-            assertTrue(playerHealth <= 0);
-        }
-    }
-
+    @Test
     @DisplayName("Test basic battle calculations - mercenary - player loses except player is invincible")
     public void testInvincibilityMovement() throws InvalidActionException {
        DungeonManiaController controller = new DungeonManiaController();
        potionPickupAndUseMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
     }
 
+    @Test
     @DisplayName("Test basic battle calculations - mercenary - player loses except player is invincible")
     public void testHealthBelowZeroMercenary() throws InvalidActionException {
        DungeonManiaController controller = new DungeonManiaController();
@@ -110,12 +95,10 @@ public class InvincibilityPotionTests {
        assertEquals(expectedPlayer, actualPlayer);
 
        EntityResponse actualMercenary = getEntities(current, "mercenary").get(0);
-       EntityResponse expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(4, 1), false);
+       EntityResponse expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(4, 1), true);
 
        assertEquals(expectedMercenary, actualMercenary);
 
-       DungeonResponse postBattleResponse = controller.tick(Direction.RIGHT);
-       BattleResponse battle = postBattleResponse.getBattles().get(0);
-       assertBattleCalculations("mercenary", battle, true, "c_battleTests_basicMercenaryPlayerDies");
+       assertEquals(1, getEntities(current, "mercenary").size());
     }
 }

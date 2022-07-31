@@ -19,6 +19,29 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class InvisibilityPotionTests {
+    
+    @Test
+    @DisplayName("Can move through enemies")
+    public void testCanPlayerMoveThroughWithInvisibility() throws InvalidActionException, IllegalArgumentException {
+        DungeonManiaController controller = new DungeonManiaController();
+        potionPickupAndUseMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
+        DungeonResponse current = controller.tick(Direction.RIGHT);
+
+        EntityResponse actualPlayer = getPlayer(current).get();
+        EntityResponse expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(3, 1), false);
+
+        assertEquals(expectedPlayer, actualPlayer);
+
+        current = controller.tick(Direction.RIGHT);
+        
+        actualPlayer = getPlayer(current).get();
+        expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(4, 1), false);
+
+        assertEquals(expectedPlayer, actualPlayer);
+
+        assertEquals(":exit", getGoals(current));  
+    }
+
     private static DungeonResponse potionPickupAndUseMercenarySequence(DungeonManiaController controller, String configFile) throws InvalidActionException, IllegalArgumentException {
         /*
          *  exit   wall  wall  wall wall
@@ -38,11 +61,11 @@ public class InvisibilityPotionTests {
         assertEquals(expectedPlayer, actualPlayer);
 
         EntityResponse actualMercenary = getEntities(potionPickupResponse, "mercenary").get(0);
-        EntityResponse expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(2, 1), false);
+        EntityResponse expectedMercenary = new EntityResponse(actualMercenary.getId(), actualMercenary.getType(), new Position(2, 1), true);
 
         assertEquals(expectedMercenary, actualMercenary);
 
-        ItemResponse potion = getInventory(potionPickupResponse, "invisibility_potion").get(0);
+        ItemResponse potion = getInventory(potionPickupResponse, "invincibility_potion").get(0);
         DungeonResponse current = controller.tick(potion.getId());
 
         actualPlayer = getPlayer(current).get();
@@ -60,25 +83,5 @@ public class InvisibilityPotionTests {
         return current;
     }
 
-    @Test
-    @DisplayName("Can move through enemies")
-    private void testCanPlayerMoveThroughWithInvisibility() throws InvalidActionException, IllegalArgumentException {
-        DungeonManiaController controller = new DungeonManiaController();
-       potionPickupAndUseMercenarySequence(controller, "c_battleTests_basicMercenaryPlayerDies");
-       DungeonResponse current = controller.tick(Direction.RIGHT);
 
-       EntityResponse actualPlayer = getPlayer(current).get();
-       EntityResponse expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(3, 1), false);
-
-       assertEquals(expectedPlayer, actualPlayer);
-
-       current = controller.tick(Direction.RIGHT);
-       
-       actualPlayer = getPlayer(current).get();
-       expectedPlayer = new EntityResponse(actualPlayer.getId(), actualPlayer.getType(), new Position(4, 1), false);
-
-       assertEquals(expectedPlayer, actualPlayer);
-
-       assertEquals("", getGoals(current));  
-    }
 }

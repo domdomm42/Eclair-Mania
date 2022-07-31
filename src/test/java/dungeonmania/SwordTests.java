@@ -21,6 +21,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class SwordTests {
+    
     @Test
     @DisplayName("Test sword is collectable")
     public void testCollectSword() {
@@ -49,12 +50,13 @@ public class SwordTests {
         double enemyHealth = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
         double playerAttack = Double.parseDouble(getValueFromConfigFile("player_attack", configFilePath));
         double enemyAttack = Double.parseDouble(getValueFromConfigFile(enemyType + "_attack", configFilePath));
+        double swordAttack = Double.parseDouble(getValueFromConfigFile("sword_attack", configFilePath));
 
         for (RoundResponse round : rounds) {
-            assertEquals(round.getDeltaCharacterHealth(), enemyAttack / 10);
-            assertEquals(round.getDeltaEnemyHealth(), playerAttack / 5);
-            enemyHealth -= round.getDeltaEnemyHealth();
-            playerHealth -= round.getDeltaCharacterHealth();
+            assertEquals(round.getDeltaCharacterHealth(), -enemyAttack / 10);
+            assertEquals(round.getDeltaEnemyHealth(), -(playerAttack + swordAttack) / 5);
+            enemyHealth += round.getDeltaEnemyHealth();
+            playerHealth += round.getDeltaCharacterHealth();
         }
 
         if (enemyDies) {
@@ -64,60 +66,25 @@ public class SwordTests {
         }
     }
 
-    
-    @DisplayName("Test sword increase damage")
+    @Test
+    @DisplayName("Test sword damage and durability")
     public void testSwordIncreaseDamage() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
         DungeonResponse res = dmc.newGame("d_swordTest_multipleSwords", "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
 
-        // pick up sword by moving right
-        res = dmc.tick(Direction.DOWN);
-        Position pos = getEntities(res, "player").get(0).getPosition();
+        // pick up 2 swords by moving right
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
         assertEquals(1, getInventory(res, "sword").size());
+        assertEquals(1, getEntities(res, "mercenary").size());
 
-
-        // move player up to pickup another sword
+        // kill mercenary with sword
         res = dmc.tick(Direction.RIGHT);
-        pos = getEntities(res, "player").get(0).getPosition();
-        assertEquals(2, getInventory(res, "sword").size());
-
-        // // check if 2 swords are in inventory
-        // assertEquals(2, getInventory(initDungeonRes, "sword").size());
-        //simulate a battle
 
         BattleResponse battle = res.getBattles().get(0);
-        // assert that player wins, taht means sword doubled in damage
-        assertBattleCalculations("spider", battle, true, "c_swordTests_sworddamage.json");
-
-
-    }
-    
-    @DisplayName("Test sword durability")
-    public void testSwordDurability() {
-        DungeonManiaController dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_swordTest_multipleSwords", "c_swordTests_sworddamage.json");
-
-        // move player upwards to pickup sword
-        res = dmc.tick(Direction.UP);
-        Position pos = getEntities(res, "player").get(0).getPosition();
-
-        // move player to the right to pickup another sword
-        res = dmc.tick(Direction.RIGHT);
-        pos = getEntities(res, "player").get(0).getPosition();
-
-        // check if 2 swords are in inventory
-        assertEquals(2, getInventory(res, "sword").size());
-
-        //simulate a battle
-        BattleResponse battle = res.getBattles().get(0);
-        // assert that player wins, taht means sword doubled in damage
-        assertBattleCalculations("spider", battle, true, "c_swordTests_sworddamage.json");
-
-        // after win go right again
-        res = dmc.tick(Direction.RIGHT);
-        //fight again but this time sword cannot be used and hence player loses
-        assertBattleCalculations("spider", battle, false, "c_swordTests_sworddamage.json");
-
+        assertBattleCalculations("mercenary", battle, true, "c_DoorsKeysTest_useKeyWalkThroughOpenDoor");
+        assertEquals(0, getEntities(res, "mercenary").size());
+        assertEquals(0, getInventory(res, "sword").size());
     }
 }
