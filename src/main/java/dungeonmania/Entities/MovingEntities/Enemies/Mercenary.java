@@ -51,7 +51,6 @@ public class Mercenary extends Enemy {
         if (player == null) return;
         
         if (!isAlly) {
-
             // Sceptre mind control is prioritised over bribery
             if (player.getInventory("sceptre").size() >= 1) {
                 isAlly = true;
@@ -66,14 +65,12 @@ public class Mercenary extends Enemy {
                     player.bribeMercenary();
                     setInteractable(false);
                 } else {
-                    throw new InvalidActionException("Mercenary is not in range to be interacted with");
+                    throw new InvalidActionException("No Treasure to bribe with");
                 }
 
             } else {
                 throw new InvalidActionException("Mercenary is not in range to be bribed or don't have sceptre to mind control");
             }
-            
-
         } else {
             super.interact();
         }

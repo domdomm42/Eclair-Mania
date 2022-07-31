@@ -168,10 +168,12 @@ public class Dungeon {
         dungeon.add("entities", entitiesToJsonArray(isTimeTravel));
         dungeon.add("configuration", config);
         dungeon.add("goal-condition", originalGoals);
-        dungeon.add("previousGameStates", previousGameStates);
+        if (!isTimeTravel) dungeon.add("previousGameStates", previousGameStates);
+        else dungeon.add("previousGameStates", new JsonArray());
         if (getPlayer() == null) return dungeon;
         dungeon.add("inventory", getPlayer().getInventory().toJsonArray());
         dungeon.add("potionBag", getPlayer().getPotionBag().toJsonArray());
+        System.err.println(dungeon.toString());
         return dungeon;
     }
 
@@ -393,6 +395,11 @@ public class Dungeon {
 
     public static void generateDungeon(int xStart, int yStart, int xEnd, int yEnd) {
         DungeonBuilder.generateDungeon(xStart, yStart, xEnd, yEnd);
+    }
+
+    public static void log(String key) {
+        JsonObject dungeonJson = toJsonObject(false);
+        System.err.println(dungeonJson.get(key));
     }
 
 }

@@ -19,8 +19,6 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class InvisibilityPotionTests {
-    
-    @Test
     private static DungeonResponse potionPickupAndUseMercenarySequence(DungeonManiaController controller, String configFile) throws InvalidActionException, IllegalArgumentException {
         /*
          *  exit   wall  wall  wall wall
@@ -62,6 +60,7 @@ public class InvisibilityPotionTests {
         return current;
     }
 
+    @Test
     @DisplayName("Can move through enemies")
     private void testCanPlayerMoveThroughWithInvisibility() throws InvalidActionException, IllegalArgumentException {
         DungeonManiaController controller = new DungeonManiaController();

@@ -284,6 +284,7 @@ public class Player extends MovingEntity {
         playerJson.addProperty("lastPositionX", lastPosition.getX());
         playerJson.addProperty("lastPositionY", lastPosition.getY());
         playerJson.addProperty("isEvil", isEvil);
+        playerJson.addProperty("health", getHealth());
         this.actions.forEach(action -> actions.add(action));
         playerJson.add("actions", actions);
         return playerJson;

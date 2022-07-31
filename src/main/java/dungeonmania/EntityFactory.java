@@ -55,6 +55,7 @@ public class EntityFactory {
                 JsonElement playerLastPositionX = entityDetails.get("lastPositionX");
                 JsonElement playerLastPositionY = entityDetails.get("lastPositionY");
                 JsonElement playerActions = entityDetails.get("actions");
+                JsonElement playerHealth = entityDetails.get("health");
                 Player player = new Player(id, new Position(x.getAsInt(), y.getAsInt()));
                 if (playerIsEvil != null) {
                     player.setEvil(playerIsEvil.getAsBoolean());
@@ -64,6 +65,9 @@ public class EntityFactory {
                 }
                 if (playerActions != null) {
                     playerActions.getAsJsonArray().forEach(action -> player.addAction(action.getAsString()));
+                }
+                if (playerHealth != null) {
+                    player.setHealth(playerHealth.getAsDouble());
                 }
                 entity = player;
                 break;
@@ -180,7 +184,7 @@ public class EntityFactory {
                 throw new IllegalArgumentException("Entity type does not exist");
             }
         if (loadedId != null) {
-            entity.setId(loadedId.toString());
+            entity.setId(loadedId.toString().replace("\"", "").replace("\\", ""));
         }
         return entity;
     }

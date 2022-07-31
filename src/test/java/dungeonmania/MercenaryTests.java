@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 import static dungeonmania.TestUtils.getPlayer;
 import static dungeonmania.TestUtils.getEntities;
 import static dungeonmania.TestUtils.getInventory;
