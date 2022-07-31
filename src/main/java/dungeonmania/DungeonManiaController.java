@@ -130,7 +130,10 @@ public class DungeonManiaController {
     /**
      * /games/all
      */
-    public DungeonResponse rewind(int ticks) {
+    public DungeonResponse rewind(int ticks) throws IllegalArgumentException {
+        if (ticks <= 0) {
+            throw new IllegalArgumentException("ticks < 0");
+        }
         try {
             Dungeon.timeTravel(ticks);
         } catch (IOException exception) {
