@@ -53,9 +53,7 @@ public class PlayerMovementStrategy extends MovementStrategy {
             // Key key = (Key) player.getInventory("key");
             // if door is not open
             if (!SwitchDoor.isIsOpen()) {
-                System.out.println("out");
                 if (!player.getInventory("key").isEmpty()) {
-                    System.out.println("in");
                     SwitchDoor.setIsOpen(true);
                 }
 

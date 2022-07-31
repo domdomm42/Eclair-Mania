@@ -257,20 +257,16 @@ public class SwitchDoorTests {
     // public void BasicCoAndTest() {
     //     DungeonManiaController dmc;
     //     dmc = new DungeonManiaController();
-    //     DungeonResponse res = dmc.newGame("d_SwitchDoorTest_Co_AND", "c_bombTest_placeBombRadius2");
+    //     DungeonResponse res = dmc.newGame("d_switchdoortest_coand", "c_bombTest_placeBombRadius2");
 
     //     // Activate Switch
-    //     res = dmc.tick(Direction.DOWN);
-    //     res = dmc.tick(Direction.DOWN);
+    //     res = dmc.tick(Direction.RIGHT);
     //     res = dmc.tick(Direction.RIGHT);
 
     //     // go to door without pushing boulder
     //     res = dmc.tick(Direction.UP);
-    //     res = dmc.tick(Direction.UP);
     //     res = dmc.tick(Direction.RIGHT);
     //     res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.RIGHT);
-    //     res = dmc.tick(Direction.DOWN);
     //     res = dmc.tick(Direction.DOWN);
         
 

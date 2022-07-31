@@ -25,19 +25,6 @@ public class SwitchDoor extends LogicalEntity {
         this.IsOpen = isOpen;
     }
 
-    // public Key getKeyThatUnlock() {
-    //     String keyNum = getId().replace("switch_door-", "");
-    //     return (Key) Dungeon.getPlayer().getInventory().getItemFromId("key-".concat(keyNum).concat(getId()));
-    // }
-
-    // @Override
-    // public JsonObject toJsonObject() {
-    //     JsonObject doorJson = super.toJsonObject();
-    //     doorJson.addProperty("key", Integer.parseInt(getId().split("-")[0]));
-    //     return doorJson;
-    // }
-
-
     public void OpenSwitchDoorIfPossible() {
         if (LogicType.equals("and")) {
             if (AndIsActivated()) {
@@ -87,13 +74,17 @@ public class SwitchDoor extends LogicalEntity {
         // co_and case
         if (LogicType.equals("co_and")) {
             if (CheckIfNotTriggeredCoAnd() == true) {
+                // System.out.println("in");
                 super.tick();
+                // System.out.println("ticked");
                 if (AndIsActivated()) {
                     setIsOpen(true);
+                    // System.out.println("true");
                 }
 
                 else {
                     setIsOpen(false);
+                    // System.out.println("false");
                 }
             }
         }
