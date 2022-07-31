@@ -118,4 +118,20 @@ public class BombTests {
         res = dmc.tick(Direction.DOWN);
         assertEquals(0, getInventory(res, "bomb").size());
     }
+
+
+    @Test
+    @DisplayName("Use wire to activate bomb")
+    public void useWireToActivateBomb(){
+
+        DungeonManiaController dmc;
+        dmc = new DungeonManiaController();
+        DungeonResponse res = dmc.newGame("d_WireTests_TestBombExplodes", "c_bombTest_placeBombRadius2");
+
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.DOWN);
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(0, getInventory(res, "bomb").size());
+
+    }
 }
